@@ -1,21 +1,41 @@
-from bs4 import NavigableString
 import json
 import re
 import unicodedata
 
 def match (regex, match_text, flags=None):
+    """
+    :param regex:
+    :param match_text:
+    :param flags: regex match flags
+    :return: The first match found (if using groups) or all matches (if not using groups), otherwise None
+    """
     if flags: text_match = re.findall(regex, match_text, flags)
     else: text_match = re.findall(regex, match_text)
 
-    return text_match[0] if text_match else None
+    # if match is not found, return None
+    if not text_match:
+        return None
+
+    # if regex is using capturing groups, return first match
+    if isinstance(text_match[0], tuple):
+        return text_match[0]
+
+    # otherwise (if regex is not using capturing groups), return all matches
+    else:
+        return text_match
 
 def requisite_match(txt, data):
+    # cleans txt
+    txt = txt.strip()
+    # if txt is an empty string, return
+    if not txt: return
+
     # if matches requisites ...
     if match("requisite", txt):
-        (requisite_type, requisites_text) = match(r"(.*)requisites?:(.*)$", txt)
+        (requisite_type, requisites_text) = match(r"(.*)requisites?:\s*(.*)$", txt)
 
         # clean up type
-        requisite_type = requisite_type.replace("-", "").lower().strip()
+        requisite_type = requisite_type.replace("-", "").lower()
 
         requisite_obj = requisite_match(requisites_text, data)
         # print(json.dumps(requisite_obj, indent=4))
@@ -31,12 +51,7 @@ def requisite_match(txt, data):
     else:
         # removes the "C or higher" from txt
         if match(r"[ABCD][+-]?\sor\shigher\s?(?:in|:)", txt):
-            txt = match(r"[ABCD][+-]? or higher\s?(?:in|:)(.*)", txt)
-
-        # cleans txt
-        txt = txt.strip()
-        # if txt is an empty string, return
-        if not txt: return
+            txt = match(r"[ABCD][+-]? or higher\s?(?:in|:)(.*)", txt)[0]
 
         # if there is an "and" or ";"
         if match(r"(?:\sand\s|;)", txt):
@@ -57,11 +72,11 @@ def requisite_match(txt, data):
 
         # if txt is majors
         if match(r"major", txt):
-            return {"type": "major", "value": [x for x in re.findall("([A-Z]{3})", txt)]}
+            return {"type": "major", "value": [x for x in match(r"([A-Z]{3})", txt)]}
 
         # if txt is standing
         if match(r"standing", txt):
-            return {"type": "standing", "value": min([int(x) for x in re.findall(r"U(\d)", txt)])}
+            return {"type": "standing", "value": min([int(x) for x in match(r"U(\d)", txt)])}
 
         # if there is an "or" | SAME CODE AS "AND"
         if match(r"\sor\s", txt):
@@ -73,7 +88,7 @@ def requisite_match(txt, data):
                 for i, t in enumerate(or_split_txt):
                     # if t does not have department code, then add it from the previous element
                     if match(r"^(?:(?![a-zA-Z]{3}).)*$", t):
-                        or_split_txt[i] = match(r"[a-zA-Z]{3}", or_split_txt[i - 1]) + " " + t
+                        or_split_txt[i] = f"{match(r'[a-zA-Z]{3}', or_split_txt[i - 1])} {t}"
 
             return {
                 "type": "or",
@@ -104,11 +119,11 @@ def parse_course(course_node):
     }
 
     for lineI, line in enumerate(course_node.children):
-        # if line is an empty line or is an empty element (of class "clear"), continue to next line
-        if isinstance(line, NavigableString) or line.attrs.get("class") == ["clear"]: continue
-
         # cleans up text by replacing all /n and multiple consecutive spaces with a single space and normalizes unicode
         text = unicodedata.normalize("NFKD", re.sub(r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
+
+        # if line is an empty line or is an empty element (of class "clear"), continue to next line
+        if not text or line.attrs.get("class") == ["clear"]: continue
 
         # if line is first (then it specifies the headers)
         if lineI == 1:
@@ -120,15 +135,16 @@ def parse_course(course_node):
 
         # if line matches SBC
         elif match(r"^SBC:", text):
-            data["sbcs"] = match(r"^SBC:\s*(.*)", text).split(", ")
+            data["sbcs"] = match(r"^SBC:\s*(.*)", text)[0].split(", ")
 
         # if line matches credits
         elif match(r"(\d+(?:-\d+)?)\scredits?", text):
-            data["credits"] = match(r"(\d+(?:-\d+)?)\scredits?", text)
+            data["credits"] = match(r"(\d+(?:-\d+)?)\scredits?", text)[0]
 
         # if line matches requisite
         elif match(r"requisite", text): requisite_match(text, data)
 
+        # otherwise (if line doesn't match) ...
         else: print(f"Unmatched: {text}")
 
     return data
