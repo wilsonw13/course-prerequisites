@@ -1,3 +1,6 @@
+# log
+log/
+
 # Created by https://www.toptal.com/developers/gitignore/api/python,pycharm,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,pycharm,windows
 
@@ -149,7 +152,7 @@ MANIFEST
 *.manifest
 *.spec
 
-# Installer logs
+# Installer log
 pip-log.txt
 pip-delete-this-directory.txt
 

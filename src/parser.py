@@ -1,6 +1,8 @@
-import json
 import re
 import unicodedata
+from bs4 import Tag
+
+from log import append_to_file
 
 def match (regex, match_text, flags=None):
     """
@@ -30,78 +32,75 @@ def requisite_match(txt, data):
     # if txt is an empty string, return
     if not txt: return
 
-    # if matches requisites ...
-    if match("requisite", txt):
-        (requisite_type, requisites_text) = match(r"(.*)requisites?:\s*(.*)$", txt)
+    # removes the "C or higher" from txt
+    if match(r"[ABCD][+-]?\sor\shigher(?:\s?in|:)\s*", txt):
+        txt = match(r"[ABCD][+-]? or higher(?:\s?in|:)\s*(.*)", txt)[0]
 
-        # clean up type
-        requisite_type = requisite_type.replace("-", "").lower()
+    # if there is an "and" or ";"
+    if match(r"(?:\sand\s|;)", txt, re.IGNORECASE):
+        or_split_txt = re.split(r"(?:\sand\s|;)", txt)
 
-        requisite_obj = requisite_match(requisites_text, data)
-        # print(json.dumps(requisite_obj, indent=4))
-        # print(requisite_type)
+        # if first txt in split_txt is a course
+        if match(r"[a-zA-Z]{3}\s?\d{3}", or_split_txt[0]):
 
-        match requisite_type:
-            case "pre": data["prerequisites"] = requisite_obj
-            case "advisory pre": data["advisoryPrerequisites"] = requisite_obj
-            case "co": data["corequisities"] = requisite_obj
-            case "anti": data["antirequisites"] = requisite_obj
-            case _: print(f"\"{requisite_type}\" is not a valid requisite type")
+            for i, t in enumerate(or_split_txt):
+                # if t does not have department code, then add it from the previous element
+                if match(r"^(?:(?![a-zA-Z]{3}).)*$", t):
+                    or_split_txt[i] = f"{match(r'[a-zA-Z]{3}', or_split_txt[i - 1])[0]} {t}"
 
-    else:
-        # removes the "C or higher" from txt
-        if match(r"[ABCD][+-]?\sor\shigher\s?(?:in|:)", txt):
-            txt = match(r"[ABCD][+-]? or higher\s?(?:in|:)(.*)", txt)[0]
+        return {
+            "type": "and",
+            "value": [requisite_match(t, data) for t in or_split_txt]
+        }
 
-        # if there is an "and" or ";"
-        if match(r"(?:\sand\s|;)", txt):
-            or_split_txt = re.split(r"(?:\sand\s|;)", txt)
+    # if txt is majors
+    if match(r"major", txt, re.IGNORECASE):
+        return {"type": "major", "value": [x for x in match(r"([A-Z]{3})", txt)]}
 
-            # if first txt in split_txt is a course
-            if match(r"[a-zA-Z]{3}\s?\d{3}", or_split_txt[0]):
+    # if txt is standing
+    if match(r"standing", txt, re.IGNORECASE):
+        return {"type": "standing", "value": min([int(x) for x in match(r"U(\d+)", txt)])}
 
-                for i, t in enumerate(or_split_txt):
-                    # if t does not have department code, then add it from the previous element
-                    if match(r"^(?:(?![a-zA-Z]{3}).)*$", t):
-                        or_split_txt[i] = match(r"[a-zA-Z]{3}", or_split_txt[i - 1]) + " " + t
+    # if txt is math placement exam
+    if match(r"math.*placement\sexam", txt, re.IGNORECASE):
+        return {"type": "math placement", "value": min([int(x) for x in match(r"level\s(\d+)", txt, re.IGNORECASE)])}
 
-            return {
-                "type": "and",
-                "value": [requisite_match(t, data) for t in or_split_txt]
-            }
+    # if txt is any of the honors programs
+    if match(r"(?:honors|university\sscholars)", txt, re.IGNORECASE):
+        honors_programs = []
 
-        # if txt is majors
-        if match(r"major", txt):
-            return {"type": "major", "value": [x for x in match(r"([A-Z]{3})", txt)]}
+        if match(r"computer\sscience\shonors", txt, re.IGNORECASE): honors_programs.append("CS Honors")
+        if match(r"honors\scollege", txt, re.IGNORECASE): honors_programs.append("Honors College")
+        if match(r"wise\shonors", txt, re.IGNORECASE): honors_programs.append("WISE Honors")
+        if match(r"university\sscholars", txt, re.IGNORECASE): honors_programs.append("University Scholars")
 
-        # if txt is standing
-        if match(r"standing", txt):
-            return {"type": "standing", "value": min([int(x) for x in match(r"U(\d)", txt)])}
+        if not honors_programs: print(f"{data['department']} {data['number']}: Unknown Honors Program: {txt}")
 
-        # if there is an "or" | SAME CODE AS "AND"
-        if match(r"\sor\s", txt):
-            or_split_txt = re.split(r"\sor\s", txt)
+        return {"type": "honors", "value": honors_programs}
 
-            # if first txt in split_txt is a course
-            if match(r"[a-zA-Z]{3}\s?\d{3}", or_split_txt[0]):
+    # if there is an "or" | SAME CODE AS "AND"
+    if match(r"\sor\s", txt, re.IGNORECASE):
+        or_split_txt = re.split(r"\sor\s", txt)
 
-                for i, t in enumerate(or_split_txt):
-                    # if t does not have department code, then add it from the previous element
-                    if match(r"^(?:(?![a-zA-Z]{3}).)*$", t):
-                        or_split_txt[i] = f"{match(r'[a-zA-Z]{3}', or_split_txt[i - 1])} {t}"
+        # if first txt in split_txt is a course
+        if match(r"[a-zA-Z]{3}\s?\d{3}", or_split_txt[0]):
 
-            return {
-                "type": "or",
-                "value": [requisite_match(t, data) for t in or_split_txt]
-            }
+            for i, t in enumerate(or_split_txt):
+                # if t does not have department code, then add it from the previous element
+                if match(r"^(?:(?![a-zA-Z]{3}).)*$", t):
+                    or_split_txt[i] = f"{match(r'[a-zA-Z]{3}', or_split_txt[i - 1])[0]} {t}"
 
-        # if txt is a course
-        if match(r"^[a-zA-Z]{3}\s\d{3}$", txt):
-            return {"type": "course", "value": txt}
+        return {
+            "type": "or",
+            "value": [requisite_match(t, data) for t in or_split_txt]
+        }
 
-        print(f"Requisite not caught: {txt}")
-        return {"type": "custom", "value": txt}
+    # if txt is a course
+    if match(r"^[a-zA-Z]{3}\s\d{3}$", txt):
+        return {"type": "course", "value": txt}
 
+    append_to_file("unknown-reqs.txt", f"{data['department']} {data['number']}: {txt}")
+    return {"type": "custom", "value": txt}
 
 def parse_course(course_node):
     # default data object
@@ -111,9 +110,10 @@ def parse_course(course_node):
         "name": None,
         "description": None,
         "prerequisites": None,
-        "advisoryPrerequisites": None,
         "corequisities": None,
         "antirequisites": None,
+        "advisoryPrerequisites": None,
+        "advisoryCorequisities": None,
         "sbcs": None,
         "credits": None,
     }
@@ -123,7 +123,7 @@ def parse_course(course_node):
         text = unicodedata.normalize("NFKD", re.sub(r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
 
         # if line is an empty line or is an empty element (of class "clear"), continue to next line
-        if not text or line.attrs.get("class") == ["clear"]: continue
+        if not text or (isinstance(line, Tag) and line.attrs.get("class") == ["clear"]): continue
 
         # if line is first (then it specifies the headers)
         if lineI == 1:
@@ -142,9 +142,33 @@ def parse_course(course_node):
             data["credits"] = match(r"(\d+(?:-\d+)?)\scredits?", text)[0]
 
         # if line matches requisite
-        elif match(r"requisite", text): requisite_match(text, data)
+        elif match(r"requisite", text):
+            (requisite_type, requisites_text) = match(r"(.*)requisites?:\s*(.*)$", text)
+
+            # clean up requisite_type
+            requisite_type = re.sub(r"\s+", " ", requisite_type.replace("-", " ").lower().strip())
+
+            requisite_obj = requisite_match(requisites_text, data)
+
+            match requisite_type:
+                case "pre":
+                    data["prerequisites"] = requisite_obj
+                case "co":
+                    data["corequisities"] = requisite_obj
+                case "pre or co":
+                    data["prerequisites"] = data["corequisities"] = requisite_obj
+                case "anti":
+                    data["antirequisites"] = requisite_obj
+                case "advisory pre":
+                    data["advisoryPrerequisites"] = requisite_obj
+                case "advisory co":
+                    data["advisoryCorequisities"] = requisite_obj
+                case "advisory pre or co":
+                    data["advisoryPrerequisites"] = data["advisoryCorequisities"] = requisite_obj
+                case _:
+                    print(f"\"{requisite_type}\" is not a valid requisite type")
 
         # otherwise (if line doesn't match) ...
-        else: print(f"Unmatched: {text}")
+        else: append_to_file("unmatched.txt", f"{data['department']} {data['number']}: {text}")
 
     return data
