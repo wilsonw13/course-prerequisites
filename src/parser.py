@@ -32,9 +32,9 @@ def requisite_match(txt, data):
     # if txt is an empty string, return
     if not txt: return
 
-    # removes the "C or higher" from txt
-    if match(r"[ABCD][+-]?\sor\shigher(?:\s?in|:)\s*", txt):
-        txt = match(r"[ABCD][+-]? or higher(?:\s?in|:)\s*(.*)", txt)[0]
+    # removes the "C or higher/better" from txt
+    if match(r"[ABCD][+-]? or (?:higher|better)(?:\s?in|:)\s*", txt):
+        txt = match(r"[ABCD][+-]? or (?:higher|better)(?:\s?in|:)\s*(.*)", txt)[0]
 
     # if there is an "and" or ";"
     if match(r"(?:\sand\s|;)", txt, re.IGNORECASE):
@@ -53,9 +53,10 @@ def requisite_match(txt, data):
             "value": [requisite_match(t, data) for t in or_split_txt]
         }
 
-    # if txt is majors
-    if match(r"major", txt, re.IGNORECASE):
+    # if txt is majors and contains major codes such as CSE, AMS, etc.
+    if match(r"major", txt, re.IGNORECASE) and match(r"([A-Z]{3})", txt):
         return {"type": "major", "value": [x for x in match(r"([A-Z]{3})", txt)]}
+
 
     # if txt is standing
     if match(r"standing", txt, re.IGNORECASE):
@@ -65,7 +66,7 @@ def requisite_match(txt, data):
     if match(r"math.*placement\sexam", txt, re.IGNORECASE):
         return {"type": "math placement", "value": min([int(x) for x in match(r"level\s(\d+)", txt, re.IGNORECASE)])}
 
-    # if txt is any of the honors programs
+    # if txt is any of the (CEAS) honors programs
     if match(r"(?:honors|university\sscholars)", txt, re.IGNORECASE):
         honors_programs = []
 
@@ -110,10 +111,10 @@ def parse_course(course_node):
         "name": None,
         "description": None,
         "prerequisites": None,
-        "corequisities": None,
+        "corequisites": None,
         "antirequisites": None,
         "advisoryPrerequisites": None,
-        "advisoryCorequisities": None,
+        "advisoryCorequisites": None,
         "sbcs": None,
         "credits": None,
     }
@@ -134,8 +135,17 @@ def parse_course(course_node):
             data["description"] = text
 
         # if line matches SBC
-        elif match(r"^SBC:", text):
-            data["sbcs"] = match(r"^SBC:\s*(.*)", text)[0].split(", ")
+        elif match(r"SBC:", text):
+            # matches all SBCs if any
+            sbcs = re.findall(r"SBC:\s*([A-Z]+(?:,\s*[A-Z]+)*)", text)
+            data["sbcs"] = sbcs if sbcs else []
+
+        # if line matches partial fulfillment of SBCs
+        elif match(r"Partially fulfills", text): continue
+
+        # if line is an SBC
+        elif isinstance(line, Tag) and line.name == "a" and line.has_attr("title"):
+            data["sbcs"].append(text)
 
         # if line matches credits
         elif match(r"(\d+(?:-\d+)?)\scredits?", text):
@@ -154,17 +164,17 @@ def parse_course(course_node):
                 case "pre":
                     data["prerequisites"] = requisite_obj
                 case "co":
-                    data["corequisities"] = requisite_obj
+                    data["corequisites"] = requisite_obj
                 case "pre or co":
-                    data["prerequisites"] = data["corequisities"] = requisite_obj
+                    data["prerequisites"] = data["corequisites"] = requisite_obj
                 case "anti":
                     data["antirequisites"] = requisite_obj
                 case "advisory pre":
                     data["advisoryPrerequisites"] = requisite_obj
                 case "advisory co":
-                    data["advisoryCorequisities"] = requisite_obj
+                    data["advisoryCorequisites"] = requisite_obj
                 case "advisory pre or co":
-                    data["advisoryPrerequisites"] = data["advisoryCorequisities"] = requisite_obj
+                    data["advisoryPrerequisites"] = data["advisoryCorequisites"] = requisite_obj
                 case _:
                     print(f"\"{requisite_type}\" is not a valid requisite type")
 
