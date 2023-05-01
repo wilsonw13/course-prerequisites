@@ -15,5 +15,6 @@ def append_to_file(file_path, string):
         f.write(string + "\n")
 
 def clear_file(file_path):
+    make_log_dir()
     with open(log_dir + file_path, 'w') as f:
         f.truncate(0)

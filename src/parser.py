@@ -26,7 +26,7 @@ def match (regex, match_text, flags=None):
     else:
         return text_match
 
-def requisite_match(txt, data):
+def req_match(txt, data):
     # cleans txt
     txt = txt.strip()
     # if txt is an empty string, return
@@ -50,7 +50,7 @@ def requisite_match(txt, data):
 
         return {
             "type": "and",
-            "value": [requisite_match(t, data) for t in or_split_txt]
+            "value": [req_match(t, data) for t in or_split_txt]
         }
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
@@ -93,7 +93,7 @@ def requisite_match(txt, data):
 
         return {
             "type": "or",
-            "value": [requisite_match(t, data) for t in or_split_txt]
+            "value": [req_match(t, data) for t in or_split_txt]
         }
 
     # if txt is a course
@@ -103,7 +103,18 @@ def requisite_match(txt, data):
     append_to_file("unknown-reqs.txt", f"{data['department']} {data['number']}: {txt}")
     return {"type": "custom", "value": txt}
 
-def parse_course(course_node):
+def short_req_match(txt, data):
+    req_courses = match(r"([A-Z]{3}\s\d{3}|\d{3})", txt)
+
+    if req_courses:
+        for i, c in enumerate(req_courses):
+            # if t does not have department code, then add it from the previous element
+            if not match(r"[A-Z]{3}", c):
+                req_courses[i] = f"{match(r'[a-zA-Z]{3}', req_courses[i - 1])[0]} {c}"
+
+    return req_courses
+
+def parse_course(course_node, shortened_reqs):
     # default data object
     data = {
         "department": None,
@@ -153,14 +164,14 @@ def parse_course(course_node):
 
         # if line matches requisite
         elif match(r"requisite", text):
-            (requisite_type, requisites_text) = match(r"(.*)requisites?:\s*(.*)$", text)
+            (req_type, req_text) = match(r"(.*)requisites?:\s*(.*)$", text)
 
             # clean up requisite_type
-            requisite_type = re.sub(r"\s+", " ", requisite_type.replace("-", " ").lower().strip())
+            req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
 
-            requisite_obj = requisite_match(requisites_text, data)
+            requisite_obj = short_req_match(req_text, data) if shortened_reqs else req_match(req_text, data)
 
-            match requisite_type:
+            match req_type:
                 case "pre":
                     data["prerequisites"] = requisite_obj
                 case "co":
@@ -176,7 +187,7 @@ def parse_course(course_node):
                 case "advisory pre or co":
                     data["advisoryPrerequisites"] = data["advisoryCorequisites"] = requisite_obj
                 case _:
-                    print(f"\"{requisite_type}\" is not a valid requisite type")
+                    print(f"\"{req_type}\" is not a valid requisite type")
 
         # otherwise (if line doesn't match) ...
         else: append_to_file("unmatched.txt", f"{data['department']} {data['number']}: {text}")
