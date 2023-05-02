@@ -1,0 +1,628 @@
+{
+    "nodes": [
+        {
+            "id": "CSE 101"
+        },
+        {
+            "id": "CSE 102"
+        },
+        {
+            "id": "CSE 110"
+        },
+        {
+            "id": "CSE 114"
+        },
+        {
+            "id": "CSE 130"
+        },
+        {
+            "id": "CSE 150"
+        },
+        {
+            "id": "CSE 160"
+        },
+        {
+            "id": "CSE 161"
+        },
+        {
+            "id": "CSE 190"
+        },
+        {
+            "id": "CSE 191"
+        },
+        {
+            "id": "CSE 192"
+        },
+        {
+            "id": "CSE 214"
+        },
+        {
+            "id": "CSE 215"
+        },
+        {
+            "id": "CSE 216"
+        },
+        {
+            "id": "CSE 220"
+        },
+        {
+            "id": "CSE 230"
+        },
+        {
+            "id": "CSE 260"
+        },
+        {
+            "id": "CSE 261"
+        },
+        {
+            "id": "CSE 300"
+        },
+        {
+            "id": "CSE 301"
+        },
+        {
+            "id": "CSE 303"
+        },
+        {
+            "id": "CSE 304"
+        },
+        {
+            "id": "CSE 305"
+        },
+        {
+            "id": "CSE 306"
+        },
+        {
+            "id": "CSE 307"
+        },
+        {
+            "id": "CSE 310"
+        },
+        {
+            "id": "CSE 311"
+        },
+        {
+            "id": "CSE 312"
+        },
+        {
+            "id": "CSE 316"
+        },
+        {
+            "id": "CSE 320"
+        },
+        {
+            "id": "CSE 323"
+        },
+        {
+            "id": "CSE 325"
+        },
+        {
+            "id": "CSE 327"
+        },
+        {
+            "id": "CSE 328"
+        },
+        {
+            "id": "CSE 331"
+        },
+        {
+            "id": "CSE 332"
+        },
+        {
+            "id": "CSE 333"
+        },
+        {
+            "id": "CSE 334"
+        },
+        {
+            "id": "CSE 336"
+        },
+        {
+            "id": "CSE 337"
+        },
+        {
+            "id": "CSE 350"
+        },
+        {
+            "id": "CSE 351"
+        },
+        {
+            "id": "CSE 352"
+        },
+        {
+            "id": "CSE 353"
+        },
+        {
+            "id": "CSE 354"
+        },
+        {
+            "id": "CSE 355"
+        },
+        {
+            "id": "CSE 356"
+        },
+        {
+            "id": "CSE 357"
+        },
+        {
+            "id": "CSE 360"
+        },
+        {
+            "id": "CSE 361"
+        },
+        {
+            "id": "CSE 362"
+        },
+        {
+            "id": "CSE 363"
+        },
+        {
+            "id": "CSE 364"
+        },
+        {
+            "id": "CSE 366"
+        },
+        {
+            "id": "CSE 370"
+        },
+        {
+            "id": "CSE 371"
+        },
+        {
+            "id": "CSE 373"
+        },
+        {
+            "id": "CSE 376"
+        },
+        {
+            "id": "CSE 377"
+        },
+        {
+            "id": "CSE 378"
+        },
+        {
+            "id": "CSE 380"
+        },
+        {
+            "id": "CSE 381"
+        },
+        {
+            "id": "CSE 385"
+        },
+        {
+            "id": "CSE 390"
+        },
+        {
+            "id": "CSE 391"
+        },
+        {
+            "id": "CSE 392"
+        },
+        {
+            "id": "CSE 393"
+        },
+        {
+            "id": "CSE 394"
+        },
+        {
+            "id": "CSE 416"
+        },
+        {
+            "id": "CSE 475"
+        },
+        {
+            "id": "CSE 487"
+        },
+        {
+            "id": "CSE 488"
+        },
+        {
+            "id": "CSE 495"
+        },
+        {
+            "id": "CSE 496"
+        }
+    ],
+    "links": [
+        {
+            "source": "CSE 114",
+            "target": "CSE 214"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 216"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 220"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 220"
+        },
+        {
+            "source": "CSE 130",
+            "target": "CSE 230"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 230"
+        },
+        {
+            "source": "CSE 160",
+            "target": "CSE 260"
+        },
+        {
+            "source": "CSE 160",
+            "target": "CSE 303"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 303"
+        },
+        {
+            "source": "CSE 150",
+            "target": "CSE 303"
+        },
+        {
+            "source": "CSE 215",
+            "target": "CSE 303"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 304"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 304"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 304"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 305"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 305"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 306"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 306"
+        },
+        {
+            "source": "CSE 320",
+            "target": "CSE 306"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 307"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 307"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 307"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 310"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 310"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 310"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 311"
+        },
+        {
+            "source": "CSE 230",
+            "target": "CSE 311"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 311"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 316"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 316"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 320"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 323"
+        },
+        {
+            "source": "CSE 230",
+            "target": "CSE 323"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 323"
+        },
+        {
+            "source": "CSE 110",
+            "target": "CSE 325"
+        },
+        {
+            "source": "CSE 101",
+            "target": "CSE 325"
+        },
+        {
+            "source": "CSE 114",
+            "target": "CSE 325"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 327"
+        },
+        {
+            "source": "CSE 230",
+            "target": "CSE 327"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 327"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 328"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 328"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 328"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 331"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 332"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 332"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 333"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 333"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 336"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 336"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 337"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 337"
+        },
+        {
+            "source": "CSE 150",
+            "target": "CSE 350"
+        },
+        {
+            "source": "CSE 215",
+            "target": "CSE 350"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 351"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 351"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 352"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 352"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 353"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 353"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 354"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 354"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 356"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 356"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 356"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 357"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 357"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 360"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 361"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 362"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 363"
+        },
+        {
+            "source": "CSE 328",
+            "target": "CSE 366"
+        },
+        {
+            "source": "CSE 310",
+            "target": "CSE 370"
+        },
+        {
+            "source": "CSE 150",
+            "target": "CSE 371"
+        },
+        {
+            "source": "CSE 215",
+            "target": "CSE 371"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 373"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 373"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 376"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 376"
+        },
+        {
+            "source": "CSE 320",
+            "target": "CSE 376"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 380"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 380"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 380"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 381"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 381"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 381"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 385"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 385"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 390"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 390"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 391"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 391"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 392"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 392"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 393"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 393"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 394"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 394"
+        },
+        {
+            "source": "CSE 316",
+            "target": "CSE 416"
+        },
+        {
+            "source": "CSE 495",
+            "target": "CSE 496"
+        }
+    ]
+}

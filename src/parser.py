@@ -4,13 +4,24 @@ from bs4 import Tag
 
 from log import append_to_file
 
-def match (regex, match_text, flags=None):
+def match (regex: str, match_text: str, flags: re.RegexFlag = None):
+    """Takes a regular expression, a text to match, and optional flags as input and returns a list of all non-overlapping matches in the text.
+
+    Parameters
+    ----------
+    regex : str
+        A string representing a regular expression pattern that you want to match against the match_text.
+    match_text : str
+        The text that we want to search for matches using the regular expression pattern specified in the regex parameter.
+    flags : re.RegexFlag, optional
+        The `flags` parameter is an optional argument that can be passed to the `re.findall()` method. It is used to modify the behavior of the regular expression pattern matching. The `flags` parameter is of type `re.RegexFlag`, which is an enumeration of various flag values that can be
+
+    Returns
+    -------
+    list
+        A list of all non-overlapping matches in the text. If no matches are found, the function returns an empty list.
     """
-    :param regex:
-    :param match_text:
-    :param flags: regex match flags
-    :return: The first match found (if using groups) or all matches (if not using groups), otherwise None
-    """
+
     if flags: text_match = re.findall(regex, match_text, flags)
     else: text_match = re.findall(regex, match_text)
 
@@ -26,7 +37,22 @@ def match (regex, match_text, flags=None):
     else:
         return text_match
 
-def req_match(txt, data):
+def req_match(txt: str, course_data: dict):
+    """Takes in a string and a dictionary, and returns a dictionary with information about the requisites specified in the string.
+
+    Parameters
+    ----------
+    txt : str
+        a string representing a requirement or prerequisite for a course
+    course_data : dict
+        The `data` parameter is a dictionary containing information about a course, including its department code (`department`) and course number (`number`). This information is used in the function to provide context for parsing the course requisites.
+
+    Returns
+    -------
+    dict
+        a dictionary containing information about the requisites specified in the string
+    """
+
     # cleans txt
     txt = txt.strip()
     # if txt is an empty string, return
@@ -50,7 +76,7 @@ def req_match(txt, data):
 
         return {
             "type": "and",
-            "value": [req_match(t, data) for t in or_split_txt]
+            "value": [req_match(t, course_data) for t in or_split_txt]
         }
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
@@ -75,7 +101,7 @@ def req_match(txt, data):
         if match(r"wise\shonors", txt, re.IGNORECASE): honors_programs.append("WISE Honors")
         if match(r"university\sscholars", txt, re.IGNORECASE): honors_programs.append("University Scholars")
 
-        if not honors_programs: print(f"{data['department']} {data['number']}: Unknown Honors Program: {txt}")
+        if not honors_programs: print(f"{course_data['department']} {course_data['number']}: Unknown Honors Program: {txt}")
 
         return {"type": "honors", "value": honors_programs}
 
@@ -93,30 +119,75 @@ def req_match(txt, data):
 
         return {
             "type": "or",
-            "value": [req_match(t, data) for t in or_split_txt]
+            "value": [req_match(t, course_data) for t in or_split_txt]
         }
 
     # if txt is a course
     if match(r"^[a-zA-Z]{3}\s\d{3}$", txt):
         return {"type": "course", "value": txt}
 
-    append_to_file("unknown-reqs.txt", f"{data['department']} {data['number']}: {txt}")
+    append_to_file("unknown-reqs.txt", f"{course_data['department']} {course_data['number']}: {txt}")
     return {"type": "custom", "value": txt}
 
-def short_req_match(txt, data):
+def short_req_match(txt: str, course_data: dict | None):
+    """Extracts course codes from a given string and adds missing department codes if necessary.
+    
+    Parameters
+    ----------
+    txt : str
+        a string containing course codes
+    course_data : dict
+        The "data" parameter is a dictionary that is not used in the given function. It is likely meant to contain some information related to courses or requirements, but without more context it is impossible to say for sure.
+    
+    Returns
+    -------
+    list
+        a list of course codes
+    """
+
     req_courses = match(r"([A-Z]{3}\s\d{3}|\d{3})", txt)
 
     if req_courses:
         for i, c in enumerate(req_courses):
             # if t does not have department code, then add it from the previous element
             if not match(r"[A-Z]{3}", c):
-                req_courses[i] = f"{match(r'[a-zA-Z]{3}', req_courses[i - 1])[0]} {c}"
+                if i == 0:
+                    append_to_file("unknown-reqs.txt", txt)
+                    return
+                else:
+                    req_courses[i] = f"{match(r'[a-zA-Z]{3}', req_courses[i - 1])[0]} {c}"
 
     return req_courses
 
-def parse_course(course_node, shortened_reqs):
+def parse_course(course_node, shortened_reqs: bool=False):
+    """Parses course information from a webpage and returns a dictionary containing various details about the course.
+    
+    Parameters
+    ----------
+    course_node
+        It is a BeautifulSoup object representing a single course
+    shortened_reqs : bool, optional
+        A boolean value that indicates whether the function should use shortened requirement names or not. The default value is False.
+    
+    Returns
+    -------
+    dict
+        A dictionary containing various details about the course. The dictionary contains the following keys:
+        - "department": the three-letter department code of the course (e.g. "CSE")
+        - "number": the three-digit course number (e.g. "101")
+        - "name": the name of the course (e.g. "Introduction to Computer Science")
+        - "description": a description of the course
+        - "prerequisites": a list of prerequisites for the course
+        - "corequisites": a list of corequisites for the course
+        - "antirequisites": a list of antirequisites for the course
+        - "advisoryPrerequisites": a list of advisory prerequisites for the course
+        - "advisoryCorequisites": a list of advisory corequisites for the course
+        - "sbcs": a list of SBCs that the course satisfies
+        - "credits": the number of credits that the course is worth
+    """
+
     # default data object
-    data = {
+    course_data = {
         "department": None,
         "number": None,
         "name": None,
@@ -139,28 +210,28 @@ def parse_course(course_node, shortened_reqs):
 
         # if line is first (then it specifies the headers)
         if lineI == 1:
-            (data["department"], data["number"], data["name"]) = match(r"^([a-zA-Z]{3})\s(\d{3}):\s*(.*)$", text)
+            (course_data["department"], course_data["number"], course_data["name"]) = match(r"^([a-zA-Z]{3})\s(\d{3}):\s*(.*)$", text)
 
         # if line is second (then it specifies the description)
         elif lineI == 3:
-            data["description"] = text
+            course_data["description"] = text
 
         # if line matches SBC
         elif match(r"SBC:", text):
             # matches all SBCs if any
             sbcs = re.findall(r"SBC:\s*([A-Z]+(?:,\s*[A-Z]+)*)", text)
-            data["sbcs"] = sbcs if sbcs else []
+            course_data["sbcs"] = sbcs if sbcs else []
 
         # if line matches partial fulfillment of SBCs
         elif match(r"Partially fulfills", text): continue
 
         # if line is an SBC
         elif isinstance(line, Tag) and line.name == "a" and line.has_attr("title"):
-            data["sbcs"].append(text)
+            course_data["sbcs"].append(text)
 
         # if line matches credits
         elif match(r"(\d+(?:-\d+)?)\scredits?", text):
-            data["credits"] = match(r"(\d+(?:-\d+)?)\scredits?", text)[0]
+            course_data["credits"] = match(r"(\d+(?:-\d+)?)\scredits?", text)[0]
 
         # if line matches requisite
         elif match(r"requisite", text):
@@ -169,27 +240,70 @@ def parse_course(course_node, shortened_reqs):
             # clean up requisite_type
             req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
 
-            requisite_obj = short_req_match(req_text, data) if shortened_reqs else req_match(req_text, data)
+            requisite_obj = short_req_match(req_text, course_data) if shortened_reqs else req_match(req_text, course_data)
 
             match req_type:
                 case "pre":
-                    data["prerequisites"] = requisite_obj
+                    course_data["prerequisites"] = requisite_obj
                 case "co":
-                    data["corequisites"] = requisite_obj
+                    course_data["corequisites"] = requisite_obj
                 case "pre or co":
-                    data["prerequisites"] = data["corequisites"] = requisite_obj
+                    course_data["prerequisites"] = course_data["corequisites"] = requisite_obj
                 case "anti":
-                    data["antirequisites"] = requisite_obj
+                    course_data["antirequisites"] = requisite_obj
                 case "advisory pre":
-                    data["advisoryPrerequisites"] = requisite_obj
+                    course_data["advisoryPrerequisites"] = requisite_obj
                 case "advisory co":
-                    data["advisoryCorequisites"] = requisite_obj
+                    course_data["advisoryCorequisites"] = requisite_obj
                 case "advisory pre or co":
-                    data["advisoryPrerequisites"] = data["advisoryCorequisites"] = requisite_obj
+                    course_data["advisoryPrerequisites"] = course_data["advisoryCorequisites"] = requisite_obj
                 case _:
                     print(f"\"{req_type}\" is not a valid requisite type")
 
         # otherwise (if line doesn't match) ...
-        else: append_to_file("unmatched.txt", f"{data['department']} {data['number']}: {text}")
+        else: append_to_file("unmatched.txt", f"{course_data['department']} {course_data['number']}: {text}")
 
-    return data
+    return course_data
+
+def parse_for_3d_visualization(course_node, data: dict, department_exceptions: list[str], depart_i: int):
+    course_number = None
+    for lineI, line in enumerate(course_node.children):
+        # cleans up text by replacing all /n and multiple consecutive spaces with a single space and normalizes unicode
+        text = unicodedata.normalize("NFKD", re.sub(r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
+
+        # if line is an empty line or is an empty element (of class "clear"), continue to next line
+        if not text or (isinstance(line, Tag) and line.attrs.get("class") == ["clear"]): continue
+
+        # if line is first (then it specifies the headers)
+        if lineI == 1:
+            course_number = match(r"^[A-Z]{3}\s\d{3}", text)[0]
+
+            # append the course as a node (to future graph)
+            data["nodes"].append({
+                "id": course_number,
+                "group": depart_i
+            })
+
+        # if line matches requisite
+        elif match(r"requisite", text):
+            assert course_number, "course has not been found!"
+
+            try:
+                (req_type, req_text) = match(r"(.*)requisite\(?s?\)?:\s*(.*)$", text)
+            except TypeError:
+                append_to_file("unknown-reqs.txt", f"{course_number}: {text}")
+                continue
+
+            # clean up requisite_type
+            req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
+
+            reqs = short_req_match(req_text, None)
+
+            if reqs and not match("advisory", req_type) and match("pre", req_type):
+                for req in short_req_match(req_text, None):
+                    if req[0:3] not in department_exceptions:
+                        data["links"].append({
+                            "source": req,
+                            "target": course_number
+                        })
+
