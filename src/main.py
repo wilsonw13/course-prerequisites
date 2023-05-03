@@ -152,96 +152,6 @@ all_departments = [
     "WST"
 ]
 
-# department_exceptions = [
-#     "AFH",
-#     "AIM",
-#     "AMR",
-#     "ANP",
-#     "ARB",
-#     "ARS",
-#     "ASC",
-#     "BCP",
-#     "CAR",
-#     "CCS",
-#     "CDS",
-#     "CDT",
-#     "CEF",
-#     "CHI",
-#     "CLL",
-#     "CLT",
-#     "DAN",
-#     "EAS",
-#     "EEL",
-#     "ENV",
-#     "EST",
-#     "EUR",
-#     "EXT",
-#     "FLA",
-#     "GER",
-#     "GRK",
-#     "HAD",
-#     "HAL",
-#     "HAN",
-#     "HAT",
-#     "HBA",
-#     "HBH",
-#     "HBM",
-#     "HBP",
-#     "HBW",
-#     "HBY",
-#     "HDG",
-#     "HDO",
-#     "HDP",
-#     "HIN",
-#     "HNC",
-#     "HND",
-#     "HNG",
-#     "HNH",
-#     "HNI",
-#     "HON",
-#     "HUE",
-#     "HUF",
-#     "HUG",
-#     "HUI",
-#     "HUL",
-#     "HUR",
-#     "HUS",
-#     "HWC",
-#     "IAE",
-#     "IAP",
-#     "INT",
-#     "JDH",
-#     "JPN",
-#     "LAN",
-#     "LAT",
-#     "LCR",
-#     "LDR",
-#     "LHD",
-#     "LHW",
-#     "LIA",
-#     "MAE",
-#     "MAP",
-#     "MDA",
-#     "MSL",
-#     "MVL",
-#     "NUR",
-#     "OAE",
-#     "PER",
-#     "POR",
-#     "SBU",
-#     "SCH",
-#     "SCI",
-#     "SKT",
-#     "SLN",
-#     "SSE",
-#     "SWA",
-#     "TRK",
-#     "UKR",
-#     "VIP",
-#     "WAE",
-#     "WSE"
-# ]
-
 def get_course_bulletin(department: str):
     # SBU UG Bulletin Link
     url = f"https://www.stonybrook.edu/sb/bulletin/current/academicprograms/{department}/courses.php"
@@ -275,9 +185,11 @@ def full_parse(department: str, course_number: str = None, shortened_reqs: bool 
         write_to_datasets_json(f"{department}-data{'-short' if shortened_reqs else ''}.json", department_data)
 
 
-def generate_3d_visualization_json(departments: list[str]):
+def generate_3d_visualization_json(departments: list[str], remove_links: bool = True):
     departments_docs = []
     department_exceptions = []
+
+    clear_log_dir()
 
     for department in departments:
         try:
@@ -288,8 +200,6 @@ def generate_3d_visualization_json(departments: list[str]):
 
     assert departments_docs, "No department courses found!"
 
-    clear_log_dir()
-
     graph_data = {
         "nodes": [],
         "links": []
@@ -299,10 +209,17 @@ def generate_3d_visualization_json(departments: list[str]):
         for node in doc:
             if isinstance(node, Tag): parse_to_prereq_graph(node, graph_data, department_exceptions, i + 1)
 
-    write_to_datasets_json("graph-data.json", graph_data)
+    # whenever a course in a link's source is not found in node...
+    if remove_links:
+        # remove the link
+        course_graph_nodes = [node["id"] for node in graph_data["nodes"]]
+        graph_data["links"] = [link for link in graph_data["links"] if link["source"] in course_graph_nodes]
+    else:
+        pass # add the course as another node
+
+    write_to_datasets_json("small-graph-data.json", graph_data)
 
 
 # full_parse("CSE", course_number=None, shortened_reqs=True)
 # generate_3d_visualization_json(all_departments)
-generate_3d_visualization_json(["CHE"])
-
+generate_3d_visualization_json(["CSE", "AMS"])

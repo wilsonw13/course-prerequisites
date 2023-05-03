@@ -3,7 +3,7 @@ import unicodedata
 from bs4 import Tag
 from exceptions import UnknownRequisite, UnmatchedCourseLine
 
-def match (regex: str, match_text: str, flags: re.RegexFlag = None):
+def match(regex: str, match_text: str, flags: re.RegexFlag = None):
     """Takes a regular expression, a text to match, and optional flags as input and returns a list of all non-overlapping matches in the text.
 
     Parameters
@@ -288,11 +288,12 @@ def parse_to_prereq_graph(course_node, data: dict, department_exceptions: list[s
 
             # if line is first (then it specifies the headers)
             if lineI == 1:
-                course_number = match(r"^[A-Z]{3}\s\d{3}", text)[0]
+                course_number, name = match(r"^([A-Z]{3}\s\d{3}):\s*(.*)", text)
 
                 # append the course as a node (to future graph)
                 data["nodes"].append({
                     "id": course_number,
+                    "name": name,
                     "group": group_num
                 })
 
@@ -317,6 +318,7 @@ def parse_to_prereq_graph(course_node, data: dict, department_exceptions: list[s
                                 "source": req,
                                 "target": course_number
                             })
+
         except UnknownRequisite as e:
             e.log()
 

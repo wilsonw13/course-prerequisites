@@ -2,462 +2,577 @@
     "nodes": [
         {
             "id": "CSE 101",
+            "name": "Computer Science Principles",
             "group": 1
         },
         {
             "id": "CSE 102",
+            "name": "Introduction to Web Design and Programming",
             "group": 1
         },
         {
             "id": "CSE 110",
+            "name": "Introduction to Computer Science",
             "group": 1
         },
         {
             "id": "CSE 114",
+            "name": "Introduction to Object-Oriented Programming",
             "group": 1
         },
         {
             "id": "CSE 130",
+            "name": "Introduction to Programming in C",
             "group": 1
         },
         {
             "id": "CSE 150",
+            "name": "Foundations of Computer Science: Honors",
             "group": 1
         },
         {
             "id": "CSE 160",
+            "name": "Computer Science A: Honors",
             "group": 1
         },
         {
             "id": "CSE 161",
+            "name": "Laboratory for Computer Science A: Honors",
             "group": 1
         },
         {
             "id": "CSE 190",
+            "name": "Special Topics in Practice and Applications of Computer Science",
             "group": 1
         },
         {
             "id": "CSE 191",
+            "name": "Special Topics in Practice and Applications for Computer Science",
             "group": 1
         },
         {
             "id": "CSE 192",
+            "name": "Special Topics in Practice and Applications for Computer Science",
             "group": 1
         },
         {
             "id": "CSE 214",
+            "name": "Data Structures",
             "group": 1
         },
         {
             "id": "CSE 215",
+            "name": "Foundations of Computer Science",
             "group": 1
         },
         {
             "id": "CSE 216",
+            "name": "Programming Abstractions",
             "group": 1
         },
         {
             "id": "CSE 220",
+            "name": "Systems Fundamentals I",
             "group": 1
         },
         {
             "id": "CSE 230",
+            "name": "Intermediate Programming in C and C++",
             "group": 1
         },
         {
             "id": "CSE 260",
+            "name": "Computer Science B: Honors",
             "group": 1
         },
         {
             "id": "CSE 261",
+            "name": "Laboratory for Computer Science B: Honors",
             "group": 1
         },
         {
             "id": "CSE 300",
+            "name": "Technical Communications",
             "group": 1
         },
         {
             "id": "CSE 301",
+            "name": "History of Computing",
             "group": 1
         },
         {
             "id": "CSE 303",
+            "name": "Introduction to the Theory of Computation",
             "group": 1
         },
         {
             "id": "CSE 304",
+            "name": "Compiler Design",
             "group": 1
         },
         {
             "id": "CSE 305",
+            "name": "Principles of Database Systems",
             "group": 1
         },
         {
             "id": "CSE 306",
+            "name": "Operating Systems",
             "group": 1
         },
         {
             "id": "CSE 307",
+            "name": "Principles of Programming Languages",
             "group": 1
         },
         {
             "id": "CSE 310",
+            "name": "Computer Networks",
             "group": 1
         },
         {
             "id": "CSE 311",
+            "name": "Systems Administration",
             "group": 1
         },
         {
             "id": "CSE 312",
+            "name": "Legal, Social, and Ethical Issues in Information Systems",
             "group": 1
         },
         {
             "id": "CSE 316",
+            "name": "Fundamentals of Software Development",
             "group": 1
         },
         {
             "id": "CSE 320",
+            "name": "Systems Fundamentals II",
             "group": 1
         },
         {
             "id": "CSE 323",
+            "name": "Human-Computer Interaction",
             "group": 1
         },
         {
             "id": "CSE 325",
+            "name": "Computers and Sculpture",
             "group": 1
         },
         {
             "id": "CSE 327",
+            "name": "Fundamentals of Computer Vision",
             "group": 1
         },
         {
             "id": "CSE 328",
+            "name": "Fundamentals of Computer Graphics",
             "group": 1
         },
         {
             "id": "CSE 331",
+            "name": "Computer Security Fundamentals",
             "group": 1
         },
         {
             "id": "CSE 332",
+            "name": "Introduction to Visualization",
             "group": 1
         },
         {
             "id": "CSE 333",
+            "name": "User Interface Development",
             "group": 1
         },
         {
             "id": "CSE 334",
+            "name": "Introduction to Multimedia Systems",
             "group": 1
         },
         {
             "id": "CSE 336",
+            "name": "Internet Programming",
             "group": 1
         },
         {
             "id": "CSE 337",
+            "name": "Scripting Languages",
             "group": 1
         },
         {
             "id": "CSE 350",
+            "name": "Theory of Computation: Honors",
             "group": 1
         },
         {
             "id": "CSE 351",
+            "name": "Introduction to Data Science",
             "group": 1
         },
         {
             "id": "CSE 352",
+            "name": "Artificial Intelligence",
             "group": 1
         },
         {
             "id": "CSE 353",
+            "name": "Machine Learning",
             "group": 1
         },
         {
             "id": "CSE 354",
+            "name": "Natural Language Processing",
             "group": 1
         },
         {
             "id": "CSE 355",
+            "name": "Computational Geometry",
             "group": 1
         },
         {
             "id": "CSE 356",
+            "name": "Cloud Computing",
             "group": 1
         },
         {
             "id": "CSE 357",
+            "name": "Statistical Methods for Data Science",
             "group": 1
         },
         {
             "id": "CSE 360",
+            "name": "Software Security",
             "group": 1
         },
         {
             "id": "CSE 361",
+            "name": "Web Security",
             "group": 1
         },
         {
             "id": "CSE 362",
+            "name": "Mobile Security",
             "group": 1
         },
         {
             "id": "CSE 363",
+            "name": "Offensive Security",
             "group": 1
         },
         {
             "id": "CSE 364",
+            "name": "Advanced Multimedia Techniques",
             "group": 1
         },
         {
             "id": "CSE 366",
+            "name": "Introduction to Virtual Reality",
             "group": 1
         },
         {
             "id": "CSE 370",
+            "name": "Wireless and Mobile Networking",
             "group": 1
         },
         {
             "id": "CSE 371",
+            "name": "Logic",
             "group": 1
         },
         {
             "id": "CSE 373",
+            "name": "Analysis of Algorithms",
             "group": 1
         },
         {
             "id": "CSE 376",
+            "name": "Advanced Systems Programming in UNIX/C",
             "group": 1
         },
         {
             "id": "CSE 377",
+            "name": "Introduction to Medical Imaging",
             "group": 1
         },
         {
             "id": "CSE 378",
+            "name": "Introduction to Robotics",
             "group": 1
         },
         {
             "id": "CSE 380",
+            "name": "2D Game Programming",
             "group": 1
         },
         {
             "id": "CSE 381",
+            "name": "3D Game Programming",
             "group": 1
         },
         {
             "id": "CSE 385",
+            "name": "Analysis of Algorithms: Honors",
             "group": 1
         },
         {
             "id": "CSE 390",
+            "name": "Special Topics in Computer Science",
             "group": 1
         },
         {
             "id": "CSE 391",
+            "name": "Special Topics in Computer Science",
             "group": 1
         },
         {
             "id": "CSE 392",
+            "name": "Special Topics in Computer Science",
             "group": 1
         },
         {
             "id": "CSE 393",
+            "name": "Special Topics in Computer Science",
             "group": 1
         },
         {
             "id": "CSE 394",
+            "name": "Special Topics in Computer Science",
             "group": 1
         },
         {
             "id": "CSE 416",
+            "name": "Software Engineering",
             "group": 1
         },
         {
             "id": "CSE 475",
+            "name": "Undergraduate Teaching Practicum",
             "group": 1
         },
         {
             "id": "CSE 487",
+            "name": "Research in Computer Science",
             "group": 1
         },
         {
             "id": "CSE 488",
+            "name": "Internship in Computer Science",
             "group": 1
         },
         {
             "id": "CSE 495",
+            "name": "Senior Honors Research Project I",
             "group": 1
         },
         {
             "id": "CSE 496",
+            "name": "Senior Honors Research Project II",
             "group": 1
         },
         {
             "id": "AMS 102",
+            "name": "Elements of Statistics",
             "group": 2
         },
         {
             "id": "AMS 103",
+            "name": "Applied Mathematics in Modern Technology",
             "group": 2
         },
         {
             "id": "AMS 104",
+            "name": "Spreadsheet Technology and Applications",
             "group": 2
         },
         {
             "id": "AMS 105",
+            "name": "Introduction to Business Statistics",
             "group": 2
         },
         {
             "id": "AMS 110",
+            "name": "Probability and Statistics in the Life Sciences",
             "group": 2
         },
         {
             "id": "AMS 151",
+            "name": "Applied Calculus I",
             "group": 2
         },
         {
             "id": "AMS 161",
+            "name": "Applied Calculus II",
             "group": 2
         },
         {
             "id": "AMS 210",
+            "name": "Applied Linear Algebra",
             "group": 2
         },
         {
             "id": "AMS 261",
+            "name": "Applied Calculus III",
             "group": 2
         },
         {
             "id": "AMS 300",
+            "name": "Writing in Applied Mathematics",
             "group": 2
         },
         {
             "id": "AMS 301",
+            "name": "Finite Mathematical Structures",
             "group": 2
         },
         {
             "id": "AMS 303",
+            "name": "Graph Theory",
             "group": 2
         },
         {
             "id": "AMS 310",
+            "name": "Survey of Probability and Statistics",
             "group": 2
         },
         {
             "id": "AMS 311",
+            "name": "Probability Theory",
             "group": 2
         },
         {
             "id": "AMS 315",
+            "name": "Data Analysis",
             "group": 2
         },
         {
             "id": "AMS 316",
+            "name": "Introduction to Time Series Analysis",
             "group": 2
         },
         {
             "id": "AMS 317",
+            "name": "Introduction to Linear Regression Analysis",
             "group": 2
         },
         {
             "id": "AMS 318",
+            "name": "Financial Mathematics",
             "group": 2
         },
         {
             "id": "AMS 320",
+            "name": "Introduction to Quantitative Finance",
             "group": 2
         },
         {
             "id": "AMS 325",
+            "name": "Computing and Programming Fundamentals in Applied Mathematics and Statistics",
             "group": 2
         },
         {
             "id": "AMS 326",
+            "name": "Numerical Analysis",
             "group": 2
         },
         {
             "id": "AMS 332",
+            "name": "Computational Modeling of Physiological Systems",
             "group": 2
         },
         {
             "id": "AMS 333",
+            "name": "Mathematical Biology",
             "group": 2
         },
         {
             "id": "AMS 335",
+            "name": "Game Theory",
             "group": 2
         },
         {
             "id": "AMS 341",
+            "name": "Operations Research I: Deterministic Models",
             "group": 2
         },
         {
             "id": "AMS 342",
+            "name": "Operations Research II: Stochastic Models",
             "group": 2
         },
         {
             "id": "AMS 345",
+            "name": "Computational Geometry",
             "group": 2
         },
         {
             "id": "AMS 351",
+            "name": "Applied Algebra",
             "group": 2
         },
         {
             "id": "AMS 361",
+            "name": "Applied Calculus IV: Differential Equations",
             "group": 2
         },
         {
             "id": "AMS 380",
+            "name": "Data Mining",
             "group": 2
         },
         {
             "id": "AMS 394",
+            "name": "Statistical Laboratory",
             "group": 2
         },
         {
             "id": "AMS 410",
+            "name": "Actuarial Mathematics",
             "group": 2
         },
         {
             "id": "AMS 412",
+            "name": "Mathematical Statistics",
             "group": 2
         },
         {
             "id": "AMS 420",
+            "name": "Investment Science Foundations",
             "group": 2
         },
         {
             "id": "AMS 441",
+            "name": "Business Enterprise",
             "group": 2
         },
         {
             "id": "AMS 458",
+            "name": "Speak Effectively Before an Audience",
             "group": 2
         },
         {
             "id": "AMS 459",
+            "name": "Write Effectively in Applied Mathematics",
             "group": 2
         },
         {
             "id": "AMS 475",
+            "name": "Undergraduate Teaching Practicum",
             "group": 2
         },
         {
             "id": "AMS 476",
+            "name": "Undergraduate Teaching Practicum",
             "group": 2
         },
         {
             "id": "AMS 487",
+            "name": "Research in Applied Mathematics",
             "group": 2
         },
         {
             "id": "AMS 492",
+            "name": "Topics in Applied Mathematics",
             "group": 2
         }
     ],
