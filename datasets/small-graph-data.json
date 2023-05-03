@@ -1,0 +1,1082 @@
+{
+    "nodes": [
+        {
+            "id": "CSE 101",
+            "group": 1
+        },
+        {
+            "id": "CSE 102",
+            "group": 1
+        },
+        {
+            "id": "CSE 110",
+            "group": 1
+        },
+        {
+            "id": "CSE 114",
+            "group": 1
+        },
+        {
+            "id": "CSE 130",
+            "group": 1
+        },
+        {
+            "id": "CSE 150",
+            "group": 1
+        },
+        {
+            "id": "CSE 160",
+            "group": 1
+        },
+        {
+            "id": "CSE 161",
+            "group": 1
+        },
+        {
+            "id": "CSE 190",
+            "group": 1
+        },
+        {
+            "id": "CSE 191",
+            "group": 1
+        },
+        {
+            "id": "CSE 192",
+            "group": 1
+        },
+        {
+            "id": "CSE 214",
+            "group": 1
+        },
+        {
+            "id": "CSE 215",
+            "group": 1
+        },
+        {
+            "id": "CSE 216",
+            "group": 1
+        },
+        {
+            "id": "CSE 220",
+            "group": 1
+        },
+        {
+            "id": "CSE 230",
+            "group": 1
+        },
+        {
+            "id": "CSE 260",
+            "group": 1
+        },
+        {
+            "id": "CSE 261",
+            "group": 1
+        },
+        {
+            "id": "CSE 300",
+            "group": 1
+        },
+        {
+            "id": "CSE 301",
+            "group": 1
+        },
+        {
+            "id": "CSE 303",
+            "group": 1
+        },
+        {
+            "id": "CSE 304",
+            "group": 1
+        },
+        {
+            "id": "CSE 305",
+            "group": 1
+        },
+        {
+            "id": "CSE 306",
+            "group": 1
+        },
+        {
+            "id": "CSE 307",
+            "group": 1
+        },
+        {
+            "id": "CSE 310",
+            "group": 1
+        },
+        {
+            "id": "CSE 311",
+            "group": 1
+        },
+        {
+            "id": "CSE 312",
+            "group": 1
+        },
+        {
+            "id": "CSE 316",
+            "group": 1
+        },
+        {
+            "id": "CSE 320",
+            "group": 1
+        },
+        {
+            "id": "CSE 323",
+            "group": 1
+        },
+        {
+            "id": "CSE 325",
+            "group": 1
+        },
+        {
+            "id": "CSE 327",
+            "group": 1
+        },
+        {
+            "id": "CSE 328",
+            "group": 1
+        },
+        {
+            "id": "CSE 331",
+            "group": 1
+        },
+        {
+            "id": "CSE 332",
+            "group": 1
+        },
+        {
+            "id": "CSE 333",
+            "group": 1
+        },
+        {
+            "id": "CSE 334",
+            "group": 1
+        },
+        {
+            "id": "CSE 336",
+            "group": 1
+        },
+        {
+            "id": "CSE 337",
+            "group": 1
+        },
+        {
+            "id": "CSE 350",
+            "group": 1
+        },
+        {
+            "id": "CSE 351",
+            "group": 1
+        },
+        {
+            "id": "CSE 352",
+            "group": 1
+        },
+        {
+            "id": "CSE 353",
+            "group": 1
+        },
+        {
+            "id": "CSE 354",
+            "group": 1
+        },
+        {
+            "id": "CSE 355",
+            "group": 1
+        },
+        {
+            "id": "CSE 356",
+            "group": 1
+        },
+        {
+            "id": "CSE 357",
+            "group": 1
+        },
+        {
+            "id": "CSE 360",
+            "group": 1
+        },
+        {
+            "id": "CSE 361",
+            "group": 1
+        },
+        {
+            "id": "CSE 362",
+            "group": 1
+        },
+        {
+            "id": "CSE 363",
+            "group": 1
+        },
+        {
+            "id": "CSE 364",
+            "group": 1
+        },
+        {
+            "id": "CSE 366",
+            "group": 1
+        },
+        {
+            "id": "CSE 370",
+            "group": 1
+        },
+        {
+            "id": "CSE 371",
+            "group": 1
+        },
+        {
+            "id": "CSE 373",
+            "group": 1
+        },
+        {
+            "id": "CSE 376",
+            "group": 1
+        },
+        {
+            "id": "CSE 377",
+            "group": 1
+        },
+        {
+            "id": "CSE 378",
+            "group": 1
+        },
+        {
+            "id": "CSE 380",
+            "group": 1
+        },
+        {
+            "id": "CSE 381",
+            "group": 1
+        },
+        {
+            "id": "CSE 385",
+            "group": 1
+        },
+        {
+            "id": "CSE 390",
+            "group": 1
+        },
+        {
+            "id": "CSE 391",
+            "group": 1
+        },
+        {
+            "id": "CSE 392",
+            "group": 1
+        },
+        {
+            "id": "CSE 393",
+            "group": 1
+        },
+        {
+            "id": "CSE 394",
+            "group": 1
+        },
+        {
+            "id": "CSE 416",
+            "group": 1
+        },
+        {
+            "id": "CSE 475",
+            "group": 1
+        },
+        {
+            "id": "CSE 487",
+            "group": 1
+        },
+        {
+            "id": "CSE 488",
+            "group": 1
+        },
+        {
+            "id": "CSE 495",
+            "group": 1
+        },
+        {
+            "id": "CSE 496",
+            "group": 1
+        },
+        {
+            "id": "AMS 102",
+            "group": 2
+        },
+        {
+            "id": "AMS 103",
+            "group": 2
+        },
+        {
+            "id": "AMS 104",
+            "group": 2
+        },
+        {
+            "id": "AMS 105",
+            "group": 2
+        },
+        {
+            "id": "AMS 110",
+            "group": 2
+        },
+        {
+            "id": "AMS 151",
+            "group": 2
+        },
+        {
+            "id": "AMS 161",
+            "group": 2
+        },
+        {
+            "id": "AMS 210",
+            "group": 2
+        },
+        {
+            "id": "AMS 261",
+            "group": 2
+        },
+        {
+            "id": "AMS 300",
+            "group": 2
+        },
+        {
+            "id": "AMS 301",
+            "group": 2
+        },
+        {
+            "id": "AMS 303",
+            "group": 2
+        },
+        {
+            "id": "AMS 310",
+            "group": 2
+        },
+        {
+            "id": "AMS 311",
+            "group": 2
+        },
+        {
+            "id": "AMS 315",
+            "group": 2
+        },
+        {
+            "id": "AMS 316",
+            "group": 2
+        },
+        {
+            "id": "AMS 317",
+            "group": 2
+        },
+        {
+            "id": "AMS 318",
+            "group": 2
+        },
+        {
+            "id": "AMS 320",
+            "group": 2
+        },
+        {
+            "id": "AMS 325",
+            "group": 2
+        },
+        {
+            "id": "AMS 326",
+            "group": 2
+        },
+        {
+            "id": "AMS 332",
+            "group": 2
+        },
+        {
+            "id": "AMS 333",
+            "group": 2
+        },
+        {
+            "id": "AMS 335",
+            "group": 2
+        },
+        {
+            "id": "AMS 341",
+            "group": 2
+        },
+        {
+            "id": "AMS 342",
+            "group": 2
+        },
+        {
+            "id": "AMS 345",
+            "group": 2
+        },
+        {
+            "id": "AMS 351",
+            "group": 2
+        },
+        {
+            "id": "AMS 361",
+            "group": 2
+        },
+        {
+            "id": "AMS 380",
+            "group": 2
+        },
+        {
+            "id": "AMS 394",
+            "group": 2
+        },
+        {
+            "id": "AMS 410",
+            "group": 2
+        },
+        {
+            "id": "AMS 412",
+            "group": 2
+        },
+        {
+            "id": "AMS 420",
+            "group": 2
+        },
+        {
+            "id": "AMS 441",
+            "group": 2
+        },
+        {
+            "id": "AMS 458",
+            "group": 2
+        },
+        {
+            "id": "AMS 459",
+            "group": 2
+        },
+        {
+            "id": "AMS 475",
+            "group": 2
+        },
+        {
+            "id": "AMS 476",
+            "group": 2
+        },
+        {
+            "id": "AMS 487",
+            "group": 2
+        },
+        {
+            "id": "AMS 492",
+            "group": 2
+        }
+    ],
+    "links": [
+        {
+            "source": "CSE 114",
+            "target": "CSE 214"
+        },
+        {
+            "source": "AMS 151",
+            "target": "CSE 215"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 216"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 220"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 220"
+        },
+        {
+            "source": "CSE 130",
+            "target": "CSE 230"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 230"
+        },
+        {
+            "source": "CSE 160",
+            "target": "CSE 260"
+        },
+        {
+            "source": "CSE 160",
+            "target": "CSE 303"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 303"
+        },
+        {
+            "source": "CSE 150",
+            "target": "CSE 303"
+        },
+        {
+            "source": "CSE 215",
+            "target": "CSE 303"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 304"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 304"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 304"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 305"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 305"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 306"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 306"
+        },
+        {
+            "source": "CSE 320",
+            "target": "CSE 306"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 307"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 307"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 307"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 310"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 310"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 310"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 311"
+        },
+        {
+            "source": "CSE 230",
+            "target": "CSE 311"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 311"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 316"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 316"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 320"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 323"
+        },
+        {
+            "source": "CSE 230",
+            "target": "CSE 323"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 323"
+        },
+        {
+            "source": "CSE 110",
+            "target": "CSE 325"
+        },
+        {
+            "source": "CSE 101",
+            "target": "CSE 325"
+        },
+        {
+            "source": "CSE 114",
+            "target": "CSE 325"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 327"
+        },
+        {
+            "source": "CSE 230",
+            "target": "CSE 327"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 327"
+        },
+        {
+            "source": "AMS 210",
+            "target": "CSE 327"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 328"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 328"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 328"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 331"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 332"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 332"
+        },
+        {
+            "source": "AMS 210",
+            "target": "CSE 332"
+        },
+        {
+            "source": "AMS 110",
+            "target": "CSE 332"
+        },
+        {
+            "source": "AMS 310",
+            "target": "CSE 332"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 333"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 333"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 336"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 336"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 337"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 337"
+        },
+        {
+            "source": "CSE 150",
+            "target": "CSE 350"
+        },
+        {
+            "source": "CSE 215",
+            "target": "CSE 350"
+        },
+        {
+            "source": "AMS 210",
+            "target": "CSE 350"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 351"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 351"
+        },
+        {
+            "source": "AMS 310",
+            "target": "CSE 351"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 352"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 352"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 353"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 353"
+        },
+        {
+            "source": "AMS 310",
+            "target": "CSE 353"
+        },
+        {
+            "source": "AMS 311",
+            "target": "CSE 353"
+        },
+        {
+            "source": "AMS 412",
+            "target": "CSE 353"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 354"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 354"
+        },
+        {
+            "source": "AMS 301",
+            "target": "CSE 355"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 356"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 356"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 356"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 357"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 357"
+        },
+        {
+            "source": "AMS 310",
+            "target": "CSE 357"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 360"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 361"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 362"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 363"
+        },
+        {
+            "source": "CSE 328",
+            "target": "CSE 366"
+        },
+        {
+            "source": "CSE 310",
+            "target": "CSE 370"
+        },
+        {
+            "source": "CSE 150",
+            "target": "CSE 371"
+        },
+        {
+            "source": "CSE 215",
+            "target": "CSE 371"
+        },
+        {
+            "source": "AMS 210",
+            "target": "CSE 373"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 373"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 373"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 376"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 376"
+        },
+        {
+            "source": "CSE 320",
+            "target": "CSE 376"
+        },
+        {
+            "source": "AMS 161",
+            "target": "CSE 377"
+        },
+        {
+            "source": "AMS 210",
+            "target": "CSE 377"
+        },
+        {
+            "source": "AMS 161",
+            "target": "CSE 378"
+        },
+        {
+            "source": "AMS 210",
+            "target": "CSE 378"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 380"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 380"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 380"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 381"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 381"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 381"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 385"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 385"
+        },
+        {
+            "source": "AMS 210",
+            "target": "CSE 385"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 390"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 390"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 391"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 391"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 392"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 392"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 393"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 393"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 394"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 394"
+        },
+        {
+            "source": "CSE 316",
+            "target": "CSE 416"
+        },
+        {
+            "source": "CSE 495",
+            "target": "CSE 496"
+        },
+        {
+            "source": "AMS 151",
+            "target": "AMS 110"
+        },
+        {
+            "source": "AMS 151",
+            "target": "AMS 161"
+        },
+        {
+            "source": "AMS 151",
+            "target": "AMS 210"
+        },
+        {
+            "source": "AMS 161",
+            "target": "AMS 261"
+        },
+        {
+            "source": "AMS 210",
+            "target": "AMS 301"
+        },
+        {
+            "source": "AMS 361",
+            "target": "AMS 301"
+        },
+        {
+            "source": "AMS 301",
+            "target": "AMS 303"
+        },
+        {
+            "source": "AMS 161",
+            "target": "AMS 310"
+        },
+        {
+            "source": "AMS 301",
+            "target": "AMS 311"
+        },
+        {
+            "source": "AMS 310",
+            "target": "AMS 311"
+        },
+        {
+            "source": "AMS 310",
+            "target": "AMS 315"
+        },
+        {
+            "source": "AMS 311",
+            "target": "AMS 316"
+        },
+        {
+            "source": "AMS 315",
+            "target": "AMS 316"
+        },
+        {
+            "source": "AMS 315",
+            "target": "AMS 317"
+        },
+        {
+            "source": "AMS 310",
+            "target": "AMS 318"
+        },
+        {
+            "source": "AMS 311",
+            "target": "AMS 320"
+        },
+        {
+            "source": "AMS 210",
+            "target": "AMS 325"
+        },
+        {
+            "source": "CSE 101",
+            "target": "AMS 326"
+        },
+        {
+            "source": "AMS 161",
+            "target": "AMS 326"
+        },
+        {
+            "source": "AMS 161",
+            "target": "AMS 333"
+        },
+        {
+            "source": "AMS 151",
+            "target": "AMS 335"
+        },
+        {
+            "source": "AMS 210",
+            "target": "AMS 341"
+        },
+        {
+            "source": "AMS 210",
+            "target": "AMS 342"
+        },
+        {
+            "source": "AMS 311",
+            "target": "AMS 342"
+        },
+        {
+            "source": "AMS 301",
+            "target": "AMS 345"
+        },
+        {
+            "source": "AMS 210",
+            "target": "AMS 351"
+        },
+        {
+            "source": "AMS 161",
+            "target": "AMS 361"
+        },
+        {
+            "source": "AMS 311",
+            "target": "AMS 380"
+        },
+        {
+            "source": "AMS 310",
+            "target": "AMS 394"
+        },
+        {
+            "source": "AMS 315",
+            "target": "AMS 394"
+        },
+        {
+            "source": "AMS 261",
+            "target": "AMS 410"
+        },
+        {
+            "source": "AMS 310",
+            "target": "AMS 410"
+        },
+        {
+            "source": "AMS 311",
+            "target": "AMS 410"
+        },
+        {
+            "source": "AMS 315",
+            "target": "AMS 410"
+        },
+        {
+            "source": "AMS 311",
+            "target": "AMS 412"
+        },
+        {
+            "source": "AMS 311",
+            "target": "AMS 420"
+        }
+    ]
+}
