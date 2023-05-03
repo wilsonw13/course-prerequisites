@@ -1,0 +1,594 @@
+{
+    "nodes": [
+        {
+            "id": "CHE 115",
+            "group": 1
+        },
+        {
+            "id": "CHE 129",
+            "group": 1
+        },
+        {
+            "id": "CHE 130",
+            "group": 1
+        },
+        {
+            "id": "CHE 131",
+            "group": 1
+        },
+        {
+            "id": "CHE 132",
+            "group": 1
+        },
+        {
+            "id": "CHE 133",
+            "group": 1
+        },
+        {
+            "id": "CHE 134",
+            "group": 1
+        },
+        {
+            "id": "CHE 152",
+            "group": 1
+        },
+        {
+            "id": "CHE 154",
+            "group": 1
+        },
+        {
+            "id": "CHE 301",
+            "group": 1
+        },
+        {
+            "id": "CHE 302",
+            "group": 1
+        },
+        {
+            "id": "CHE 303",
+            "group": 1
+        },
+        {
+            "id": "CHE 304",
+            "group": 1
+        },
+        {
+            "id": "CHE 310",
+            "group": 1
+        },
+        {
+            "id": "CHE 312",
+            "group": 1
+        },
+        {
+            "id": "CHE 321",
+            "group": 1
+        },
+        {
+            "id": "CHE 322",
+            "group": 1
+        },
+        {
+            "id": "CHE 327",
+            "group": 1
+        },
+        {
+            "id": "CHE 328",
+            "group": 1
+        },
+        {
+            "id": "CHE 331",
+            "group": 1
+        },
+        {
+            "id": "CHE 332",
+            "group": 1
+        },
+        {
+            "id": "CHE 345",
+            "group": 1
+        },
+        {
+            "id": "CHE 346",
+            "group": 1
+        },
+        {
+            "id": "CHE 348",
+            "group": 1
+        },
+        {
+            "id": "CHE 351",
+            "group": 1
+        },
+        {
+            "id": "CHE 353",
+            "group": 1
+        },
+        {
+            "id": "CHE 357",
+            "group": 1
+        },
+        {
+            "id": "CHE 358",
+            "group": 1
+        },
+        {
+            "id": "CHE 361",
+            "group": 1
+        },
+        {
+            "id": "CHE 362",
+            "group": 1
+        },
+        {
+            "id": "CHE 375",
+            "group": 1
+        },
+        {
+            "id": "CHE 376",
+            "group": 1
+        },
+        {
+            "id": "CHE 378",
+            "group": 1
+        },
+        {
+            "id": "CHE 379",
+            "group": 1
+        },
+        {
+            "id": "CHE 383",
+            "group": 1
+        },
+        {
+            "id": "CHE 384",
+            "group": 1
+        },
+        {
+            "id": "CHE 385",
+            "group": 1
+        },
+        {
+            "id": "CHE 444",
+            "group": 1
+        },
+        {
+            "id": "CHE 459",
+            "group": 1
+        },
+        {
+            "id": "CHE 461",
+            "group": 1
+        },
+        {
+            "id": "CHE 475",
+            "group": 1
+        },
+        {
+            "id": "CHE 476",
+            "group": 1
+        },
+        {
+            "id": "CHE 477",
+            "group": 1
+        },
+        {
+            "id": "CHE 487",
+            "group": 1
+        },
+        {
+            "id": "CHE 488",
+            "group": 1
+        },
+        {
+            "id": "CHE 495",
+            "group": 1
+        },
+        {
+            "id": "CHE 496",
+            "group": 1
+        }
+    ],
+    "links": [
+        {
+            "source": "MAT 125",
+            "target": "CHE 131"
+        },
+        {
+            "source": "MAT 125",
+            "target": "CHE 132"
+        },
+        {
+            "source": "CHE 129",
+            "target": "CHE 132"
+        },
+        {
+            "source": "CHE 130",
+            "target": "CHE 132"
+        },
+        {
+            "source": "MAT 126",
+            "target": "CHE 132"
+        },
+        {
+            "source": "CHE 129",
+            "target": "CHE 133"
+        },
+        {
+            "source": "CHE 131",
+            "target": "CHE 133"
+        },
+        {
+            "source": "CHE 133",
+            "target": "CHE 134"
+        },
+        {
+            "source": "CHE 132",
+            "target": "CHE 134"
+        },
+        {
+            "source": "MAT 131",
+            "target": "CHE 152"
+        },
+        {
+            "source": "MAT 125",
+            "target": "CHE 152"
+        },
+        {
+            "source": "AMS 151",
+            "target": "CHE 152"
+        },
+        {
+            "source": "CHE 132",
+            "target": "CHE 301"
+        },
+        {
+            "source": "CHE 152",
+            "target": "CHE 301"
+        },
+        {
+            "source": "MAT 132",
+            "target": "CHE 301"
+        },
+        {
+            "source": "MAT 142",
+            "target": "CHE 301"
+        },
+        {
+            "source": "MAT 127",
+            "target": "CHE 301"
+        },
+        {
+            "source": "MAT 171",
+            "target": "CHE 301"
+        },
+        {
+            "source": "AMS 161",
+            "target": "CHE 301"
+        },
+        {
+            "source": "CHE 301",
+            "target": "CHE 302"
+        },
+        {
+            "source": "MAT 203",
+            "target": "CHE 302"
+        },
+        {
+            "source": "MAT 211",
+            "target": "CHE 302"
+        },
+        {
+            "source": "AMS 210",
+            "target": "CHE 302"
+        },
+        {
+            "source": "AMS 261",
+            "target": "CHE 302"
+        },
+        {
+            "source": "PHY 122",
+            "target": "CHE 302"
+        },
+        {
+            "source": "PHY 132",
+            "target": "CHE 302"
+        },
+        {
+            "source": "PHY 134",
+            "target": "CHE 302"
+        },
+        {
+            "source": "PHY 142",
+            "target": "CHE 302"
+        },
+        {
+            "source": "PHY 126",
+            "target": "CHE 302"
+        },
+        {
+            "source": "PHY 127",
+            "target": "CHE 302"
+        },
+        {
+            "source": "CHE 134",
+            "target": "CHE 303"
+        },
+        {
+            "source": "CHE 154",
+            "target": "CHE 303"
+        },
+        {
+            "source": "CHE 303",
+            "target": "CHE 304"
+        },
+        {
+            "source": "CHE 132",
+            "target": "CHE 310"
+        },
+        {
+            "source": "CHE 152",
+            "target": "CHE 310"
+        },
+        {
+            "source": "CHE 132",
+            "target": "CHE 312"
+        },
+        {
+            "source": "CHE 152",
+            "target": "CHE 312"
+        },
+        {
+            "source": "MAT 132",
+            "target": "CHE 312"
+        },
+        {
+            "source": "MAT 142",
+            "target": "CHE 312"
+        },
+        {
+            "source": "MAT 127",
+            "target": "CHE 312"
+        },
+        {
+            "source": "MAT 171",
+            "target": "CHE 312"
+        },
+        {
+            "source": "AMS 161",
+            "target": "CHE 312"
+        },
+        {
+            "source": "PHY 121",
+            "target": "CHE 312"
+        },
+        {
+            "source": "PHY 125",
+            "target": "CHE 312"
+        },
+        {
+            "source": "PHY 131",
+            "target": "CHE 312"
+        },
+        {
+            "source": "PHY 133",
+            "target": "CHE 312"
+        },
+        {
+            "source": "PHY 141",
+            "target": "CHE 312"
+        },
+        {
+            "source": "CHE 132",
+            "target": "CHE 321"
+        },
+        {
+            "source": "CHE 321",
+            "target": "CHE 322"
+        },
+        {
+            "source": "CHE 134",
+            "target": "CHE 327"
+        },
+        {
+            "source": "CHE 321",
+            "target": "CHE 327"
+        },
+        {
+            "source": "CHE 327",
+            "target": "CHE 328"
+        },
+        {
+            "source": "CHE 322",
+            "target": "CHE 328"
+        },
+        {
+            "source": "CHE 152",
+            "target": "CHE 331"
+        },
+        {
+            "source": "CHE 331",
+            "target": "CHE 332"
+        },
+        {
+            "source": "CHE 322",
+            "target": "CHE 345"
+        },
+        {
+            "source": "CHE 332",
+            "target": "CHE 345"
+        },
+        {
+            "source": "CHE 301",
+            "target": "CHE 345"
+        },
+        {
+            "source": "CHE 312",
+            "target": "CHE 345"
+        },
+        {
+            "source": "CHE 322",
+            "target": "CHE 346"
+        },
+        {
+            "source": "CHE 332",
+            "target": "CHE 346"
+        },
+        {
+            "source": "CHE 301",
+            "target": "CHE 346"
+        },
+        {
+            "source": "CHE 312",
+            "target": "CHE 346"
+        },
+        {
+            "source": "CHE 322",
+            "target": "CHE 348"
+        },
+        {
+            "source": "CHE 332",
+            "target": "CHE 348"
+        },
+        {
+            "source": "CHE 302",
+            "target": "CHE 351"
+        },
+        {
+            "source": "MAT 203",
+            "target": "CHE 351"
+        },
+        {
+            "source": "MAT 205",
+            "target": "CHE 351"
+        },
+        {
+            "source": "CHE 302",
+            "target": "CHE 353"
+        },
+        {
+            "source": "CHE 321",
+            "target": "CHE 353"
+        },
+        {
+            "source": "CHE 304",
+            "target": "CHE 357"
+        },
+        {
+            "source": "CHE 327",
+            "target": "CHE 357"
+        },
+        {
+            "source": "CHE 383",
+            "target": "CHE 357"
+        },
+        {
+            "source": "CHE 302",
+            "target": "CHE 358"
+        },
+        {
+            "source": "CHE 304",
+            "target": "CHE 358"
+        },
+        {
+            "source": "PHY 126",
+            "target": "CHE 361"
+        },
+        {
+            "source": "PHY 127",
+            "target": "CHE 361"
+        },
+        {
+            "source": "PHY 132",
+            "target": "CHE 361"
+        },
+        {
+            "source": "PHY 134",
+            "target": "CHE 361"
+        },
+        {
+            "source": "PHY 142",
+            "target": "CHE 361"
+        },
+        {
+            "source": "PHY 171",
+            "target": "CHE 361"
+        },
+        {
+            "source": "AMS 161",
+            "target": "CHE 361"
+        },
+        {
+            "source": "MAT 127",
+            "target": "CHE 361"
+        },
+        {
+            "source": "MAT 132",
+            "target": "CHE 361"
+        },
+        {
+            "source": "MAT 142",
+            "target": "CHE 361"
+        },
+        {
+            "source": "CHE 322",
+            "target": "CHE 375"
+        },
+        {
+            "source": "CHE 332",
+            "target": "CHE 375"
+        },
+        {
+            "source": "CHE 375",
+            "target": "CHE 376"
+        },
+        {
+            "source": "CHE 375",
+            "target": "CHE 378"
+        },
+        {
+            "source": "ESG 332",
+            "target": "CHE 378"
+        },
+        {
+            "source": "CHE 375",
+            "target": "CHE 379"
+        },
+        {
+            "source": "CHE 154",
+            "target": "CHE 383"
+        },
+        {
+            "source": "CHE 383",
+            "target": "CHE 384"
+        },
+        {
+            "source": "CHE 327",
+            "target": "CHE 385"
+        },
+        {
+            "source": "CHE 383",
+            "target": "CHE 385"
+        },
+        {
+            "source": "WRT 102",
+            "target": "CHE 444"
+        },
+        {
+            "source": "WRT 102",
+            "target": "CHE 459"
+        },
+        {
+            "source": "CHE 476",
+            "target": "CHE 477"
+        },
+        {
+            "source": "CHE 328",
+            "target": "CHE 488"
+        },
+        {
+            "source": "CHE 384",
+            "target": "CHE 488"
+        }
+    ]
+}
