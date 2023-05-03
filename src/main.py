@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup, SoupStrainer, Tag
-from log import clear_file, write_to_json
-from parser import parse_course, parse_for_3d_visualization
+from parser import parse_course, parse_to_prereq_graph
+from file_utils import write_to_datasets_json, clear_log_dir
+from exceptions import DepartmentDoesNotExist
 
 all_departments = [
     "AAS",
@@ -151,122 +152,116 @@ all_departments = [
     "WST"
 ]
 
-department_exceptions = [
-    "AFH",
-    "AIM",
-    "AMR",
-    "ANP",
-    "ARB",
-    "ARS",
-    "ASC",
-    "BCP",
-    "CAR",
-    "CCS",
-    "CDS",
-    "CDT",
-    "CEF",
-    "CHI",
-    "CLL",
-    "CLT",
-    "DAN",
-    "EAS",
-    "EEL",
-    "ENV",
-    "EST",
-    "EUR",
-    "EXT",
-    "FLA",
-    "GER",
-    "GRK",
-    "HAD",
-    "HAL",
-    "HAN",
-    "HAT",
-    "HBA",
-    "HBH",
-    "HBM",
-    "HBP",
-    "HBW",
-    "HBY",
-    "HDG",
-    "HDO",
-    "HDP",
-    "HIN",
-    "HNC",
-    "HND",
-    "HNG",
-    "HNH",
-    "HNI",
-    "HON",
-    "HUE",
-    "HUF",
-    "HUG",
-    "HUI",
-    "HUL",
-    "HUR",
-    "HUS",
-    "HWC",
-    "IAE",
-    "IAP",
-    "INT",
-    "JDH",
-    "JPN",
-    "LAN",
-    "LAT",
-    "LCR",
-    "LDR",
-    "LHD",
-    "LHW",
-    "LIA",
-    "MAE",
-    "MAP",
-    "MDA",
-    "MSL",
-    "MVL",
-    "NUR",
-    "OAE",
-    "PER",
-    "POR",
-    "SBU",
-    "SCH",
-    "SCI",
-    "SKT",
-    "SLN",
-    "SSE",
-    "SWA",
-    "TRK",
-    "UKR",
-    "VIP",
-    "WAE",
-    "WSE"
-]
+# department_exceptions = [
+#     "AFH",
+#     "AIM",
+#     "AMR",
+#     "ANP",
+#     "ARB",
+#     "ARS",
+#     "ASC",
+#     "BCP",
+#     "CAR",
+#     "CCS",
+#     "CDS",
+#     "CDT",
+#     "CEF",
+#     "CHI",
+#     "CLL",
+#     "CLT",
+#     "DAN",
+#     "EAS",
+#     "EEL",
+#     "ENV",
+#     "EST",
+#     "EUR",
+#     "EXT",
+#     "FLA",
+#     "GER",
+#     "GRK",
+#     "HAD",
+#     "HAL",
+#     "HAN",
+#     "HAT",
+#     "HBA",
+#     "HBH",
+#     "HBM",
+#     "HBP",
+#     "HBW",
+#     "HBY",
+#     "HDG",
+#     "HDO",
+#     "HDP",
+#     "HIN",
+#     "HNC",
+#     "HND",
+#     "HNG",
+#     "HNH",
+#     "HNI",
+#     "HON",
+#     "HUE",
+#     "HUF",
+#     "HUG",
+#     "HUI",
+#     "HUL",
+#     "HUR",
+#     "HUS",
+#     "HWC",
+#     "IAE",
+#     "IAP",
+#     "INT",
+#     "JDH",
+#     "JPN",
+#     "LAN",
+#     "LAT",
+#     "LCR",
+#     "LDR",
+#     "LHD",
+#     "LHW",
+#     "LIA",
+#     "MAE",
+#     "MAP",
+#     "MDA",
+#     "MSL",
+#     "MVL",
+#     "NUR",
+#     "OAE",
+#     "PER",
+#     "POR",
+#     "SBU",
+#     "SCH",
+#     "SCI",
+#     "SKT",
+#     "SLN",
+#     "SSE",
+#     "SWA",
+#     "TRK",
+#     "UKR",
+#     "VIP",
+#     "WAE",
+#     "WSE"
+# ]
 
-def get_course_bulletin(department: str, course_number: str = None):
-    # UG Bulletin Link
+def get_course_bulletin(department: str):
+    # SBU UG Bulletin Link
     url = f"https://www.stonybrook.edu/sb/bulletin/current/academicprograms/{department}/courses.php"
 
-    # Returns beautiful soup instance with children that are <div class="course">
+    # Returns beautiful soup instance with children that are div tags with the course class
     doc = BeautifulSoup(requests.get(url).content, "lxml", parse_only=SoupStrainer(class_="course"))
 
-    try:
-        # if no course nodes found, then throw error
-        assert doc.find(id=course_number), f"Not a valid department: {department}"
-    except AssertionError:
-        print(f"{department} not found")
-
-    # clears log files
-    clear_file("unmatched.txt")
-    clear_file("unknown-reqs.txt")
+    # If a course tag can't be found, raise exception
+    if not doc.find(): raise DepartmentDoesNotExist(department)
 
     return doc
 
-
 def full_parse(department: str, course_number: str = None, shortened_reqs: bool = False):
-    doc = get_course_bulletin(department, course_number)
+    doc = get_course_bulletin(department)
+
+    clear_log_dir()
 
     # if specific course number is specified ...
     if course_number:
-        write_to_json("data.json", parse_course(doc.find(id=course_number), shortened_reqs))
+        write_to_datasets_json("data.json", parse_course(doc.find(id=course_number), shortened_reqs))
 
     # otherwise parse the whole doc
     else:
@@ -277,31 +272,37 @@ def full_parse(department: str, course_number: str = None, shortened_reqs: bool 
                 course_data = parse_course(node, shortened_reqs)
                 department_data[course_data["number"]] = course_data
 
-        write_to_json(f"{department}-data{'-short' if shortened_reqs else ''}.json", department_data)
+        write_to_datasets_json(f"{department}-data{'-short' if shortened_reqs else ''}.json", department_data)
 
 
-def generate_3d_visualization_json(departments: list[str], department_exceptions: list[str]):
-    data = {
+def generate_3d_visualization_json(departments: list[str]):
+    departments_docs = []
+    department_exceptions = []
+
+    for department in departments:
+        try:
+            departments_docs.append(get_course_bulletin(department))
+        except DepartmentDoesNotExist as e:
+            department_exceptions.append(e.department)
+            e.log()
+
+    assert departments_docs, "No department courses found!"
+
+    clear_log_dir()
+
+    graph_data = {
         "nodes": [],
         "links": []
     }
 
-    for i, department in enumerate(departments):
-        doc = get_course_bulletin(department)
-
+    for i, doc in enumerate(departments_docs):
         for node in doc:
-            if isinstance(node, Tag): parse_for_3d_visualization(node, data, department_exceptions, i + 1)
+            if isinstance(node, Tag): parse_to_prereq_graph(node, graph_data, department_exceptions, i + 1)
 
-    write_to_json(f"all-3d-visual.json", data)
+    write_to_datasets_json("graph-data.json", graph_data)
 
 
 # full_parse("CSE", course_number=None, shortened_reqs=True)
-generate_3d_visualization_json(all_departments, department_exceptions)
-
-# nodes that i had to add:
-# MAT 141, 142, 171, 205, 305
-# ANT 304
-# CHE 141, 326, 341
-# 
-# gave up manually adding nodes, so wrote some quick js to do it for me
+# generate_3d_visualization_json(all_departments)
+generate_3d_visualization_json(["CHE"])
 

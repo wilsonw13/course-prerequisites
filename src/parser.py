@@ -1,8 +1,7 @@
 import re
 import unicodedata
 from bs4 import Tag
-
-from log import append_to_file
+from exceptions import UnknownRequisite, UnmatchedCourseLine
 
 def match (regex: str, match_text: str, flags: re.RegexFlag = None):
     """Takes a regular expression, a text to match, and optional flags as input and returns a list of all non-overlapping matches in the text.
@@ -37,14 +36,14 @@ def match (regex: str, match_text: str, flags: re.RegexFlag = None):
     else:
         return text_match
 
-def req_match(txt: str, course_data: dict):
+def req_match(txt: str, course_number: str):
     """Takes in a string and a dictionary, and returns a dictionary with information about the requisites specified in the string.
 
     Parameters
     ----------
     txt : str
         a string representing a requirement or prerequisite for a course
-    course_data : dict
+    course_number : str
         The `data` parameter is a dictionary containing information about a course, including its department code (`department`) and course number (`number`). This information is used in the function to provide context for parsing the course requisites.
 
     Returns
@@ -76,7 +75,7 @@ def req_match(txt: str, course_data: dict):
 
         return {
             "type": "and",
-            "value": [req_match(t, course_data) for t in or_split_txt]
+            "value": [req_match(t, course_number) for t in or_split_txt]
         }
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
@@ -101,7 +100,7 @@ def req_match(txt: str, course_data: dict):
         if match(r"wise\shonors", txt, re.IGNORECASE): honors_programs.append("WISE Honors")
         if match(r"university\sscholars", txt, re.IGNORECASE): honors_programs.append("University Scholars")
 
-        if not honors_programs: print(f"{course_data['department']} {course_data['number']}: Unknown Honors Program: {txt}")
+        if not honors_programs: print(f"{course_number}: Unknown Honors Program: {txt}")
 
         return {"type": "honors", "value": honors_programs}
 
@@ -119,24 +118,27 @@ def req_match(txt: str, course_data: dict):
 
         return {
             "type": "or",
-            "value": [req_match(t, course_data) for t in or_split_txt]
+            "value": [req_match(t, course_number) for t in or_split_txt]
         }
 
     # if txt is a course
     if match(r"^[a-zA-Z]{3}\s\d{3}$", txt):
         return {"type": "course", "value": txt}
 
-    append_to_file("unknown-reqs.txt", f"{course_data['department']} {course_data['number']}: {txt}")
-    return {"type": "custom", "value": txt}
+    try:
+        raise UnknownRequisite(txt, course_number)
+    except UnknownRequisite as e:
+        e.log()
+        return {"type": "custom", "value": txt}
 
-def short_req_match(txt: str, course_data: dict | None):
+def simple_req_match(txt: str, course_number: str):
     """Extracts course codes from a given string and adds missing department codes if necessary.
     
     Parameters
     ----------
     txt : str
         a string containing course codes
-    course_data : dict
+    course_number : str
         The "data" parameter is a dictionary that is not used in the given function. It is likely meant to contain some information related to courses or requirements, but without more context it is impossible to say for sure.
     
     Returns
@@ -147,27 +149,30 @@ def short_req_match(txt: str, course_data: dict | None):
 
     req_courses = match(r"([A-Z]{3}\s\d{3}|\d{3})", txt)
 
-    if req_courses:
-        for i, c in enumerate(req_courses):
-            # if t does not have department code, then add it from the previous element
-            if not match(r"[A-Z]{3}", c):
-                if i == 0:
-                    append_to_file("unknown-reqs.txt", txt)
-                    return
-                else:
-                    req_courses[i] = f"{match(r'[a-zA-Z]{3}', req_courses[i - 1])[0]} {c}"
+    try:
+        if req_courses:
+            for i, c in enumerate(req_courses):
+                # if t does not have department code, then add it from the previous element
+                if not match(r"[A-Z]{3}", c):
+                    if i == 0:
+                        raise UnknownRequisite(txt, course_number)
+                    else:
+                        req_courses[i] = f"{match(r'[a-zA-Z]{3}', req_courses[i - 1])[0]} {c}"
+        else: raise UnknownRequisite(txt, course_number)
+    except UnknownRequisite as e:
+        e.log()
 
     return req_courses
 
-def parse_course(course_node, shortened_reqs: bool=False):
+def parse_course(course_node, parse_simple_reqs: bool = False):
     """Parses course information from a webpage and returns a dictionary containing various details about the course.
     
     Parameters
     ----------
     course_node
         It is a BeautifulSoup object representing a single course
-    shortened_reqs : bool, optional
-        A boolean value that indicates whether the function should use shortened requirement names or not. The default value is False.
+    parse_simple_reqs : bool, optional
+        A boolean value that indicates whether the function should simply parse reqs. The default value is False.
     
     Returns
     -------
@@ -175,6 +180,7 @@ def parse_course(course_node, shortened_reqs: bool=False):
         A dictionary containing various details about the course. The dictionary contains the following keys:
         - "department": the three-letter department code of the course (e.g. "CSE")
         - "number": the three-digit course number (e.g. "101")
+        - "full_course_number": the three-letter department code followed by the three-digit course number (e.g. "CSE 101")
         - "name": the name of the course (e.g. "Introduction to Computer Science")
         - "description": a description of the course
         - "prerequisites": a list of prerequisites for the course
@@ -190,6 +196,7 @@ def parse_course(course_node, shortened_reqs: bool=False):
     course_data = {
         "department": None,
         "number": None,
+        "full_course_number": None,
         "name": None,
         "description": None,
         "prerequisites": None,
@@ -211,6 +218,7 @@ def parse_course(course_node, shortened_reqs: bool=False):
         # if line is first (then it specifies the headers)
         if lineI == 1:
             (course_data["department"], course_data["number"], course_data["name"]) = match(r"^([a-zA-Z]{3})\s(\d{3}):\s*(.*)$", text)
+            course_data["full_course_number"] = course_data["department"] + " " + course_data["number"]
 
         # if line is second (then it specifies the description)
         elif lineI == 3:
@@ -240,7 +248,7 @@ def parse_course(course_node, shortened_reqs: bool=False):
             # clean up requisite_type
             req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
 
-            requisite_obj = short_req_match(req_text, course_data) if shortened_reqs else req_match(req_text, course_data)
+            requisite_obj = simple_req_match(req_text, course_data['full_course_number']) if parse_simple_reqs else req_match(req_text, course_data['full_course_number'])
 
             match req_type:
                 case "pre":
@@ -261,49 +269,54 @@ def parse_course(course_node, shortened_reqs: bool=False):
                     print(f"\"{req_type}\" is not a valid requisite type")
 
         # otherwise (if line doesn't match) ...
-        else: append_to_file("unmatched.txt", f"{course_data['department']} {course_data['number']}: {text}")
+        else:
+            try: raise UnmatchedCourseLine(text, course_data['full_course_number'])
+            except UnmatchedCourseLine as e: e.log()
 
     return course_data
 
-def parse_for_3d_visualization(course_node, data: dict, department_exceptions: list[str], depart_i: int):
+def parse_to_prereq_graph(course_node, data: dict, department_exceptions: list[str], group_num: int):
     course_number = None
+
     for lineI, line in enumerate(course_node.children):
-        # cleans up text by replacing all /n and multiple consecutive spaces with a single space and normalizes unicode
-        text = unicodedata.normalize("NFKD", re.sub(r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
+        try:
+            # cleans up text by replacing all /n and multiple consecutive spaces with a single space and normalizes unicode
+            text = unicodedata.normalize("NFKD", re.sub(r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
 
-        # if line is an empty line or is an empty element (of class "clear"), continue to next line
-        if not text or (isinstance(line, Tag) and line.attrs.get("class") == ["clear"]): continue
+            # if line is an empty line or is an empty element (of class "clear"), continue to next line
+            if not text or (isinstance(line, Tag) and line.attrs.get("class") == ["clear"]): continue
 
-        # if line is first (then it specifies the headers)
-        if lineI == 1:
-            course_number = match(r"^[A-Z]{3}\s\d{3}", text)[0]
+            # if line is first (then it specifies the headers)
+            if lineI == 1:
+                course_number = match(r"^[A-Z]{3}\s\d{3}", text)[0]
 
-            # append the course as a node (to future graph)
-            data["nodes"].append({
-                "id": course_number,
-                "group": depart_i
-            })
+                # append the course as a node (to future graph)
+                data["nodes"].append({
+                    "id": course_number,
+                    "group": group_num
+                })
 
-        # if line matches requisite
-        elif match(r"requisite", text):
-            assert course_number, "course has not been found!"
+            # if line matches requisite
+            elif match(r"requisite", text):
+                assert course_number, "course has not been found!"
 
-            try:
-                (req_type, req_text) = match(r"(.*)requisite\(?s?\)?:\s*(.*)$", text)
-            except TypeError:
-                append_to_file("unknown-reqs.txt", f"{course_number}: {text}")
-                continue
+                try:
+                    (req_type, req_text) = match(r"(.*)requisite\(?s?\)?:\s*(.*)$", text)
+                except TypeError:
+                    raise UnknownRequisite(text, course_number)
 
-            # clean up requisite_type
-            req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
+                # clean up requisite_type
+                req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
 
-            reqs = short_req_match(req_text, None)
+                reqs = simple_req_match(req_text, course_number)
 
-            if reqs and not match("advisory", req_type) and match("pre", req_type):
-                for req in short_req_match(req_text, None):
-                    if req[0:3] not in department_exceptions:
-                        data["links"].append({
-                            "source": req,
-                            "target": course_number
-                        })
+                if reqs and not match("advisory", req_type) and match("pre", req_type):
+                    for req in reqs:
+                        if req[0:3] not in department_exceptions:
+                            data["links"].append({
+                                "source": req,
+                                "target": course_number
+                            })
+        except UnknownRequisite as e:
+            e.log()
 
