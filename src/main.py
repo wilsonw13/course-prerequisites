@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup, SoupStrainer, Tag
-from parser import parse_course, parse_to_prereq_graph
-from file_utils import write_to_datasets_json, clear_log_dir
+from parser import match, parse_course, parse_to_prereq_graph
+from file_utils import write_to_datasets_json, get_datasets_json, clear_log_dir
 from exceptions import DepartmentDoesNotExist
 
 all_departments = [
@@ -210,16 +210,71 @@ def generate_3d_visualization_json(departments: list[str], remove_links: bool = 
             if isinstance(node, Tag): parse_to_prereq_graph(node, graph_data, department_exceptions, i + 1)
 
     # whenever a course in a link's source is not found in node...
-    if remove_links:
-        # remove the link
+    if remove_links:  # remove the link
         course_graph_nodes = [node["id"] for node in graph_data["nodes"]]
         graph_data["links"] = [link for link in graph_data["links"] if link["source"] in course_graph_nodes]
-    else:
-        pass # add the course as another node
 
-    write_to_datasets_json("small-graph-data.json", graph_data)
+        # trying to remove all the isolated "stars"
+        # course_graph_links = [link["source"] for link in graph_data["links"]] + [link["target"] for link in graph_data["links"]]
+        # graph_data["nodes"] = [node for node in graph_data["nodes"] if node["id"] in course_graph_links]
+    else:  # add the course as another node
+        pass
+
+    write_to_datasets_json("graph-data.json", graph_data)
+
+def query_prerequisite_graph(
+        courses: list[str] = None,
+        departments: list[str] = None,
+        show_direct_prerequisites: bool = False,
+        show_transitive_prerequisites: bool = False,
+        show_disconnected_courses: bool = True
+):
+    graph_data = get_datasets_json("graph-data.json")
+
+    # gets a set of all course names in nodes (will be used later as the set of queried nodes
+    node_ids = {node["id"] for node in graph_data["nodes"]}
+
+    if courses or departments:
+        # filters courses to only include those of the specified course/department (found in either)
+        if courses and departments:
+            node_ids = {course for course in node_ids if
+                        course[:3] in departments or
+                        course in courses}
+        else:
+            node_ids = {course for course in node_ids if
+                        (not departments or course[:3] in departments) and
+                        (not courses or course in courses)}
+        if not node_ids: raise Exception("No matching courses found from course/department!")
+
+        # if show_transitive_prerequisites:  should be if/elif/else --- USE LOGIC RULES HERE
+        if show_direct_prerequisites:
+            # making set of all courses that appear in links that direct to a queried course
+            link_source_ids = {link["source"] for link in graph_data["links"] if link["target"] in node_ids}
+            graph_data["nodes"] = [node for node in graph_data["nodes"]
+                                   if node["id"] in node_ids or node["id"] in link_source_ids]
+            graph_data["links"] = [link for link in graph_data["links"]
+                                   if link["target"] in node_ids]
+        else:
+            graph_data["nodes"] = [node for node in graph_data["nodes"] if node["id"] in node_ids]
+            graph_data["links"] = [link for link in graph_data["links"]
+                                   if link["source"] in node_ids and link["target"] in node_ids]
 
 
-# full_parse("CSE", course_number=None, shortened_reqs=True)
+
+    # will not remove disconnected courses if there are no links (i.e. all queried courses are disconnected)
+    if not show_disconnected_courses and graph_data["links"]:
+        # gets a list of all courses found in links
+        courses_in_links = {link["source"] for link in graph_data["links"]} | {link["target"] for link in graph_data["links"]}
+
+        graph_data["nodes"] = [node for node in graph_data["nodes"] if node["id"] in courses_in_links]
+
+    write_to_datasets_json("queried-graph-data.json", graph_data)
+
+
+# full_parse("CSE", course_number=None, shortened_reqs=False)
 # generate_3d_visualization_json(all_departments)
-generate_3d_visualization_json(["CSE", "AMS"])
+# generate_3d_visualization_json(["CSE", "AMS"])
+query_prerequisite_graph(courses=["AMS 210"],
+                         departments=[],
+                         show_direct_prerequisites=True,
+                         show_disconnected_courses=True)

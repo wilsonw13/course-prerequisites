@@ -25,7 +25,7 @@ const Graph = ForceGraph3D({
   controlType: "fly",
   extraRenderers: [new CSS2DRenderer()],
 })(document.getElementById("graph"))
-  .jsonUrl("../../datasets/graph-data.json")
+  .jsonUrl("../../datasets/queried-graph-data.json")
   .nodeLabel("name")
   .nodeAutoColorBy("group")
   .nodeThreeObject((node) => {

@@ -1,4 +1,5 @@
 import os
+import requests
 import json
 
 def ensure_dirs(path): os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -8,6 +9,17 @@ def write_to_datasets_json(file_path, data):
     ensure_dirs(init_path + file_path)
     with open(init_path + file_path, "w") as f:
         json.dump(data, f, indent=4)
+
+def get_datasets_json(file_path):
+    init_path = "../datasets/"
+    path = init_path + file_path
+
+    try:
+        with open(path, "r") as file: return json.load(file)
+    except FileNotFoundError:
+        print("File not found: " + path)
+    except json.JSONDecodeError:
+        print("Invalid JSON format in file: " + path)
 
 def append_to_log_file(file_path, string):
     init_path = "../log/"
