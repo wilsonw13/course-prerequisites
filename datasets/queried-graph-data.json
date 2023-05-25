@@ -1,0 +1,75 @@
+{
+    "nodes": [
+        {
+            "id": "AMS 151",
+            "name": "Applied Calculus I",
+            "group": 4
+        },
+        {
+            "id": "AMS 210",
+            "name": "Applied Linear Algebra",
+            "group": 4
+        },
+        {
+            "id": "CSE 101",
+            "name": "Computer Science Principles",
+            "group": 17
+        },
+        {
+            "id": "CSE 216",
+            "name": "Programming Abstractions",
+            "group": 17
+        },
+        {
+            "id": "CSE 220",
+            "name": "Systems Fundamentals I",
+            "group": 17
+        },
+        {
+            "id": "CSE 260",
+            "name": "Computer Science B: Honors",
+            "group": 17
+        },
+        {
+            "id": "CSE 307",
+            "name": "Principles of Programming Languages",
+            "group": 17
+        },
+        {
+            "id": "MAT 126",
+            "name": "Calculus B",
+            "group": 43
+        },
+        {
+            "id": "MAT 131",
+            "name": "Calculus I",
+            "group": 43
+        }
+    ],
+    "links": [
+        {
+            "source": "AMS 151",
+            "target": "AMS 210"
+        },
+        {
+            "source": "MAT 131",
+            "target": "AMS 210"
+        },
+        {
+            "source": "MAT 126",
+            "target": "AMS 210"
+        },
+        {
+            "source": "CSE 216",
+            "target": "CSE 307"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 307"
+        },
+        {
+            "source": "CSE 220",
+            "target": "CSE 307"
+        }
+    ]
+}

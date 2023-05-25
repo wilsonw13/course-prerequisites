@@ -231,7 +231,7 @@ def query_prerequisite_graph(
 ):
     graph_data = get_datasets_json("graph-data.json")
 
-    # gets a set of all course names in nodes (will be used later as the set of queried nodes
+    # gets a set of all course names in nodes (will be used later as the set of queried nodes)
     node_ids = {node["id"] for node in graph_data["nodes"]}
 
     if courses or departments:
@@ -259,8 +259,6 @@ def query_prerequisite_graph(
             graph_data["links"] = [link for link in graph_data["links"]
                                    if link["source"] in node_ids and link["target"] in node_ids]
 
-
-
     # will not remove disconnected courses if there are no links (i.e. all queried courses are disconnected)
     if not show_disconnected_courses and graph_data["links"]:
         # gets a list of all courses found in links
@@ -274,7 +272,7 @@ def query_prerequisite_graph(
 # full_parse("CSE", course_number=None, shortened_reqs=False)
 # generate_3d_visualization_json(all_departments)
 # generate_3d_visualization_json(["CSE", "AMS"])
-query_prerequisite_graph(courses=["AMS 210"],
+query_prerequisite_graph(courses=["CSE 307", "CSE 101", "AMS 210"],
                          departments=[],
                          show_direct_prerequisites=True,
                          show_disconnected_courses=True)
