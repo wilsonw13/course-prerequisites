@@ -97,7 +97,7 @@ def req_match(txt: str, course_number: str):
 
         if match(r"computer\sscience\shonors", txt, re.IGNORECASE): honors_programs.append("CS Honors")
         if match(r"honors\scollege", txt, re.IGNORECASE): honors_programs.append("Honors College")
-        if match(r"wise\shonors", txt, re.IGNORECASE): honors_programs.append("WISE Honors")
+        if match(r"wise\shonors", txt, re.IGNORECASE): honors_programs.append("WISE")
         if match(r"university\sscholars", txt, re.IGNORECASE): honors_programs.append("University Scholars")
 
         if not honors_programs: print(f"{course_number}: Unknown Honors Program: {txt}")
