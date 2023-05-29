@@ -1,27 +1,29 @@
-# Course Prerequisites
+# Course Prerequisites<!-- omit in toc -->
 
-## Table of Contents
+## Table of Contents<!-- omit in toc -->
 
-- [Course Prerequisites](#course-prerequisites)
-  - [Table of Contents](#table-of-contents)
-  - [Description](#description)
-  - [Design](#design)
-    - [Web Scraper](#web-scraper)
-      - [Course Details](#course-details)
-      - [Requisite Object](#requisite-object)
-      - [Graph Representation](#graph-representation)
-    - [Query](#query)
-    - [Prerequisite Tree Visualizer](#prerequisite-tree-visualizer)
-  - [Implementation](#implementation)
-    - [Course Attribute Parsing](#course-attribute-parsing)
-    - [Requisite Parsing](#requisite-parsing)
-    - [Parsing Into Graph Representation](#parsing-into-graph-representation)
-  - [Future Work](#future-work)
-    - [Requisite Parsing](#requisite-parsing-1)
-    - [Query, Prerequisite Tree Visualizer, and User Interface](#query-prerequisite-tree-visualizer-and-user-interface)
-    - [Other](#other)
-  - [References](#references)
-  - [Local Installation](#local-installation)
+- [Description](#description)
+- [Design](#design)
+  - [Web Scraper](#web-scraper)
+    - [Course Details](#course-details)
+    - [Requisite Object](#requisite-object)
+    - [Graph Representation](#graph-representation)
+  - [Query](#query)
+  - [Prerequisite Tree Visualizer](#prerequisite-tree-visualizer)
+- [Implementation](#implementation)
+  - [Course Attribute Parsing](#course-attribute-parsing)
+  - [Requisite Parsing](#requisite-parsing)
+  - [Parsing Into Graph Representation](#parsing-into-graph-representation)
+- [Future Work](#future-work)
+  - [General Parsing](#general-parsing)
+  - [Requisite Parsing](#requisite-parsing-1)
+  - [Query, Prerequisite Tree Visualizer, and User Interface](#query-prerequisite-tree-visualizer-and-user-interface)
+  - [Other](#other)
+- [Local Installation](#local-installation)
+  - [Setting Up Python, Virtual Environment, and Dependencies](#setting-up-python-virtual-environment-and-dependencies)
+  - [Scraping](#scraping)
+  - [View Visualization](#view-visualization)
+- [References](#references)
 
 ## Description
 
@@ -208,6 +210,11 @@ The current implementation uses the first solution and adds the missing courses 
 
 ## Future Work
 
+### General Parsing
+
+- Some departments do not show their courses on the undergraduate bulletin but rather have their own site to display them.
+  - 
+
 ### Requisite Parsing
 
 - Find a better or more efficient way to represent prequisites as an object/list.
@@ -220,7 +227,7 @@ The current implementation uses the first solution and adds the missing courses 
 
 ### Query, Prerequisite Tree Visualizer, and User Interface
 
-- **(IMPORTANT)** Connect the python query to the web interface.
+- **(IMPORTANT)** Connect the Python query to the web interface by setting up a Python backend server that either manages a REST API or connects via a websocket.
 - Add more query options (e.g. SBCs, credits, depth of prerequisite transitivity).
 - Add customizability to the prerequisite tree visualizer (e.g. toggle between 2D/3D, toggle between different graph layouts, toggle between different color schemes).
 - Add the ability to make small dynamic changes to the graph (e.g. add/remove nodes, change node color, change node size, change link color, change link width).
@@ -232,7 +239,31 @@ The current implementation uses the first solution and adds the missing courses 
   - Show an animaton of which courses to take each semester
 - Scrape schedule builder, course evaluations, rate my professor, etc. and integrate it into the application to create a more complete course planning tool.
 
-...
+## Local Installation
+
+### Setting Up Python, Virtual Environment, and Dependencies
+
+Ensure you have [Python 3.11](https://www.python.org/downloads/) installed for the best results. After cloning the repository, run the following commands to set up a virtual environment and install the required dependencies:
+
+```bash
+python -m venv venv
+venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Scraping
+
+> Note: Currently, you will have to edit the `src/main.py` file in order to execute the various functions with different arguments.
+
+To scrape course data and return all information, run the `full_parse function` in `/src/main.py`
+
+To scrape course data and generate a graph, run the `generate_3d_visualization_json` function in `/src/main.py`
+
+To query the graph, run the query_prerequisite_graph function with optional arguments in `/src/main.py`
+
+### View Visualization
+
+To view the visualization, open either the [2D](/visualizations/2d-force-graph/index.html) or [3D](/visualizations/3d-force-graph/index.html) visualization in a browser.
 
 ## References
 
@@ -240,7 +271,3 @@ The current implementation uses the first solution and adds the missing courses 
 - (Paper) [The curriculum prerequisite network: a tool for visualizing and analyzing academic curricula](https://arxiv.org/ftp/arxiv/papers/1408/1408.5340.pdf)
 - (Paper) [Visualization UW Course Prerequisites Sequences](http://cse512-16s.github.io/fp-dbabbs-jordanstarkey95/paper-dbabbs-jds56.pdf)
 - [Rhumbl: Mapping the cirriculum of MIT through OCW](https://rhumbl.com/examples/curriculum-maps)
-
-## Local Installation
-
-...

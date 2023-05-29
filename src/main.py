@@ -213,10 +213,6 @@ def generate_3d_visualization_json(departments: list[str], remove_links: bool = 
     if remove_links:  # remove the link
         course_graph_nodes = [node["id"] for node in graph_data["nodes"]]
         graph_data["links"] = [link for link in graph_data["links"] if link["source"] in course_graph_nodes]
-
-        # trying to remove all the isolated "stars"
-        # course_graph_links = [link["source"] for link in graph_data["links"]] + [link["target"] for link in graph_data["links"]]
-        # graph_data["nodes"] = [node for node in graph_data["nodes"] if node["id"] in course_graph_links]
     else:  # add the course as another node
         pass
 
