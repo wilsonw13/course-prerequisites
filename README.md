@@ -16,7 +16,12 @@
     - [Course Attribute Parsing](#course-attribute-parsing)
     - [Requisite Parsing](#requisite-parsing)
     - [Parsing Into Graph Representation](#parsing-into-graph-representation)
+  - [Future Work](#future-work)
+    - [Requisite Parsing](#requisite-parsing-1)
+    - [Query, Prerequisite Tree Visualizer, and User Interface](#query-prerequisite-tree-visualizer-and-user-interface)
+    - [Other](#other)
   - [References](#references)
+  - [Local Installation](#local-installation)
 
 ## Description
 
@@ -190,7 +195,44 @@ The web scraper uses a set of rules, similar to that of context free grammar (CF
 
 Currently, the graph representation does not use the requisite parsing rules to parse the requisites. Instead, for each course, it adds itself as a node and simply extracts every course from the prerequisite string and creates a link from these courses. 
 
-After all the course prerequisites have been parsed, there are `source` courses within links that do not exist as a node within the `nodes` list. The only reason this occurs is if a course is not listed in the bulletin. This is a problem because the graph representation is incomplete and does not represent the entire prerequisite tree. To solve this problem, ... (two ways)
+After all the course prerequisites have been parsed, there may be several `source` courses within links that do not exist as a node within the `nodes` list. The only reason this occurs is if a course is not listed in the bulletin. This is a problem because the graph representation is incomplete and thus the prerequisite tree visualizer will not be able to display the graph.
+
+There are two (or three) possible ways to solve this problem:
+1. Add the missing courses as nodes to the `nodes` list.
+    - i.e. add all missing courses
+2. Remove the links that have a `source` that does not exist as a node within the `nodes` list.
+    - i.e. remove all links that contain a missing course
+3. *?!! Request that all courses on the bulletin be updated.*
+
+The current implementation uses the first solution and adds the missing courses as nodes to the `nodes` list. However in the future, there will be an option to toggle between the first and second solution and this may become a query option.
+
+## Future Work
+
+### Requisite Parsing
+
+- Find a better or more efficient way to represent prequisites as an object/list.
+- Add more nodes to the requisite object (e.g. `permission of instructor`, `department consent`).
+- Implemented nested requisites.
+  - e.g. [PHY 134](https://www.stonybrook.edu/sb/bulletin/current/academicprograms/phy/courses.php#134): `PHY 126 and PHY 127; or PHY 132; or corequisite PHY 142`
+- Build an course equivalency knowledge base (e.g. `AMS 210` is equivalent to `MAT 211`, Math Placement Score of `5` is equivalent to `MAT 131 or AMS 151`). Also applies to AP and IB scores.
+- Create a "strict" language for writing requisites unambiguously that can easily parsed and analyzed (e.g. `CSE 214 and (CSE 220 or CSE 260) and (CSE 215 or CSE 230)).
+  - e.g. [PHY 311](https://www.stonybrook.edu/sb/bulletin/current/academicprograms/phy/courses.php#311): `PHY 122/124 or PHY 126 and PHY 127 and PHY 134 or PHY 132/134 or PHY 142/134`
+
+### Query, Prerequisite Tree Visualizer, and User Interface
+
+- **(IMPORTANT)** Connect the python query to the web interface.
+- Add more query options (e.g. SBCs, credits, depth of prerequisite transitivity).
+- Add customizability to the prerequisite tree visualizer (e.g. toggle between 2D/3D, toggle between different graph layouts, toggle between different color schemes).
+- Add the ability to make small dynamic changes to the graph (e.g. add/remove nodes, change node color, change node size, change link color, change link width).
+- View information about each course on hover (e.g. course number, name, description).
+
+### Other
+
+- Generate course progression in order to complete a major/minor or a set of courses based off prior courses taken.
+  - Show an animaton of which courses to take each semester
+- Scrape schedule builder, course evaluations, rate my professor, etc. and integrate it into the application to create a more complete course planning tool.
+
+...
 
 ## References
 
@@ -198,3 +240,7 @@ After all the course prerequisites have been parsed, there are `source` courses 
 - (Paper) [The curriculum prerequisite network: a tool for visualizing and analyzing academic curricula](https://arxiv.org/ftp/arxiv/papers/1408/1408.5340.pdf)
 - (Paper) [Visualization UW Course Prerequisites Sequences](http://cse512-16s.github.io/fp-dbabbs-jordanstarkey95/paper-dbabbs-jds56.pdf)
 - [Rhumbl: Mapping the cirriculum of MIT through OCW](https://rhumbl.com/examples/curriculum-maps)
+
+## Local Installation
+
+...
