@@ -225,7 +225,7 @@ def query_prerequisite_graph(
         show_transitive_prerequisites: bool = False,
         show_disconnected_courses: bool = True
 ):
-    graph_data = get_datasets_json("graph-data.json")
+    graph_data = get_datasets_json("full-graph-data.json")
 
     # gets a set of all course names in nodes (will be used later as the set of queried nodes)
     node_ids = {node["id"] for node in graph_data["nodes"]}
@@ -268,7 +268,7 @@ def query_prerequisite_graph(
 # full_parse("CSE", course_number=None, shortened_reqs=False)
 # generate_3d_visualization_json(all_departments)
 # generate_3d_visualization_json(["CSE", "AMS"])
-query_prerequisite_graph(courses=["CSE 307", "CSE 101", "AMS 210"],
-                         departments=[],
+query_prerequisite_graph(courses=[],
+                         departments=["CSE", "AMS"],
                          show_direct_prerequisites=True,
                          show_disconnected_courses=True)

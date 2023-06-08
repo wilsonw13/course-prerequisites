@@ -1,4 +1,4 @@
-fetch("../../datasets/queried-graph-data.json")
+fetch("../../datasets/full-graph-data.json")
   .then((res) => res.json())
   .then((data) => {
     const Graph = ForceGraph()(document.getElementById("graph"))
