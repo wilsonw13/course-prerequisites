@@ -206,31 +206,6 @@
             "group": 4
         },
         {
-            "id": "BIO 202",
-            "name": "Fundamentals of Biology: Molecular and Cellular Biology",
-            "group": 9
-        },
-        {
-            "id": "BIO 203",
-            "name": "Fundamentals of Biology: Cellular and Organ Physiology",
-            "group": 9
-        },
-        {
-            "id": "BME 120",
-            "name": "Programming Fundamentals in Biomedical Engineering",
-            "group": 10
-        },
-        {
-            "id": "CHE 132",
-            "name": "General Chemistry II",
-            "group": 12
-        },
-        {
-            "id": "CHE 331",
-            "name": "Molecular Science II",
-            "group": 12
-        },
-        {
             "id": "CSE 101",
             "name": "Computer Science Principles",
             "group": 17
@@ -599,172 +574,19 @@
             "id": "CSE 496",
             "name": "Senior Honors Research Project II",
             "group": 17
-        },
-        {
-            "id": "ECO 303",
-            "name": "Intermediate Microeconomic Theory",
-            "group": 21
-        },
-        {
-            "id": "ESE 124",
-            "name": "Programming Fundamentals",
-            "group": 26
-        },
-        {
-            "id": "ESG 111",
-            "name": "Programming for Engineers",
-            "group": 27
-        },
-        {
-            "id": "ISE 208",
-            "name": "Intermediate Programming",
-            "group": 35
-        },
-        {
-            "id": "ISE 218",
-            "name": "Fundamentals of Information Technology",
-            "group": 35
-        },
-        {
-            "id": "ISE 332",
-            "name": "Introduction to Visualization",
-            "group": 35
-        },
-        {
-            "id": "ISE 334",
-            "name": "Introduction to Multimedia Systems",
-            "group": 35
-        },
-        {
-            "id": "MAT 123",
-            "name": "Precalculus",
-            "group": 43
-        },
-        {
-            "id": "MAT 125",
-            "name": "Calculus A",
-            "group": 43
-        },
-        {
-            "id": "MAT 126",
-            "name": "Calculus B",
-            "group": 43
-        },
-        {
-            "id": "MAT 127",
-            "name": "Calculus C",
-            "group": 43
-        },
-        {
-            "id": "MAT 131",
-            "name": "Calculus I",
-            "group": 43
-        },
-        {
-            "id": "MAT 132",
-            "name": "Calculus II",
-            "group": 43
-        },
-        {
-            "id": "MAT 200",
-            "name": "Logic, Language and Proof",
-            "group": 43
-        },
-        {
-            "id": "MAT 203",
-            "name": "Calculus III with Applications",
-            "group": 43
-        },
-        {
-            "id": "MAT 211",
-            "name": "Introduction to Linear Algebra",
-            "group": 43
-        },
-        {
-            "id": "MAT 250",
-            "name": "Introduction to Advanced Mathematics",
-            "group": 43
-        },
-        {
-            "id": "MAT 303",
-            "name": "Calculus IV with Applications",
-            "group": 43
-        },
-        {
-            "id": "MAT 307",
-            "name": "Multivariable Calculus with Linear Algebra",
-            "group": 43
-        },
-        {
-            "id": "MAT 308",
-            "name": "Differential Equations with Linear Algebra",
-            "group": 43
-        },
-        {
-            "id": "MEC 102",
-            "name": "Engineering Computing and Problem Solving",
-            "group": 44
-        },
-        {
-            "id": "MEC 262",
-            "name": "Engineering Dynamics",
-            "group": 44
-        },
-        {
-            "id": "PHY 127",
-            "name": "Classical Physics C",
-            "group": 47
-        },
-        {
-            "id": "PHY 132",
-            "name": "Classical Physics II",
-            "group": 47
-        },
-        {
-            "id": "WRT 102",
-            "name": "Intermediate Writing Workshop",
-            "group": 57
         }
     ],
     "links": [
         {
-            "source": "MAT 123",
-            "target": "AMS 104"
-        },
-        {
             "source": "AMS 151",
             "target": "AMS 110"
-        },
-        {
-            "source": "MAT 125",
-            "target": "AMS 110"
-        },
-        {
-            "source": "MAT 131",
-            "target": "AMS 110"
-        },
-        {
-            "source": "MAT 123",
-            "target": "AMS 151"
         },
         {
             "source": "AMS 151",
             "target": "AMS 161"
         },
         {
-            "source": "MAT 131",
-            "target": "AMS 161"
-        },
-        {
             "source": "AMS 151",
-            "target": "AMS 210"
-        },
-        {
-            "source": "MAT 131",
-            "target": "AMS 210"
-        },
-        {
-            "source": "MAT 126",
             "target": "AMS 210"
         },
         {
@@ -772,31 +594,11 @@
             "target": "AMS 261"
         },
         {
-            "source": "MAT 127",
-            "target": "AMS 261"
-        },
-        {
-            "source": "MAT 132",
-            "target": "AMS 261"
-        },
-        {
-            "source": "WRT 102",
-            "target": "AMS 300"
-        },
-        {
             "source": "AMS 210",
             "target": "AMS 301"
         },
         {
-            "source": "MAT 211",
-            "target": "AMS 301"
-        },
-        {
             "source": "AMS 361",
-            "target": "AMS 301"
-        },
-        {
-            "source": "MAT 303",
             "target": "AMS 301"
         },
         {
@@ -805,14 +607,6 @@
         },
         {
             "source": "AMS 161",
-            "target": "AMS 310"
-        },
-        {
-            "source": "MAT 132",
-            "target": "AMS 310"
-        },
-        {
-            "source": "MAT 127",
             "target": "AMS 310"
         },
         {
@@ -852,10 +646,6 @@
             "target": "AMS 325"
         },
         {
-            "source": "MAT 211",
-            "target": "AMS 325"
-        },
-        {
             "source": "CSE 101",
             "target": "AMS 326"
         },
@@ -864,83 +654,19 @@
             "target": "AMS 326"
         },
         {
-            "source": "MAT 127",
-            "target": "AMS 332"
-        },
-        {
-            "source": "MAT 132",
-            "target": "AMS 332"
-        },
-        {
-            "source": "BIO 202",
-            "target": "AMS 332"
-        },
-        {
-            "source": "BIO 203",
-            "target": "AMS 332"
-        },
-        {
-            "source": "CHE 132",
-            "target": "AMS 332"
-        },
-        {
-            "source": "CHE 331",
-            "target": "AMS 332"
-        },
-        {
-            "source": "PHY 127",
-            "target": "AMS 332"
-        },
-        {
-            "source": "PHY 132",
-            "target": "AMS 332"
-        },
-        {
             "source": "AMS 161",
             "target": "AMS 333"
-        },
-        {
-            "source": "MAT 132",
-            "target": "AMS 333"
-        },
-        {
-            "source": "MAT 126",
-            "target": "AMS 335"
-        },
-        {
-            "source": "MAT 131",
-            "target": "AMS 335"
         },
         {
             "source": "AMS 151",
             "target": "AMS 335"
         },
         {
-            "source": "ECO 303",
-            "target": "AMS 335"
-        },
-        {
             "source": "AMS 210",
             "target": "AMS 341"
         },
         {
-            "source": "MAT 211",
-            "target": "AMS 341"
-        },
-        {
-            "source": "MAT 307",
-            "target": "AMS 341"
-        },
-        {
-            "source": "MAT 308",
-            "target": "AMS 341"
-        },
-        {
             "source": "AMS 210",
-            "target": "AMS 342"
-        },
-        {
-            "source": "MAT 211",
             "target": "AMS 342"
         },
         {
@@ -956,19 +682,7 @@
             "target": "AMS 351"
         },
         {
-            "source": "MAT 211",
-            "target": "AMS 351"
-        },
-        {
             "source": "AMS 161",
-            "target": "AMS 361"
-        },
-        {
-            "source": "MAT 127",
-            "target": "AMS 361"
-        },
-        {
-            "source": "MAT 132",
             "target": "AMS 361"
         },
         {
@@ -985,10 +699,6 @@
         },
         {
             "source": "AMS 261",
-            "target": "AMS 410"
-        },
-        {
-            "source": "MAT 203",
             "target": "AMS 410"
         },
         {
@@ -1012,27 +722,11 @@
             "target": "AMS 420"
         },
         {
-            "source": "WRT 102",
-            "target": "AMS 458"
-        },
-        {
-            "source": "WRT 102",
-            "target": "AMS 459"
-        },
-        {
             "source": "CSE 114",
             "target": "CSE 214"
         },
         {
             "source": "AMS 151",
-            "target": "CSE 215"
-        },
-        {
-            "source": "MAT 125",
-            "target": "CSE 215"
-        },
-        {
-            "source": "MAT 131",
             "target": "CSE 215"
         },
         {
@@ -1056,28 +750,8 @@
             "target": "CSE 230"
         },
         {
-            "source": "ESE 124",
-            "target": "CSE 230"
-        },
-        {
-            "source": "ESG 111",
-            "target": "CSE 230"
-        },
-        {
-            "source": "BME 120",
-            "target": "CSE 230"
-        },
-        {
-            "source": "MEC 102",
-            "target": "CSE 230"
-        },
-        {
             "source": "CSE 160",
             "target": "CSE 260"
-        },
-        {
-            "source": "WRT 102",
-            "target": "CSE 300"
         },
         {
             "source": "CSE 160",
@@ -1152,10 +826,6 @@
             "target": "CSE 310"
         },
         {
-            "source": "ISE 218",
-            "target": "CSE 310"
-        },
-        {
             "source": "CSE 214",
             "target": "CSE 311"
         },
@@ -1165,10 +835,6 @@
         },
         {
             "source": "CSE 260",
-            "target": "CSE 311"
-        },
-        {
-            "source": "ISE 208",
             "target": "CSE 311"
         },
         {
@@ -1193,10 +859,6 @@
         },
         {
             "source": "CSE 260",
-            "target": "CSE 323"
-        },
-        {
-            "source": "ISE 208",
             "target": "CSE 323"
         },
         {
@@ -1228,10 +890,6 @@
             "target": "CSE 327"
         },
         {
-            "source": "MAT 211",
-            "target": "CSE 327"
-        },
-        {
             "source": "CSE 216",
             "target": "CSE 328"
         },
@@ -1253,10 +911,6 @@
         },
         {
             "source": "CSE 260",
-            "target": "CSE 332"
-        },
-        {
-            "source": "MAT 211",
             "target": "CSE 332"
         },
         {
@@ -1305,10 +959,6 @@
         },
         {
             "source": "AMS 210",
-            "target": "CSE 350"
-        },
-        {
-            "source": "MAT 211",
             "target": "CSE 350"
         },
         {
@@ -1404,15 +1054,7 @@
             "target": "CSE 363"
         },
         {
-            "source": "ISE 334",
-            "target": "CSE 364"
-        },
-        {
             "source": "CSE 328",
-            "target": "CSE 366"
-        },
-        {
-            "source": "ISE 332",
             "target": "CSE 366"
         },
         {
@@ -1426,18 +1068,6 @@
         {
             "source": "CSE 215",
             "target": "CSE 371"
-        },
-        {
-            "source": "MAT 200",
-            "target": "CSE 371"
-        },
-        {
-            "source": "MAT 250",
-            "target": "CSE 371"
-        },
-        {
-            "source": "MAT 211",
-            "target": "CSE 373"
         },
         {
             "source": "AMS 210",
@@ -1468,19 +1098,7 @@
             "target": "CSE 377"
         },
         {
-            "source": "MAT 127",
-            "target": "CSE 377"
-        },
-        {
-            "source": "MAT 132",
-            "target": "CSE 377"
-        },
-        {
             "source": "AMS 210",
-            "target": "CSE 377"
-        },
-        {
-            "source": "MAT 211",
             "target": "CSE 377"
         },
         {
@@ -1488,23 +1106,7 @@
             "target": "CSE 378"
         },
         {
-            "source": "MAT 127",
-            "target": "CSE 378"
-        },
-        {
-            "source": "MAT 132",
-            "target": "CSE 378"
-        },
-        {
             "source": "AMS 210",
-            "target": "CSE 378"
-        },
-        {
-            "source": "MAT 211",
-            "target": "CSE 378"
-        },
-        {
-            "source": "MEC 262",
             "target": "CSE 378"
         },
         {
@@ -1541,10 +1143,6 @@
         },
         {
             "source": "AMS 210",
-            "target": "CSE 385"
-        },
-        {
-            "source": "MAT 211",
             "target": "CSE 385"
         },
         {
