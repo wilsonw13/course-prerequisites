@@ -9,12 +9,11 @@ port = 3001
 
 async def handler(websocket):
     async for message in websocket:
-        # parses the message into a dictionary 
+        # parses the message into a dictionary
         msgData = json.loads(message)
-        
+
         # checks the type of message
         if msgData["type"] == "query":
-            # print({msgData['query']})
 
             # queries the graph and sends the response back to the client
             response = query_prerequisite_graph(**msgData["query"])

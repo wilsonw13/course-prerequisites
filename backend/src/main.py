@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup, SoupStrainer, Tag
-from parser import match, parse_course, parse_to_prereq_graph
+from req_parser import match, parse_course, parse_to_prereq_graph
 from file_utils import write_to_datasets_json, get_datasets_json, clear_log_dir
 from exceptions import DepartmentDoesNotExist
 
