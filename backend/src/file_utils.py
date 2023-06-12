@@ -1,17 +1,16 @@
 import os
-import requests
 import json
 
 def ensure_dirs(path): os.makedirs(os.path.dirname(path), exist_ok=True)
 
 def write_to_datasets_json(file_path, data):
-    init_path = "../datasets/"
+    init_path = "./datasets/"
     ensure_dirs(init_path + file_path)
     with open(init_path + file_path, "w") as f:
         json.dump(data, f, indent=4)
 
 def get_datasets_json(file_path):
-    init_path = "../datasets/"
+    init_path = "./datasets/"
     path = init_path + file_path
 
     try:
@@ -22,14 +21,14 @@ def get_datasets_json(file_path):
         print("Invalid JSON format in file: " + path)
 
 def append_to_log_file(file_path, string):
-    init_path = "../log/"
+    init_path = "./log/"
     ensure_dirs(init_path + file_path)
     with open(init_path + file_path, 'a') as f:
         f.write(string + "\n")
 
 def clear_log_dir():
     # Set the directory path
-    directory = '../log/'
+    directory = './log/'
 
     # Iterate over the files in the directory
     for filename in os.listdir(directory):
