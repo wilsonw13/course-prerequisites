@@ -1,6 +1,7 @@
 import re
 import unicodedata
 from bs4 import Tag
+
 from exceptions import UnknownRequisite, UnmatchedCourseLine
 
 def match(regex: str, match_text: str, flags: re.RegexFlag = None):
@@ -133,14 +134,14 @@ def req_match(txt: str, course_number: str):
 
 def simple_req_match(txt: str, course_number: str):
     """Extracts course codes from a given string and adds missing department codes if necessary.
-    
+
     Parameters
     ----------
     txt : str
         a string containing course codes
     course_number : str
         The "data" parameter is a dictionary that is not used in the given function. It is likely meant to contain some information related to courses or requirements, but without more context it is impossible to say for sure.
-    
+
     Returns
     -------
     list
@@ -166,14 +167,14 @@ def simple_req_match(txt: str, course_number: str):
 
 def parse_course(course_node, parse_simple_reqs: bool = False):
     """Parses course information from a webpage and returns a dictionary containing various details about the course.
-    
+
     Parameters
     ----------
     course_node
         It is a BeautifulSoup object representing a single course
     parse_simple_reqs : bool, optional
         A boolean value that indicates whether the function should simply parse reqs. The default value is False.
-    
+
     Returns
     -------
     dict
@@ -250,23 +251,22 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
 
             requisite_obj = simple_req_match(req_text, course_data['full_course_number']) if parse_simple_reqs else req_match(req_text, course_data['full_course_number'])
 
-            match req_type:
-                case "pre":
-                    course_data["prerequisites"] = requisite_obj
-                case "co":
-                    course_data["corequisites"] = requisite_obj
-                case "pre or co":
-                    course_data["prerequisites"] = course_data["corequisites"] = requisite_obj
-                case "anti":
-                    course_data["antirequisites"] = requisite_obj
-                case "advisory pre":
-                    course_data["advisoryPrerequisites"] = requisite_obj
-                case "advisory co":
-                    course_data["advisoryCorequisites"] = requisite_obj
-                case "advisory pre or co":
-                    course_data["advisoryPrerequisites"] = course_data["advisoryCorequisites"] = requisite_obj
-                case _:
-                    print(f"\"{req_type}\" is not a valid requisite type")
+            if req_type == "pre":
+                course_data["prerequisites"] = requisite_obj
+            elif req_type == "co":
+                course_data["corequisites"] = requisite_obj
+            elif req_type == "pre or co":
+                course_data["prerequisites"] = course_data["corequisites"] = requisite_obj
+            elif req_type == "anti":
+                course_data["antirequisites"] = requisite_obj
+            elif req_type == "advisory pre":
+                course_data["advisoryPrerequisites"] = requisite_obj
+            elif req_type == "advisory co":
+                course_data["advisoryCorequisites"] = requisite_obj
+            elif req_type == "advisory pre or co":
+                course_data["advisoryPrerequisites"] = course_data["advisoryCorequisites"] = requisite_obj
+            else:
+                print(f"\"{req_type}\" is not a valid requisite type")
 
         # otherwise (if line doesn't match) ...
         else:
@@ -275,7 +275,7 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
 
     return course_data
 
-def parse_to_prereq_graph(course_node, data: dict, department_exceptions: list[str], group_num: int):
+def parse_to_prereq_graph(course_node, data: dict, department_exceptions: list, group_num: int):
     course_number = None
 
     for lineI, line in enumerate(course_node.children):

@@ -1,4 +1,5 @@
 from file_utils import append_to_log_file
+
 class DepartmentDoesNotExist(Exception):
     """
     Exception raised when the department doesn't exist on the UG Bulletin webpage

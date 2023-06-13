@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup, SoupStrainer, Tag
-from req_parser import match, parse_course, parse_to_prereq_graph
+
+from req_parser import parse_course, parse_to_prereq_graph
 from file_utils import write_to_datasets_json, get_datasets_json, clear_log_dir
 from exceptions import DepartmentDoesNotExist
 
@@ -185,7 +186,7 @@ def full_parse(department: str, course_number: str = None, shortened_reqs: bool 
         write_to_datasets_json(f"{department}-data{'-short' if shortened_reqs else ''}.json", department_data)
 
 
-def generate_3d_visualization_json(departments: list[str], remove_links: bool = True):
+def generate_3d_visualization_json(departments: list, remove_links: bool = True):
     departments_docs = []
     department_exceptions = []
 
@@ -219,8 +220,8 @@ def generate_3d_visualization_json(departments: list[str], remove_links: bool = 
     write_to_datasets_json("graph-data.json", graph_data)
 
 def query_prerequisite_graph(
-        courses: list[str] = None,
-        departments: list[str] = None,
+        courses: list = None,
+        departments: list = None,
         show_direct_prerequisites: bool = False,
         show_transitive_prerequisites: bool = False,
         show_disconnected_courses: bool = True
