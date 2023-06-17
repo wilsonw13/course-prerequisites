@@ -213,7 +213,6 @@ The current implementation uses the first solution and adds the missing courses 
 ### General Parsing
 
 - Some departments do not show their courses on the undergraduate bulletin but rather have their own site to display them.
-  - 
 
 ### Requisite Parsing
 

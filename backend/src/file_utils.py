@@ -1,7 +1,9 @@
 import os
 import json
 
+
 def ensure_dirs(path): os.makedirs(os.path.dirname(path), exist_ok=True)
+
 
 def write_to_datasets_json(file_path, data):
     init_path = "./datasets/"
@@ -9,22 +11,26 @@ def write_to_datasets_json(file_path, data):
     with open(init_path + file_path, "w") as f:
         json.dump(data, f, indent=4)
 
+
 def get_datasets_json(file_path):
     init_path = "./datasets/"
     path = init_path + file_path
 
     try:
-        with open(path, "r") as file: return json.load(file)
+        with open(path, "r") as file:
+            return json.load(file)
     except FileNotFoundError:
         print("File not found: " + path)
     except json.JSONDecodeError:
         print("Invalid JSON format in file: " + path)
+
 
 def append_to_log_file(file_path, string):
     init_path = "./log/"
     ensure_dirs(init_path + file_path)
     with open(init_path + file_path, 'a') as f:
         f.write(string + "\n")
+
 
 def clear_log_dir():
     # Set the directory path
@@ -40,6 +46,7 @@ def clear_log_dir():
             # Open the file in write mode and truncate its content
             with open(file_path, 'w') as f:
                 f.truncate(0)
+
 
 def clear_file(file_path):
     ensure_dirs(file_path)

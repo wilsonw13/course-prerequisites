@@ -1,8 +1,10 @@
 import re
 import unicodedata
 from bs4 import Tag
+from typing import List
 
 from exceptions import UnknownRequisite, UnmatchedCourseLine
+
 
 def match(regex: str, match_text: str, flags: re.RegexFlag = None):
     """Takes a regular expression, a text to match, and optional flags as input and returns a list of all non-overlapping matches in the text.
@@ -22,8 +24,10 @@ def match(regex: str, match_text: str, flags: re.RegexFlag = None):
         A list of all non-overlapping matches in the text. If no matches are found, the function returns an empty list.
     """
 
-    if flags: text_match = re.findall(regex, match_text, flags)
-    else: text_match = re.findall(regex, match_text)
+    if flags:
+        text_match = re.findall(regex, match_text, flags)
+    else:
+        text_match = re.findall(regex, match_text)
 
     # if match is not found, return None
     if not text_match:
@@ -36,6 +40,7 @@ def match(regex: str, match_text: str, flags: re.RegexFlag = None):
     # otherwise (if regex is not using capturing groups), return all matches
     else:
         return text_match
+
 
 def req_match(txt: str, course_number: str):
     """Takes in a string and a dictionary, and returns a dictionary with information about the requisites specified in the string.
@@ -56,11 +61,13 @@ def req_match(txt: str, course_number: str):
     # cleans txt
     txt = txt.strip()
     # if txt is an empty string, return
-    if not txt: return
+    if not txt:
+        return
 
     # removes the "C or higher/better" from txt
     if match(r"[ABCD][+-]? or (?:higher|better)(?:\s?in|:)\s*", txt):
-        txt = match(r"[ABCD][+-]? or (?:higher|better)(?:\s?in|:)\s*(.*)", txt)[0]
+        txt = match(
+            r"[ABCD][+-]? or (?:higher|better)(?:\s?in|:)\s*(.*)", txt)[0]
 
     # if there is an "and" or ";"
     if match(r"(?:\sand\s|;)", txt, re.IGNORECASE):
@@ -83,7 +90,6 @@ def req_match(txt: str, course_number: str):
     if match(r"major", txt, re.IGNORECASE) and match(r"([A-Z]{3})", txt):
         return {"type": "major", "value": [x for x in match(r"([A-Z]{3})", txt)]}
 
-
     # if txt is standing
     if match(r"standing", txt, re.IGNORECASE):
         return {"type": "standing", "value": min([int(x) for x in match(r"U(\d+)", txt)])}
@@ -96,12 +102,17 @@ def req_match(txt: str, course_number: str):
     if match(r"(?:honors|university\sscholars)", txt, re.IGNORECASE):
         honors_programs = []
 
-        if match(r"computer\sscience\shonors", txt, re.IGNORECASE): honors_programs.append("CS Honors")
-        if match(r"honors\scollege", txt, re.IGNORECASE): honors_programs.append("Honors College")
-        if match(r"wise\shonors", txt, re.IGNORECASE): honors_programs.append("WISE")
-        if match(r"university\sscholars", txt, re.IGNORECASE): honors_programs.append("University Scholars")
+        if match(r"computer\sscience\shonors", txt, re.IGNORECASE):
+            honors_programs.append("CS Honors")
+        if match(r"honors\scollege", txt, re.IGNORECASE):
+            honors_programs.append("Honors College")
+        if match(r"wise\shonors", txt, re.IGNORECASE):
+            honors_programs.append("WISE")
+        if match(r"university\sscholars", txt, re.IGNORECASE):
+            honors_programs.append("University Scholars")
 
-        if not honors_programs: print(f"{course_number}: Unknown Honors Program: {txt}")
+        if not honors_programs:
+            print(f"{course_number}: Unknown Honors Program: {txt}")
 
         return {"type": "honors", "value": honors_programs}
 
@@ -132,6 +143,7 @@ def req_match(txt: str, course_number: str):
         e.log()
         return {"type": "custom", "value": txt}
 
+
 def simple_req_match(txt: str, course_number: str):
     """Extracts course codes from a given string and adds missing department codes if necessary.
 
@@ -159,11 +171,13 @@ def simple_req_match(txt: str, course_number: str):
                         raise UnknownRequisite(txt, course_number)
                     else:
                         req_courses[i] = f"{match(r'[a-zA-Z]{3}', req_courses[i - 1])[0]} {c}"
-        else: raise UnknownRequisite(txt, course_number)
+        else:
+            raise UnknownRequisite(txt, course_number)
     except UnknownRequisite as e:
         e.log()
 
     return req_courses
+
 
 def parse_course(course_node, parse_simple_reqs: bool = False):
     """Parses course information from a webpage and returns a dictionary containing various details about the course.
@@ -211,15 +225,19 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
 
     for lineI, line in enumerate(course_node.children):
         # cleans up text by replacing all /n and multiple consecutive spaces with a single space and normalizes unicode
-        text = unicodedata.normalize("NFKD", re.sub(r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
+        text = unicodedata.normalize("NFKD", re.sub(
+            r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
 
         # if line is an empty line or is an empty element (of class "clear"), continue to next line
-        if not text or (isinstance(line, Tag) and line.attrs.get("class") == ["clear"]): continue
+        if not text or (isinstance(line, Tag) and line.attrs.get("class") == ["clear"]):
+            continue
 
         # if line is first (then it specifies the headers)
         if lineI == 1:
-            (course_data["department"], course_data["number"], course_data["name"]) = match(r"^([a-zA-Z]{3})\s(\d{3}):\s*(.*)$", text)
-            course_data["full_course_number"] = course_data["department"] + " " + course_data["number"]
+            (course_data["department"], course_data["number"], course_data["name"]) = match(
+                r"^([a-zA-Z]{3})\s(\d{3}):\s*(.*)$", text)
+            course_data["full_course_number"] = course_data["department"] + \
+                " " + course_data["number"]
 
         # if line is second (then it specifies the description)
         elif lineI == 3:
@@ -232,7 +250,8 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
             course_data["sbcs"] = sbcs if sbcs else []
 
         # if line matches partial fulfillment of SBCs
-        elif match(r"Partially fulfills", text): continue
+        elif match(r"Partially fulfills", text):
+            continue
 
         # if line is an SBC
         elif isinstance(line, Tag) and line.name == "a" and line.has_attr("title"):
@@ -240,16 +259,19 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
 
         # if line matches credits
         elif match(r"(\d+(?:-\d+)?)\scredits?", text):
-            course_data["credits"] = match(r"(\d+(?:-\d+)?)\scredits?", text)[0]
+            course_data["credits"] = match(
+                r"(\d+(?:-\d+)?)\scredits?", text)[0]
 
         # if line matches requisite
         elif match(r"requisite", text):
             (req_type, req_text) = match(r"(.*)requisites?:\s*(.*)$", text)
 
             # clean up requisite_type
-            req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
+            req_type = re.sub(
+                r"\s+", " ", req_type.replace("-", " ").lower().strip())
 
-            requisite_obj = simple_req_match(req_text, course_data['full_course_number']) if parse_simple_reqs else req_match(req_text, course_data['full_course_number'])
+            requisite_obj = simple_req_match(req_text, course_data['full_course_number']) if parse_simple_reqs else req_match(
+                req_text, course_data['full_course_number'])
 
             if req_type == "pre":
                 course_data["prerequisites"] = requisite_obj
@@ -270,25 +292,32 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
 
         # otherwise (if line doesn't match) ...
         else:
-            try: raise UnmatchedCourseLine(text, course_data['full_course_number'])
-            except UnmatchedCourseLine as e: e.log()
+            try:
+                raise UnmatchedCourseLine(
+                    text, course_data['full_course_number'])
+            except UnmatchedCourseLine as e:
+                e.log()
 
     return course_data
 
-def parse_to_prereq_graph(course_node, data: dict, department_exceptions: list, group_num: int):
+
+def parse_to_prereq_graph(course_node, data: dict, department_exceptions: List[str], group_num: int):
     course_number = None
 
     for lineI, line in enumerate(course_node.children):
         try:
             # cleans up text by replacing all /n and multiple consecutive spaces with a single space and normalizes unicode
-            text = unicodedata.normalize("NFKD", re.sub(r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
+            text = unicodedata.normalize("NFKD", re.sub(
+                r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
 
             # if line is an empty line or is an empty element (of class "clear"), continue to next line
-            if not text or (isinstance(line, Tag) and line.attrs.get("class") == ["clear"]): continue
+            if not text or (isinstance(line, Tag) and line.attrs.get("class") == ["clear"]):
+                continue
 
             # if line is first (then it specifies the headers)
             if lineI == 1:
-                course_number, name = match(r"^([A-Z]{3}\s\d{3}):\s*(.*)", text)
+                course_number, name = match(
+                    r"^([A-Z]{3}\s\d{3}):\s*(.*)", text)
 
                 # append the course as a node (to future graph)
                 data["nodes"].append({
@@ -302,12 +331,14 @@ def parse_to_prereq_graph(course_node, data: dict, department_exceptions: list, 
                 assert course_number, "course has not been found!"
 
                 try:
-                    (req_type, req_text) = match(r"(.*)requisite\(?s?\)?:\s*(.*)$", text)
+                    (req_type, req_text) = match(
+                        r"(.*)requisite\(?s?\)?:\s*(.*)$", text)
                 except TypeError:
                     raise UnknownRequisite(text, course_number)
 
                 # clean up requisite_type
-                req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
+                req_type = re.sub(
+                    r"\s+", " ", req_type.replace("-", " ").lower().strip())
 
                 reqs = simple_req_match(req_text, course_number)
 
@@ -321,4 +352,3 @@ def parse_to_prereq_graph(course_node, data: dict, department_exceptions: list, 
 
         except UnknownRequisite as e:
             e.log()
-

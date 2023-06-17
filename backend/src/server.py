@@ -7,6 +7,7 @@ from main import query_prerequisite_graph
 url = "localhost"
 port = 3001
 
+
 async def handler(websocket):
     async for message in websocket:
         # parses the message into a dictionary
@@ -18,6 +19,7 @@ async def handler(websocket):
             # queries the graph and sends the response back to the client
             response = query_prerequisite_graph(**msgData["query"])
             await websocket.send(json.dumps({"type": "graph", "data": response}))
+
 
 async def main():
     async with serve(handler, url, port):
