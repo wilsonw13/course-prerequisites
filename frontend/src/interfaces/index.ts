@@ -1,1 +1,2 @@
-export * from './graph.interface.ts'
+export * from './graph.interface.js'
+export * from './query.interface.js'

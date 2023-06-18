@@ -5,7 +5,7 @@ import json
 from main import query_prerequisite_graph
 
 url = "localhost"
-port = 3001
+port = 3003
 
 
 async def handler(websocket):

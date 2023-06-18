@@ -1,9 +1,9 @@
-import { useRef, useState, useEffect, forwardRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import ForceGraph3D from 'react-force-graph-3d'
-import { GraphData } from '../interfaces'
+import { GraphData } from '../interfaces/index.ts'
 
 interface Props {
-  graphData: GraphData,
+  graphData: GraphData | null,
   // focusControls: boolean
 }
 
@@ -26,15 +26,19 @@ export default function Graph ({ graphData/* , focusControls */ }: Props) {
   }, [focusControls])
 
   return (
-    <ForceGraph3D
-      ref={graphRef}
+    <>{
+      graphData
+        ? <ForceGraph3D
+          ref={graphRef}
 
-      graphData={graphData}
-      nodeLabel={'id'}
-      nodeAutoColorBy={'group'}
-      linkDirectionalArrowLength={3.5}
-      linkDirectionalArrowRelPos={1}
-      controlType={'fly'}
-    />
+          graphData={graphData}
+          nodeLabel={'id'}
+          nodeAutoColorBy={'group'}
+          linkDirectionalArrowLength={3.5}
+          linkDirectionalArrowRelPos={1}
+          controlType={'fly'}
+        />
+        : <div>Loading...</div>
+    }</>
   )
 }

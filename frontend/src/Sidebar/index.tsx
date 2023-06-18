@@ -1,56 +1,62 @@
-import { useState, ChangeEvent } from 'react'
+import { useState, Dispatch, SetStateAction, ChangeEvent, FormEvent } from 'react'
 import { RxDoubleArrowLeft } from 'react-icons/rx'
 import styles from './Sidebar.module.css'
+import { Query, QueryValue } from '../interfaces'
 
-// interface Props {
-// }
+interface Props {
+  socket: WebSocket | null,
+  query: Query,
+  setQuery: Dispatch<SetStateAction<Query>>,
+}
 
-export default function Sidebar () {
-  const [open, setOpen] = useState<boolean>(true)
+export default function Sidebar ({ socket, query, setQuery }: Props) {
+  const [isOpen, setOpen] = useState<boolean>(true)
 
-  const [query, setQuery] = useState({
-    courses: '',
-    departments: 'CSE',
-    show_direct_prerequisites: false,
-    show_transitive_prerequisites: false,
-    show_disconnected_courses: true
-  })
-
-  const [graphData, setGraphData] = useState(null)
-
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = event.target
-    let inputValue: string | string[] | boolean
+  const handleInputChange = (e: ChangeEvent<HTMLFormElement>) => {
+    const { name, value, type, checked } = e.target
+    let inputValue: QueryValue
 
     if (type === 'checkbox') {
       inputValue = checked
     } else if (name === 'courses' || name === 'departments') {
       // Parse input values as arrays
-      inputValue = value.split(',').map((item) => item.toUpperCase().trim())
+      inputValue = value.split(',').map((item: string) => item.toUpperCase().trim())
     } else {
       inputValue = value
     }
 
-    setQuery((prevState) => ({
+    setQuery((prevState: Query) => ({
       ...prevState,
       [name]: inputValue
     }))
   }
 
-  const handleSubmit = () => {
-    console.log('SUBMIT')
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    if (socket) {
+      // Send message through the WebSocket connection
+      console.log('Sending query', query)
+
+      socket.send(JSON.stringify({ type: 'query', query }))
+    }
   }
 
+  const containerStyle = `${styles.sidebar} ${isOpen ? '' : styles.sidebar_collapsed}`
+
+  const arrowIronStyle = `${styles.arrow_icon} ${isOpen ? '' : styles.rotate_arrow_icon}`
+
   return (
-    <div className={styles.sidebar}>
-      <form className={styles.form} onSubmit={handleSubmit}>
+    <div className={containerStyle}>
+      <RxDoubleArrowLeft className={arrowIronStyle} onClick={() => { setOpen(!isOpen) }} />
+      <form className={styles.form} onChange={handleInputChange} onSubmit={handleSubmit}>
+        <p>Query Courses</p>
         <div>
           <label htmlFor="courses">Courses</label>
           <input
             type="text"
             name="courses"
             value={query.courses}
-            onChange={handleInputChange}
           />
         </div>
 
@@ -60,7 +66,6 @@ export default function Sidebar () {
             type="text"
             name="departments"
             value={query.departments}
-            onChange={handleInputChange}
           />
         </div>
 
@@ -72,7 +77,6 @@ export default function Sidebar () {
             type="checkbox"
             name="show_direct_prerequisites"
             checked={query.show_direct_prerequisites}
-            onChange={handleInputChange}
           />
         </div>
 
@@ -84,7 +88,6 @@ export default function Sidebar () {
             type="checkbox"
             name="show_transitive_prerequisites"
             checked={query.show_transitive_prerequisites}
-            onChange={handleInputChange}
           />
         </div>
 
@@ -96,12 +99,10 @@ export default function Sidebar () {
             type="checkbox"
             name="show_disconnected_courses"
             checked={query.show_disconnected_courses}
-            onChange={handleInputChange}
           />
         </div>
         <button>Query</button>
       </form>
-      <RxDoubleArrowLeft className={styles.arrow_icon} />
     </div>
   )
 }
