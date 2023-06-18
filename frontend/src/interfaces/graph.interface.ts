@@ -1,5 +1,5 @@
 export interface Node {
-    id: string;
+    course_number: string;
     name: string;
     group: number;
 }

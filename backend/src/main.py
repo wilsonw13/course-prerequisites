@@ -223,7 +223,7 @@ def generate_3d_visualization(departments: List[str], remove_links: bool = True)
 
     # whenever a course in a link's source is not found in node...
     if remove_links:  # remove the link
-        course_graph_nodes = [node["id"] for node in graph_data["nodes"]]
+        course_graph_nodes = [node["course_number"] for node in graph_data["nodes"]]
         graph_data["links"] = [link for link in graph_data["links"]
                                if link["source"] in course_graph_nodes]
     else:  # add the course as another node
@@ -245,7 +245,7 @@ def query_prerequisite_graph(
     print(courses, departments, show_disconnected_courses)
 
     # gets a set of all course names in nodes (will be used later as the set of queried nodes)
-    node_ids = {node["id"] for node in graph_data["nodes"]}
+    node_ids = {node["course_number"] for node in graph_data["nodes"]}
 
     if courses or departments:
         # filters courses to only include those of the specified course/department (found in either)
@@ -267,12 +267,12 @@ def query_prerequisite_graph(
             link_source_ids = {
                 link["source"] for link in graph_data["links"] if link["target"] in node_ids}
             graph_data["nodes"] = [node for node in graph_data["nodes"]
-                                   if node["id"] in node_ids or node["id"] in link_source_ids]
+                                   if node["course_number"] in node_ids or node["course_number"] in link_source_ids]
             graph_data["links"] = [link for link in graph_data["links"]
                                    if link["target"] in node_ids]
         else:
             graph_data["nodes"] = [
-                node for node in graph_data["nodes"] if node["id"] in node_ids]
+                node for node in graph_data["nodes"] if node["course_number"] in node_ids]
             graph_data["links"] = [link for link in graph_data["links"]
                                    if link["source"] in node_ids and link["target"] in node_ids]
 
@@ -283,7 +283,7 @@ def query_prerequisite_graph(
             link["target"] for link in graph_data["links"]}
 
         graph_data["nodes"] = [node for node in graph_data["nodes"]
-                               if node["id"] in courses_in_links]
+                               if node["course_number"] in courses_in_links]
 
     write_to_datasets_json("queried-graph-data.json", graph_data)
 

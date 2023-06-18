@@ -321,7 +321,7 @@ def parse_to_prereq_graph(course_node, data: dict, department_exceptions: List[s
 
                 # append the course as a node (to future graph)
                 data["nodes"].append({
-                    "id": course_number,
+                    "course_number": course_number,
                     "name": name,
                     "group": group_num
                 })

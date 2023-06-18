@@ -1,44 +1,57 @@
 import { useRef, useState, useEffect } from 'react'
-import ForceGraph3D from 'react-force-graph-3d'
-import { GraphData } from '../interfaces/index.ts'
+import { ForceGraph3D } from 'react-force-graph'
+import SpriteText from 'three-spritetext'
+// import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js'
+import { GraphData, Node } from '../interfaces/index.ts'
 
 interface Props {
   graphData: GraphData | null,
-  // focusControls: boolean
 }
 
-export default function Graph ({ graphData/* , focusControls */ }: Props) {
+interface Object3DNode extends Node, THREE.Object3D {
+  color: string
+}
+
+export default function Graph ({ graphData }: Props) {
   const graphRef = useRef(undefined)
-  const [focusControls, setFocusControls] = useState<boolean>(true)
 
-  const enableControls = (enabled: boolean) => {
-    const graphInstance = graphRef?.current
-    if (graphInstance) {
-      const controls = graphInstance.controls()
-      if (controls) {
-        controls.enabled = enabled
-      }
-    }
-  }
+  // const [focusControls, setFocusControls] = useState<boolean>(true)
 
-  useEffect(() => {
-    enableControls(focusControls)
-  }, [focusControls])
+  // const enableControls = (enabled: boolean) => {
+  //   const graphInstance = gr\aphRef?.current
+  //   if (graphInstance) {
+  //     const controls = graphInstance.controls()
+  //     if (controls) {
+  //       controls.enabled = enabled
+  //     }
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   enableControls(focusControls)
+  // }, [focusControls])
+
+  const ForceGraph = <ForceGraph3D
+    ref={graphRef}
+
+    graphData={graphData}
+    nodeId={'course_number'}
+    nodeLabel={'name'}
+    nodeAutoColorBy={'group'}
+    nodeThreeObject={(node: Object3DNode) => {
+      const sprite = new SpriteText(node.course_number)
+      sprite.material.depthWrite = false // make sprite background transparent
+      sprite.color = node.color
+      sprite.textHeight = 8
+      return sprite
+    }}
+    nodeThreeObjectExtend={true}
+    linkDirectionalArrowLength={3.5}
+    linkDirectionalArrowRelPos={1}
+    controlType={'fly'}
+  />
 
   return (
-    <>{
-      graphData
-        ? <ForceGraph3D
-          ref={graphRef}
-
-          graphData={graphData}
-          nodeLabel={'id'}
-          nodeAutoColorBy={'group'}
-          linkDirectionalArrowLength={3.5}
-          linkDirectionalArrowRelPos={1}
-          controlType={'fly'}
-        />
-        : <div>Loading...</div>
-    }</>
+    <>{ graphData ? ForceGraph : <div>Loading...</div>}</>
   )
 }
