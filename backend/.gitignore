@@ -2,7 +2,7 @@
 log/
 
 # new queried dataset
-datasets/queried-graph-data.json
+datasets/queried_graph_data.json
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python

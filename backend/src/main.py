@@ -4,198 +4,14 @@ from inspect import signature
 from typing import List
 import re
 
-from req_parser import parse_course, parse_to_prereq_graph
+from web_scrape import get_course_bulletin
+from req_parser import parse_to_prereq_graph
 from file_utils import write_to_datasets_json, get_datasets_json, clear_log_dir
 from exceptions import DepartmentDoesNotExist
 
-all_departments = [
-    "AAS",
-    "ACC",
-    "AFH",
-    "AFS",
-    "AIM",
-    "AMR",
-    "AMS",
-    "ANP",
-    "ANT",
-    "ARB",
-    "ARH",
-    "ARS",
-    "ASC",
-    "AST",
-    "ATM",
-    "BCP",
-    "BIO",
-    "BME",
-    "BUS",
-    "CAR",
-    "CCS",
-    "CDS",
-    "CDT",
-    "CEF",
-    "CHE",
-    "CHI",
-    "CIV",
-    "CLL",
-    "CLS",
-    "CLT",
-    "CME",
-    "COM",
-    "CSE",
-    "CWL",
-    "DAN",
-    "DIA",
-    "EAS",
-    "EBH",
-    "ECO",
-    "EDP",
-    "EEL",
-    "EEO",
-    "EGL",
-    "ENS",
-    "ENV",
-    "ESE",
-    "ESG",
-    "ESM",
-    "EST",
-    "EUR",
-    "EXT",
-    "FLA",
-    "FLM",
-    "FRN",
-    "GEO",
-    "GER",
-    "GLI",
-    "GRK",
-    "GSS",
-    "HAD",
-    "HAL",
-    "HAN",
-    "HAT",
-    "HBA",
-    "HBH",
-    "HBM",
-    "HBP",
-    "HBW",
-    "HBY",
-    "HDG",
-    "HDO",
-    "HDP",
-    "HIN",
-    "HIS",
-    "HNC",
-    "HND",
-    "HNG",
-    "HNH",
-    "HNI",
-    "HON",
-    "HUE",
-    "HUF",
-    "HUG",
-    "HUI",
-    "HUL",
-    "HUR",
-    "HUS",
-    "HWC",
-    "IAE",
-    "IAP",
-    "INT",
-    "ISE",
-    "ITL",
-    "JDH",
-    "JDS",
-    "JPN",
-    "JRN",
-    "KOR",
-    "LAC",
-    "LAN",
-    "LAT",
-    "LCR",
-    "LDR",
-    "LHD",
-    "LHW",
-    "LIA",
-    "LIN",
-    "MAE",
-    "MAP",
-    "MAR",
-    "MAT",
-    "MDA",
-    "MEC",
-    "MSL",
-    "MUS",
-    "MVL",
-    "NUR",
-    "OAE",
-    "PER",
-    "PHI",
-    "PHY",
-    "POL",
-    "POR",
-    "PSY",
-    "RLS",
-    "RUS",
-    "SBU",
-    "SCH",
-    "SCI",
-    "SKT",
-    "SLN",
-    "SOC",
-    "SPN",
-    "SSE",
-    "SUS",
-    "SWA",
-    "THR",
-    "TRK",
-    "TVW",
-    "UKR",
-    "VIP",
-    "WAE",
-    "WRT",
-    "WSE",
-    "WST"
-]
+all_departments = get_datasets_json("all_departments.json")
 
-
-def get_course_bulletin(department: str):
-    # SBU UG Bulletin Link
-    url = f"https://www.stonybrook.edu/sb/bulletin/current/academicprograms/{department}/courses.php"
-
-    # Returns beautiful soup instance with children that are div tags with the course class
-    doc = BeautifulSoup(requests.get(url).content, "lxml",
-                        parse_only=SoupStrainer(class_="course"))
-
-    # If a course tag can't be found, raise exception
-    if not doc.find():
-        raise DepartmentDoesNotExist(department)
-
-    return doc
-
-
-def full_parse(department: str, course_number: str = "", shortened_reqs: bool = False):
-    doc = get_course_bulletin(department)
-
-    clear_log_dir()
-
-    # if specific course number is specified ...
-    if course_number:
-        write_to_datasets_json("data.json", parse_course(
-            doc.find(id=course_number), shortened_reqs))
-
-    # otherwise parse the whole doc
-    else:
-        department_data = {}
-
-        for node in doc:
-            if isinstance(node, Tag):
-                course_data = parse_course(node, shortened_reqs)
-                department_data[course_data["number"]] = course_data
-
-        write_to_datasets_json(
-            f"{department}-data{'-short' if shortened_reqs else ''}.json", department_data)
-
-
-def generate_3d_visualization(departments: List[str], remove_links: bool = True):
+def generate_3d_visualization(departments: List[str] = all_departments, remove_links: bool = True):
     departments_docs = []
     department_exceptions = []
 
@@ -229,7 +45,7 @@ def generate_3d_visualization(departments: List[str], remove_links: bool = True)
     else:  # add the course as another node
         pass
 
-    write_to_datasets_json("graph-data.json", graph_data)
+    write_to_datasets_json("full_graph_data.json", graph_data)
 
 
 def query_prerequisite_graph(
@@ -239,7 +55,7 @@ def query_prerequisite_graph(
         show_transitive_prerequisites: bool = False,
         show_disconnected_courses: bool = True
 ):
-    graph_data = get_datasets_json("full-graph-data.json")
+    graph_data = get_datasets_json("full_graph_data.json")
     assert graph_data, "No graph data found!"
 
     print(courses, departments, show_disconnected_courses)
@@ -285,7 +101,7 @@ def query_prerequisite_graph(
         graph_data["nodes"] = [node for node in graph_data["nodes"]
                                if node["course_number"] in courses_in_links]
 
-    write_to_datasets_json("queried-graph-data.json", graph_data)
+    write_to_datasets_json("queried_graph_data.json", graph_data)
 
     return graph_data
 
