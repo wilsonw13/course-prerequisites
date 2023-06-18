@@ -1,0 +1,44 @@
+.sidebar {
+  position: absolute;
+  z-index: 100;
+
+  width: 40rem;
+  height: 100vh;
+
+  background-color: gray;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  background-color: gold;
+
+  > div {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+
+    font-size: 1.5rem;
+
+    > label {
+    }
+
+    > input {
+    }
+  }
+}
+
+.arrow_icon {
+  position: absolute;
+  right: -1rem;
+  border-radius: 100%;
+  padding: 0.5rem;
+
+  font-size: 4rem;
+
+  color: white;
+  background-color: aqua;
+
+  cursor: pointer;
+}
