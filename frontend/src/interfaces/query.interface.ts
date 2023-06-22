@@ -1,5 +1,17 @@
-export type QueryValue = string | string[] | number | boolean;
+export type QueryFormValue = string | boolean;
+
+export interface QueryForm {
+  courses: string;
+  departments: string;
+  show_direct_prerequisites: boolean;
+  show_transitive_prerequisites: boolean;
+  show_disconnected_courses: boolean;
+}
 
 export interface Query {
-  [key: string]: QueryValue;
+  courses: string[];
+  departments: string[];
+  show_direct_prerequisites: boolean;
+  show_transitive_prerequisites: boolean;
+  show_disconnected_courses: boolean;
 }

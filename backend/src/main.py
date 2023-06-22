@@ -1,5 +1,4 @@
-import requests
-from bs4 import BeautifulSoup, SoupStrainer, Tag
+from bs4 import Tag
 from inspect import signature
 from typing import List
 import re
@@ -11,19 +10,23 @@ from exceptions import DepartmentDoesNotExist
 
 all_departments = get_datasets_json("all_departments.json")
 
+
 def generate_3d_visualization(departments: List[str] = all_departments, remove_links: bool = True):
     departments_docs = []
     department_exceptions = []
 
-    clear_log_dir()
+    clear_log_dir()  # Clear the log directory before starting
 
     for department in departments:
         try:
+            # Get the course bulletin for each department
             departments_docs.append(get_course_bulletin(department))
         except DepartmentDoesNotExist as e:
+            # Log any departments that don't exist
             department_exceptions.append(e.department)
             e.log()
 
+    # Make sure there are courses to visualize
     assert departments_docs, "No department courses found!"
 
     graph_data = {
@@ -34,17 +37,19 @@ def generate_3d_visualization(departments: List[str] = all_departments, remove_l
     for i, doc in enumerate(departments_docs):
         for node in doc:
             if isinstance(node, Tag):
+                # Parse the course data into a graph
                 parse_to_prereq_graph(
                     node, graph_data, department_exceptions, i + 1)
 
-    # whenever a course in a link's source is not found in node...
-    if remove_links:  # remove the link
-        course_graph_nodes = [node["course_number"] for node in graph_data["nodes"]]
+    if remove_links:  # Remove links that don't have a corresponding course node
+        course_graph_nodes = [node["course_number"]
+                              for node in graph_data["nodes"]]
         graph_data["links"] = [link for link in graph_data["links"]
                                if link["source"] in course_graph_nodes]
-    else:  # add the course as another node
+    else:  # Add courses as nodes even if they don't have any prerequisites
         pass
 
+    # Write the graph data to a JSON file
     write_to_datasets_json("full_graph_data.json", graph_data)
 
 
@@ -109,7 +114,6 @@ def query_prerequisite_graph(
 def get_params(func):
     return [list(match) for match in re.findall(r'(\w+):\s*([\w\[\]]+)(?:\s*=\s*([\w\d\[\]\'\"]+))?', str(signature(func)))]
 
-# full_parse("CSE", course_number=None, shortened_reqs=False)
 # generate_3d_visualization(all_departments)
 # generate_3d_visualization(["CSE", "AMS"])
 # query_prerequisite_graph(courses=[],

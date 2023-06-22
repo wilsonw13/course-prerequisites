@@ -1,21 +1,25 @@
 import { useEffect, useState } from 'react'
 import Graph from './ForceGraph'
 import Sidebar from './Sidebar'
-import { GraphData, Query } from './interfaces/index.ts'
+import { GraphData, Query, QueryForm } from './interfaces/index.ts'
 
 export default function App () {
   const [socket, setSocket] = useState<WebSocket | null>(null)
-  const [query, setQuery] = useState<Query>({
-    courses: '',
-    departments: 'CSE',
+  const [queryForm, setQueryForm] = useState<QueryForm>({
+    courses: 'CSE320',
+    departments: '',
     show_direct_prerequisites: false,
-    show_transitive_prerequisites: false,
+    show_transitive_prerequisites: true,
     show_disconnected_courses: true
   })
   const [graphData, setGraphData] = useState<GraphData | null>(null)
   const [focusControls, setFocusControls] = useState<boolean>(true)
 
-  const states = { socket, setSocket, query, setQuery, graphData, setGraphData, focusControls, setFocusControls }
+  const computeQuery = (): Query => ({
+    ...queryForm,
+    courses: queryForm.courses.split(',').map((course) => `${course.slice(0, 3)} ${course.slice(3)}`),
+    departments: queryForm.departments.split(',')
+  })
 
   useEffect(() => {
     // creates a new WebSocket connection
@@ -26,7 +30,7 @@ export default function App () {
     // event handlers for the WebSocket
     socket.onopen = () => {
       console.log('WebSocket connection opened')
-      socket.send(JSON.stringify({ type: 'query', query })) // TODO: Remove
+      sendQuery(socket)
     }
 
     socket.onmessage = (event) => {
@@ -49,6 +53,16 @@ export default function App () {
       socket.close()
     }
   }, [])
+
+  const sendQuery = (s: WebSocket | null = socket) => {
+    if (s) {
+      s.send(JSON.stringify({ type: 'query', query: computeQuery() })) // TODO: Remove
+    } else {
+      console.log('Failed to send message to socket:', s)
+    }
+  }
+
+  const states = { socket, setSocket, queryForm, setQueryForm, graphData, setGraphData, focusControls, setFocusControls, sendQuery }
 
   return (
     <div className="App">
