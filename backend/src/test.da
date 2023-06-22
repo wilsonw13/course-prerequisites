@@ -1,0 +1,7 @@
+def rules(name=trans_rules):
+    path(x, y), if_(edge(x, y))
+    path(x, y), if_(edge(x, z), path(z, y))
+
+
+e = {(7, 2), (7, 3), (2, 3), (2, 4), (7, 5), (3, 6)}
+print(infer(rules=trans_rules, bindings=[('edge', e)], queries=['path']))
