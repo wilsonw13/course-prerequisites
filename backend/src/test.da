@@ -1,7 +1,22 @@
-def rules(name=trans_rules):
-    path(x, y), if_(edge(x, y))
-    path(x, y), if_(edge(x, z), path(z, y))
+import json
+
+with open('datasets/full_graph_data.json', 'r') as f:
+    graph_data = json.load(f)
+
+# courses = [node["course_number"] for node in graph_data["nodes"]]
+courses = ["CSE 320", "AMS 261"]
+prereqs = [(link["source"], link["target"]) for link in graph_data["links"]]
 
 
-e = {(7, 2), (7, 3), (2, 3), (2, 4), (7, 5), (3, 6)}
-print(infer(rules=trans_rules, bindings=[('edge', e)], queries=['path']))
+def rules(name=infinite_prereq_reach):
+    reach(x), if_(source(x))
+    reach(x), if_(prereq(x, y), reach(y))
+
+
+# def rules(name=prereq_reach):
+#     reach(x, 0), if_(source(x))
+#     reach(x, n), if_(prereq(x, y), reach(y, n-1))
+
+
+print(infer(rules=infinite_prereq_reach, bindings=[
+      ('prereq', prereqs), ('source', courses)], queries=['reach']))
