@@ -25,6 +25,15 @@ def get_datasets_json(file_path):
         print("Invalid JSON format in file: " + path)
 
 
+def get_config():
+    path = "config.json"
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("File not found: " + path)
+
+
 def append_to_log_file(file_path, string):
     init_path = "./log/"
     ensure_dirs(init_path + file_path)

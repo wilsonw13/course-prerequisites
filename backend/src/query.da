@@ -1,50 +1,37 @@
-from websocket import create_connection
-from file_utils import get_datasets_json
 import json
+import websocket
+# import _thread
+# import time
+# import rel
 
-print(1)
+from file_utils import get_datasets_json, get_config
 
-with open("config.json", "r") as f:
-    config = json.load(f)
-    host, port = config["ws_host"], config["ws_port"]
-    assert host and port, "Failed to load host and port from config.json!"
+config = get_config()
+host, port = config["ws_host"], config["ws_port"]
+assert host and port, "Failed to load host and port from config.json!"
 
 graph_data = get_datasets_json("full_graph_data.json")
 
-# courses = [node["course_number"] for node in graph_data["nodes"]]
 courses = ["CSE 320", "AMS 261"]
 prereqs = [(link["source"], link["target"]) for link in graph_data["links"]]
-
-print(2)
 
 
 def rules(name=infinite_prereq_reach):
     reach(x), if_(source(x))
     reach(x), if_(prereq(x, y), reach(y))
 
-
-print(3)
-
 # def rules(name=prereq_reach):
 #     reach(x, 0), if_(source(x))
 #     reach(x, n), if_(prereq(x, y), reach(y, n-1))
 
+
 inf = infer(rules=infinite_prereq_reach, bindings=[
     ('prereq', prereqs), ('source', courses)], queries=['reach'])
 
-print(4)
-print(f"ws://{host}:{port}")
-
-ws = create_connection(f"ws://{host}:{port}")
-
-print(5)
-
+ws = websocket.create_connection(f"ws://{host}:{port}")
 msg = json.dumps({"type": "haha", "data": list(inf)})
 ws.send(msg)
-print(f"Sent: {msg}")
 ws.close()
-
-print(6)
 
 # class Query:
 #     def __init__(self):
