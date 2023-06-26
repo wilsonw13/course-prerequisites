@@ -7,4 +7,5 @@ pyDistAlgo==1.1.0
 requests==2.31.0
 soupsieve==2.4.1
 urllib3==2.0.3
+websocket-client==1.6.1
 websockets==11.0.3
