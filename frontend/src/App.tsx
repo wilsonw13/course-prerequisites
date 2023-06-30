@@ -56,7 +56,7 @@ export default function App () {
 
   const sendQuery = (s: WebSocket | null = socket) => {
     if (s) {
-      s.send(JSON.stringify({ type: 'query', query: computeQuery() })) // TODO: Remove
+      s.send(JSON.stringify({ type: 'query', data: computeQuery() })) // TODO: Remove
     } else {
       console.log('Failed to send message to socket:', s)
     }

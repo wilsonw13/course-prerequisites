@@ -1,99 +1,122 @@
-import json
-import websocket
-# import _thread
-# import time
-# import rel
+from file_utils import get_datasets_json, write_to_datasets_json
 
-from file_utils import get_datasets_json, get_config
 
-config = get_config()
-host, port = config["ws_host"], config["ws_port"]
-assert host and port, "Failed to load host and port from config.json!"
-
-graph_data = get_datasets_json("full_graph_data.json")
-
-courses = ["CSE 320", "AMS 261"]
-prereqs = [(link["source"], link["target"]) for link in graph_data["links"]]
+def remove_nested_quotes(iterable):
+    # TODO have to use splice to remove nested quotes
+    return {item[1:-1] for item in iterable}
 
 
 def rules(name=infinite_prereq_reach):
     reach(x), if_(source(x))
     reach(x), if_(prereq(x, y), reach(y))
 
-# def rules(name=prereq_reach):
-#     reach(x, 0), if_(source(x))
-#     reach(x, n), if_(prereq(x, y), reach(y, n-1))
+
+def rules(name=prereq_reach):
+    reach(x, 0), if_(source(x))
+    reach(x, n), if_(prereq(x, y), reach(y, n-1))
 
 
-inf = infer(rules=infinite_prereq_reach, bindings=[
-    ('prereq', prereqs), ('source', courses)], queries=['reach'])
+def rules(name=isolated_courses):
+    isolated(x), if_(course(x), not_(prereq(x, y)), course(y))
+    isolated(x), if_(course(x), not_(prereq(y, x)), course(y))
 
-ws = websocket.create_connection(f"ws://{host}:{port}")
-msg = json.dumps({"type": "haha", "data": list(inf)})
-ws.send(msg)
-ws.close()
 
-# class Query:
-#     def __init__(self):
-#         self.data = get_datasets_json("full_graph_data.json")
+def rules(name=necessary_prereqs):
+    necessary(x, y), if_(prereq(x, y), course(x), course(y))
 
-#     def query_courses(self, courses: List[str], show_direct_prerequisites: bool, show_transitive_prerequisites: bool, show_disconnected_courses: bool):
-#         node_ids = {node["course_number"] for node in self.data["nodes"]}
-#         node_ids = {course for course in node_ids if course in courses}
-#         if not node_ids:
-#             raise Exception(
-#                 "No matching courses found from course/department!")
-#         if show_direct_prerequisites:
-#             link_source_ids = {
-#                 link["source"] for link in self.data["links"] if link["target"] in node_ids}
-#             self.data["nodes"] = [node for node in self.data["nodes"]
-#                                         if node["course_number"] in node_ids or node["course_number"] in link_source_ids]
-#             self.data["links"] = [
-#                 link for link in self.data["links"] if link["target"] in node_ids]
-#         else:
-#             self.data["nodes"] = [
-#                 node for node in self.data["nodes"] if node["course_number"] in node_ids]
-#             self.data["links"] = [link for link in self.data["links"]
-#                                         if link["source"] in node_ids and link["target"] in node_ids]
-#         if show_transitive_prerequisites:
-#             # TODO: implement transitive prerequisites
-#             pass
-#         if not show_disconnected_courses and self.data["links"]:
-#             courses_in_links = {link["source"] for link in self.data["links"]} | {
-#                 link["target"] for link in self.data["links"]}
-#             self.data["nodes"] = [
-#                 node for node in self.data["nodes"] if node["course_number"] in courses_in_links]
-#         write_to_datasets_json("queried_graph_data.json", self.data)
-#         return self.data
 
-#     def query_departments(self, departments: List[str], show_direct_prerequisites: bool, show_transitive_prerequisites: bool, show_disconnected_courses: bool):
-#         node_ids = {node["course_number"] for node in self.data["nodes"]}
-#         node_ids = {course for course in node_ids if course[:3] in departments}
-#         if not node_ids:
-#             raise Exception(
-#                 "No matching courses found from course/department!")
-#         if show_direct_prerequisites:
-#             link_source_ids = {
-#                 link["source"] for link in self.data["links"] if link["target"] in node_ids}
-#             self.data["nodes"] = [node for node in self.data["nodes"]
-#                                         if node["course_number"] in node_ids or node["course_number"] in link_source_ids]
-#             self.data["links"] = [
-#                 link for link in self.data["links"] if link["target"] in node_ids]
-#         else:
-#             self.data["nodes"] = [
-#                 node for node in self.data["nodes"] if node["course_number"] in node_ids]
-#             self.data["links"] = [link for link in self.data["links"]
-#                                         if link["source"] in node_ids and link["target"] in node_ids]
-#         if show_transitive_prerequisites:
-#             # TODO: implement transitive prerequisites
-#             pass
-#         if not show_disconnected_courses and self.data["links"]:
-#             courses_in_links = {link["source"] for link in self.data["links"]} | {
-#                 link["target"] for link in self.data["links"]}
-#             self.data["nodes"] = [
-#                 node for node in self.data["nodes"] if node["course_number"] in courses_in_links]
-#         write_to_datasets_json("queried_graph_data.json", self.data)
-#         return self.data
+class Query:
+    def __init__(self, data=None, options={}):
+        if not data:
+            data = get_datasets_json("simple_graph_data.json")
 
-#     def query_all(self, show_direct_prerequisites: bool, show_transitive_prerequisites: bool, show_disconnected_courses: bool):
-#         if show_direct_prerequisites:
+        self.data = data
+        self.all_courses = [course for course, _ in data["courses_name_pair"]]
+        self.all_prereqs = data["prereqs"]
+        self.options = options
+
+        self.courses = set()   # initialize courses set
+        self.prereqs = []   # initialize prereqs list
+
+    def update_departments(self, departments):
+        self.courses.update(
+            {c for c in self.all_courses if c[:3] in departments})
+
+    def update_courses(self, courses):
+        self.courses.update({c for c in courses if c in self.all_courses})
+
+    def transitive_prereqs(self):
+
+        inf = infer(rules=infinite_prereq_reach, bindings=[
+                    ('prereq', self.all_prereqs), ('source', self.courses)], queries=['reach'])
+
+        self.courses.update(remove_nested_quotes(inf))
+
+    def remove_courses_without_prereqs(self):
+
+        inf = infer(rules=isolated_courses, bindings=[
+            ('prereq', self.all_prereqs), ('course', self.courses)], queries=['isolated'])
+
+        self.courses = {
+            c for c in self.courses if c not in remove_nested_quotes(inf)}
+
+    # Remove prereqs that don't have a corresponding course within the set of courses
+    def remove_dead_prereqs(self):
+        # actual implementation FINDS all prereqs that have a corresponding course instead of remove
+
+        inf = infer(rules=necessary_prereqs, bindings=[
+            ('prereq', self.all_prereqs), ('course', self.courses)], queries=['necessary'])
+
+        # TODO have to use splice to remove nested quotes
+        self.prereqs = {(p[0][1:-1], p[1][1:-1]) for p in inf}
+
+    # Returns a dictionary of the actual, exact graph data that the graph uses
+    def generate_graph_data(self):
+
+        # Get the course name from the course id from the simple_graph_data.json file (data)
+        def get_course_name(course_id):
+            for pair in self.data["courses_name_pair"]:
+                if pair[0] == course_id:
+                    return pair[1]
+
+        # Keeps track of the unique departments in the courses set to assign a group number to each department from the index
+        deps = []
+
+        def get_group_number(course_id):
+            dep = course_id[:3]
+            if dep not in deps:
+                deps.append(dep)
+            return deps.index(dep)
+
+        return {
+            "nodes": [{"course_number": c, "name": get_course_name(c), "group": get_group_number(c)} for c in self.courses],
+            "links": [{"source": p[0], "target": p[1]} for p in self.prereqs]
+        }
+
+    def query(self):
+        if self.options.get("departments") or self.options.get("courses"):
+            self.update_departments(self.options["departments"])
+            self.update_courses(self.options["courses"])
+
+            if self.options.get("show_transitive_prereqs"):
+                self.transitive_prereqs()
+        else:
+            self.courses = self.all_courses
+            self.prereqs = self.all_prereqs
+
+        if self.options.get("remove_courses_without_prereqs"):
+            self.remove_courses_without_prereqs()
+
+        self.remove_dead_prereqs()
+
+        return self.generate_graph_data()
+
+
+options = {
+    "departments": [""],
+    "courses": ["CSE 320"],
+    "show_transitive_prereqs": True,
+    "remove_courses_without_prereqs": False,
+}
+
+write_to_datasets_json("test.json", Query(options=options).query())

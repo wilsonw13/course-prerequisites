@@ -1,0 +1,56 @@
+{
+    "nodes": [
+        {
+            "course_number": "CSE 320",
+            "name": "Systems Fundamentals II",
+            "group": 0
+        },
+        {
+            "course_number": "CSE 114",
+            "name": "Introduction to Object-Oriented Programming",
+            "group": 0
+        },
+        {
+            "course_number": "CSE 260",
+            "name": "Computer Science B: Honors",
+            "group": 0
+        },
+        {
+            "course_number": "CSE 160",
+            "name": "Computer Science A: Honors",
+            "group": 0
+        },
+        {
+            "course_number": "CSE 214",
+            "name": "Data Structures",
+            "group": 0
+        },
+        {
+            "course_number": "CSE 220",
+            "name": "Systems Fundamentals I",
+            "group": 0
+        }
+    ],
+    "links": [
+        {
+            "source": "CSE 220",
+            "target": "CSE 320"
+        },
+        {
+            "source": "CSE 214",
+            "target": "CSE 220"
+        },
+        {
+            "source": "CSE 260",
+            "target": "CSE 220"
+        },
+        {
+            "source": "CSE 160",
+            "target": "CSE 260"
+        },
+        {
+            "source": "CSE 114",
+            "target": "CSE 214"
+        }
+    ]
+}
