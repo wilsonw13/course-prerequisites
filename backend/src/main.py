@@ -5,10 +5,10 @@ import re
 
 from web_scrape import get_course_bulletin
 from req_parser import parse_to_prereq_graph
-from file_utils import write_to_datasets_json, get_datasets_json, clear_log_dir
+from file_utils import write_to_json_dir, get_from_json_dir, clear_log_dir
 from exceptions import DepartmentDoesNotExist
 
-all_departments = get_datasets_json("all_departments.json")
+all_departments = get_from_json_dir("all_departments.json")
 
 
 def generate_3d_visualization(departments: List[str] = all_departments, remove_links: bool = True):
@@ -50,7 +50,7 @@ def generate_3d_visualization(departments: List[str] = all_departments, remove_l
         pass
 
     # Write the graph data to a JSON file
-    write_to_datasets_json("full_graph_data.json", graph_data)
+    write_to_json_dir("full_graph_data.json", graph_data)
 
 
 def query_prerequisite_graph(
@@ -60,7 +60,7 @@ def query_prerequisite_graph(
         show_transitive_prerequisites: bool = False,
         show_disconnected_courses: bool = True
 ):
-    graph_data = get_datasets_json("full_graph_data.json")
+    graph_data = get_from_json_dir("full_graph_data.json")
     assert graph_data, "No graph data found!"
 
     print(courses, departments, show_disconnected_courses)
@@ -106,7 +106,7 @@ def query_prerequisite_graph(
         graph_data["nodes"] = [node for node in graph_data["nodes"]
                                if node["course_number"] in courses_in_links]
 
-    write_to_datasets_json("queried_graph_data.json", graph_data)
+    write_to_json_dir("queried_graph_data.json", graph_data)
 
     return graph_data
 

@@ -1,8 +1,7 @@
 from websocket_server import WebsocketServer
 import json
 
-from main import query_prerequisite_graph
-from file_utils import get_config
+from file_utils import get_config, get_from_json_dir, write_to_json_dir
 from query import Query
 
 config = get_config()
@@ -14,6 +13,9 @@ assert host and port, "Failed to load host and port from config.json!"
 def client_connect(client, server):
     print("New client connected and was given id %d" % client['id'])
 
+    server.send_message(client, json.dumps(
+        {"type": "query_options", "data": get_from_json_dir("query_options.json")}))
+
 
 # Called for every client disconnecting
 def client_disconnect(client, server):
@@ -24,14 +26,36 @@ def client_disconnect(client, server):
 def message_received(client, server, message):
     # parses the message into a dictionary
     msg_dict = json.loads(message)
+    # print(msg_dict)
 
     # checks the type of message
     if msg_dict.get("type") == "query":
+        options = msg_dict["data"]
+
+        # parses specific query options into a list and cleans it up
+        # creates a list of courses from the string of courses
+        options["courses"] = [
+            f"{c[:3].upper()} {c[-3:]}"
+            for c in options["courses"].replace(" ", "").split(",")
+            if c.strip()
+        ]
+
+        # creates a list of departments from the string of departments
+        options["departments"] = [
+            code.upper()
+            for code in options["departments"].replace(" ", "").split(",")
+            if code.strip()
+        ]
+
+        # print(options)
 
         # queries the graph and sends the response back to the client
-        response = query_prerequisite_graph(**msg_dict["data"])
+        graph_data = Query().query(options)
+
+        # write_to_json_dir("test.json", graph)
+
         server.send_message(client, json.dumps(
-            {"type": "graph", "data": response}))
+            {"type": "graph", "data": graph_data}))
 
     else:
         print(f"Received unknown message type: {msg_dict.get('type')}")

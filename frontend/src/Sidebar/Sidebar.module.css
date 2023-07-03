@@ -1,5 +1,5 @@
 .sidebar {
-  --side_bar_width: 50rem;
+  --side_bar_width: 55rem;
 
   position: absolute;
   z-index: 100;
@@ -7,7 +7,8 @@
   width: var(--side_bar_width);
   height: 100vh;
 
-  background-color: rgba(255, 255, 255, 0.1);
+  /* was white originally */
+  background-color: rgba(0, 0, 0, 0.1);
   color: white;
 
   transition: transform 0.5s ease-in-out;
@@ -36,11 +37,11 @@
   cursor: pointer;
 
   transition: transform 0.5s ease-in-out;
-}
 
-.rotate_arrow_icon {
-  transform: translate(-50%, -50%) translateX(calc(var(--icon_size) - 1rem))
-    rotate(180deg);
+  &.rotate_arrow_icon {
+    transform: translate(-50%, -50%) translateX(calc(var(--icon_size) - 1rem))
+      rotate(180deg);
+  }
 }
 
 .form {
@@ -53,7 +54,7 @@
 
   /* background-color: gold; */
 
-  > p {
+  > h1 {
     margin-bottom: var(--margin_between_inputs);
 
     font-size: 3rem;
@@ -81,6 +82,10 @@
       padding: 0rem 0.5rem;
 
       /* background-color: chartreuse; */
+
+      &.invalid {
+        border: red 0.2rem solid;
+      }
     }
   }
 

@@ -2,7 +2,7 @@
 log/
 
 # new queried dataset
-datasets/queried_graph_data.json
+json/queried_graph_data.json
 
 # ps cache files?
 timing/

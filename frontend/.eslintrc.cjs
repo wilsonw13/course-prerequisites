@@ -12,6 +12,7 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     'react-refresh/only-export-components': 'warn',
-    'space-before-function-paren': 'error'
+    'space-before-function-paren': 'error',
+    camelcase: 'off'
   }
 }

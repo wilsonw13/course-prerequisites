@@ -5,15 +5,15 @@ import json
 def ensure_dirs(path): os.makedirs(os.path.dirname(path), exist_ok=True)
 
 
-def write_to_datasets_json(file_path, data):
-    init_path = "./datasets/"
+def write_to_json_dir(file_path, data):
+    init_path = "./json/"
     ensure_dirs(init_path + file_path)
     with open(init_path + file_path, "w") as f:
         json.dump(data, f, indent=4)
 
 
-def get_datasets_json(file_path):
-    init_path = "./datasets/"
+def get_from_json_dir(file_path):
+    init_path = "./json/"
     path = init_path + file_path
 
     try:
@@ -26,12 +26,7 @@ def get_datasets_json(file_path):
 
 
 def get_config():
-    path = "config.json"
-    try:
-        with open(path, "r") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        print("File not found: " + path)
+    return get_from_json_dir("server_config.json")
 
 
 def append_to_log_file(file_path, string):

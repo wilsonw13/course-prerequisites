@@ -2,8 +2,9 @@ import requests
 from bs4 import BeautifulSoup, SoupStrainer, Tag
 
 from req_parser import parse_course
-from file_utils import write_to_datasets_json, clear_log_dir
+from file_utils import write_to_json_dir, clear_log_dir
 from exceptions import DepartmentDoesNotExist
+
 
 def get_course_bulletin(department: str):
     # SBU UG Bulletin Link
@@ -27,7 +28,7 @@ def full_parse(department: str, course_number: str = "", shortened_reqs: bool = 
 
     # if specific course number is specified ...
     if course_number:
-        write_to_datasets_json("data.json", parse_course(
+        write_to_json_dir("data.json", parse_course(
             doc.find(id=course_number), shortened_reqs))
 
     # otherwise parse the whole doc
@@ -39,5 +40,5 @@ def full_parse(department: str, course_number: str = "", shortened_reqs: bool = 
                 course_data = parse_course(node, shortened_reqs)
                 department_data[course_data["number"]] = course_data
 
-        write_to_datasets_json(
+        write_to_json_dir(
             f"{department}-data{'-short' if shortened_reqs else ''}.json", department_data)

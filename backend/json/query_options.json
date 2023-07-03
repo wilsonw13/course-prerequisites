@@ -1,0 +1,36 @@
+[
+    {
+        "id": "departments",
+        "display_name": "Departments",
+        "description": "The departments to include in the graph. If left blank, all departments will be included.",
+        "value_type": "string",
+        "default_value": "CSE",
+        "input_placeholder": "CSE, AMS, PHY, etc.",
+        "input_validation": "^(?:[A-Z]{3}\\s?(?:,\\s?[A-Z]{3})*)?$",
+        "character_limit": 1000
+    },
+    {
+        "id": "courses",
+        "display_name": "Courses",
+        "description": "The courses to include in the graph. If left blank, all courses will be included.",
+        "value_type": "string",
+        "default_value": "",
+        "input_placeholder": "BIO 202, CHE 131, etc.",
+        "input_validation": "^(?:[A-Z]{3}\\s?\\d{3}\\s?(?:,\\s?[A-Z]{3}\\s?\\d{3})*)?$",
+        "character_limit": 1000
+    },
+    {
+        "id": "show_transitive_prereqs",
+        "display_name": "Show Transitive Prereqs",
+        "description": "If checked, the graph will include all courses that are reachable from the selected source courses through prerequisite relationships, including transitive prerequisites.",
+        "default_value": false,
+        "value_type": "boolean"
+    },
+    {
+        "id": "remove_courses_without_prereqs",
+        "display_name": "Remove Courses Without Prereqs",
+        "description": "If checked, the graph will remove courses that have no prerequisites.",
+        "default_value": false,
+        "value_type": "boolean"
+    }
+]
