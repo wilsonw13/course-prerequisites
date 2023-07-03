@@ -7,21 +7,25 @@ def remove_nested_quotes(iterable):
 
 
 def rules(name=infinite_prereq_reach):
+    """Reachability of prereqs without depth"""
     reach(x), if_(source(x))
     reach(x), if_(prereq(x, y), reach(y))
 
 
 def rules(name=prereq_reach):
+    """Reachability of prereqs with depth"""
     reach(x, 0), if_(source(x))
     reach(x, n), if_(prereq(x, y), reach(y, n-1))
 
 
 def rules(name=isolated_courses):
+    """Courses that are not prereqs of any other course"""
     isolated(x), if_(course(x), not_(prereq(x, y)), course(y))
     isolated(x), if_(course(x), not_(prereq(y, x)), course(y))
 
 
 def rules(name=necessary_prereqs):
+    """(Filters) Prereqs that are necessary for the set of courses"""
     necessary(x, y), if_(prereq(x, y), course(x), course(y))
 
 
@@ -45,32 +49,30 @@ class Query:
         self.courses.update({c for c in courses if c in self.all_courses})
 
     def transitive_prereqs(self):
-
         inf = infer(rules=infinite_prereq_reach, bindings=[
                     ('prereq', self.all_prereqs), ('source', self.courses)], queries=['reach'])
 
         self.courses.update(remove_nested_quotes(inf))
 
     def remove_courses_without_prereqs(self):
-
         inf = infer(rules=isolated_courses, bindings=[
             ('prereq', self.all_prereqs), ('course', self.courses)], queries=['isolated'])
 
         self.courses = {
             c for c in self.courses if c not in remove_nested_quotes(inf)}
 
-    # Remove prereqs that don't have a corresponding course within the set of courses
     def remove_dead_prereqs(self):
-        # actual implementation FINDS all prereqs that have a corresponding course instead of remove
+        """Remove prereqs that don't have a corresponding course within the set of courses"""
 
+        # actual implementation FINDS all prereqs that have a corresponding course instead of remove
         inf = infer(rules=necessary_prereqs, bindings=[
             ('prereq', self.all_prereqs), ('course', self.courses)], queries=['necessary'])
 
         # TODO have to use splice to remove nested quotes
         self.prereqs = {(p[0][1:-1], p[1][1:-1]) for p in inf}
 
-    # Returns a dictionary of the actual, exact graph data that the graph uses
     def generate_graph_data(self):
+        """Returns a dictionary of the actual, exact graph data that the graph uses"""
 
         # Get the course name from the course id from the full_course_data.json file (data)
         def get_course_name(course_id):
@@ -93,6 +95,8 @@ class Query:
         }
 
     def query(self, options):
+        """Returns a dictionary of the graph data that the graph uses"""
+
         if options.get("departments") or options.get("courses"):
             self.update_departments(options["departments"])
             self.update_courses(options["courses"])

@@ -43,6 +43,10 @@ export default function Sidebar ({ query, queryOptions, setQuery, sendQuery }: P
     setQueryValid(newQueryValid)
   }, [queryOptions])
 
+  const containerStyle = `${styles.sidebar} ${isOpen ? '' : styles.sidebar_collapsed}`
+  const arrowIronStyle = `${styles.arrow_icon} ${isOpen ? '' : styles.rotate_arrow_icon}`
+
+  // Update whenever input form changes (i.e. when the query changes)
   const handleInputChange = (e: ChangeEvent<HTMLFormElement>) => {
     const { name, value, type, checked } = e.target
     let inputValue: QueryValue
@@ -54,11 +58,10 @@ export default function Sidebar ({ query, queryOptions, setQuery, sendQuery }: P
         // Remove multiple whitespaces
         inputValue = value.replace(/\s{2}/g, ' ')
 
-        // Validate input values
+        // Gets the correct regex from the query options
         const regex = new RegExp(queryOptions.find((option) => option.id === name)?.input_validation as string)
 
-        console.log(regex, regex.test(inputValue as string))
-
+        // Updates the query validation object
         setQueryValid((prevState) => ({
           ...prevState,
           [name]: regex.test(inputValue as string)
@@ -76,51 +79,21 @@ export default function Sidebar ({ query, queryOptions, setQuery, sendQuery }: P
         break // TODO
     }
 
-    setQuery((prevState) => ({
-      ...prevState,
-      [name]: inputValue
-    }))
-
-    // if (type === 'checkbox') {
-    //   inputValue = checked
-    // } else if (name === 'courses' || name === 'departments') {
-    //   // Remove all whitespace and convert to uppercase and trim
-    //   inputValue = value.toUpperCase().replace(/\s{2}/g, ' ')
-
-    //   // Validate input values
-    //   let regex: RegExp
-    //   switch (name) {
-    //     case 'courses':
-    //       regex = /^[A-Z]{3}\s?\d{3}\s*(?:,\s*[A-Z]{3}\s?\d{3})*$/
-    //       break
-    //     case 'departments':
-    //       regex = /^[A-Z]{3}\s*(?:,\s*[A-Z]{3})$/
-    //       break
-    //   }
-
-    //   setQueryValid((prevState) => ({
-    //     ...prevState,
-    //     [name]: regex.test(`${inputValue}`)
-    //   }))
-    // } else {
-    //   inputValue = value
-    // }
-
+    // Updates the query object
     setQuery((prevState) => ({
       ...prevState,
       [name]: inputValue
     }))
   }
 
+  // Submit handler for the input form
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     sendQuery()
   }
 
-  const containerStyle = `${styles.sidebar} ${isOpen ? '' : styles.sidebar_collapsed}`
-  const arrowIronStyle = `${styles.arrow_icon} ${isOpen ? '' : styles.rotate_arrow_icon}`
-
-  const renderInput = ({ id, display_name, value_type, input_placeholder, input_validation, character_limit }: QueryOption) => {
+  // Renders the correct type of input field based on the query option (e.g. text, number, checkbox)
+  const renderInput = ({ id, value_type, input_placeholder }: QueryOption) => {
     const value = query?.[id] as string | number | boolean
 
     switch (value_type) {
@@ -157,6 +130,7 @@ export default function Sidebar ({ query, queryOptions, setQuery, sendQuery }: P
     }
   }
 
+  // Creates the input fields (container + label + input) for the query options
   const formFields = queryOptions.map((option) => (
     <div key={option.id}>
       <label htmlFor={option.id}>{option.display_name}</label>
@@ -170,46 +144,6 @@ export default function Sidebar ({ query, queryOptions, setQuery, sendQuery }: P
       <form className={styles.form} onChange={handleInputChange} onSubmit={handleSubmit}>
         <h1>Query Courses</h1>
         {formFields}
-        {/* <div>
-          <label htmlFor="courses">Courses</label>
-          <input
-            type="text"
-            name="courses"
-            value={query.courses}
-          />
-        </div>
-        {!isQueryValidObj.courses && <p style={{ color: 'red' }}>Please enter valid courses!</p>}
-        <div>
-          <label htmlFor="departments">Departments</label>
-          <input
-            type="text"
-            name="departments"
-            value={query.departments}
-          />
-        </div>
-        {!isQueryValidObj.departments && <p style={{ color: 'red' }}>Please enter valid departments!</p>}
-
-        <div>
-          <label htmlFor="show_transitive_prereqs">
-            Show Transitive Prerequisites
-          </label>
-          <input
-            type="checkbox"
-            name="show_transitive_prereqs"
-            checked={query.show_transitive_prereqs}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="remove_courses_without_prereqs">
-            Show Disconnected Courses
-          </label>
-          <input
-            type="checkbox"
-            name="remove_courses_without_prereqs"
-            checked={query.remove_courses_without_prereqs}
-          />
-        </div> */}
         <button
           className={allQueriesValid() ? '' : styles.submitDisabled}
           disabled={!allQueriesValid()}>Query</button>
