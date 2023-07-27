@@ -8,7 +8,7 @@ def ensure_dirs(path): os.makedirs(os.path.dirname(path), exist_ok=True)
 def write_to_json_dir(file_path, data):
     init_path = "./json/"
     ensure_dirs(init_path + file_path)
-    with open(init_path + file_path, "w") as f:
+    with open(init_path + file_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4)
 
 
@@ -32,7 +32,7 @@ def get_config():
 def append_to_log_file(file_path, string):
     init_path = "./log/"
     ensure_dirs(init_path + file_path)
-    with open(init_path + file_path, 'a') as f:
+    with open(init_path + file_path, 'a', encoding="utf-8") as f:
         f.write(string + "\n")
 
 

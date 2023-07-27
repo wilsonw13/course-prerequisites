@@ -1,10 +1,7 @@
 # log
 log/
 
-# new queried dataset
-json/queried_graph_data.json
-
-# ps cache files?
+# ps cache?
 timing/
 
 # Created by https://www.toptal.com/developers/gitignore/api/python

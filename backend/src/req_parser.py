@@ -301,7 +301,7 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
     return course_data
 
 
-def parse_to_prereq_graph(course_node, data: dict, department_exceptions: List[str], group_num: int):
+def parse_to_prereq_graph(course_node, data: dict, department_exceptions: List[str]):
     course_number = None
 
     for lineI, line in enumerate(course_node.children):
@@ -319,12 +319,8 @@ def parse_to_prereq_graph(course_node, data: dict, department_exceptions: List[s
                 course_number, name = match(
                     r"^([A-Z]{3}\s\d{3}):\s*(.*)", text)
 
-                # append the course as a node (to future graph)
-                data["nodes"].append({
-                    "course_number": course_number,
-                    "name": name,
-                    "group": group_num
-                })
+                # append the course (to future graph)
+                data["courses_name_pair"].append([course_number, name])
 
             # if line matches requisite
             elif match(r"requisite", text):
@@ -345,10 +341,7 @@ def parse_to_prereq_graph(course_node, data: dict, department_exceptions: List[s
                 if reqs and not match("advisory", req_type) and match("pre", req_type):
                     for req in reqs:
                         if req[0:3] not in department_exceptions:
-                            data["links"].append({
-                                "source": req,
-                                "target": course_number
-                            })
+                            data["prereqs"].append([req, course_number])
 
         except UnknownRequisite as e:
             e.log()

@@ -23,14 +23,14 @@
         "id": "show_transitive_prereqs",
         "display_name": "Show Transitive Prereqs",
         "description": "If checked, the graph will include all courses that are reachable from the selected source courses through prerequisite relationships, including transitive prerequisites.",
-        "default_value": false,
-        "value_type": "boolean"
+        "value_type": "boolean",
+        "default_value": false
     },
     {
         "id": "remove_courses_without_prereqs",
         "display_name": "Remove Courses Without Prereqs",
         "description": "If checked, the graph will remove courses that have no prerequisites.",
-        "default_value": false,
-        "value_type": "boolean"
+        "value_type": "boolean",
+        "default_value": false
     }
 ]

@@ -19,9 +19,9 @@ def rules(name=prereq_reach):
 
 
 def rules(name=isolated_courses):
-    """Courses that are not prereqs of any other course"""
-    isolated(x), if_(course(x), not_(prereq(x, y)), course(y))
-    isolated(x), if_(course(x), not_(prereq(y, x)), course(y))
+    """Courses that are not prereqs of any other course AND do not have any prereqs"""
+    isolated(x), if_(course(x), course(y), not prereq(x, y))
+    # course(z), not prereq(z, x)
 
 
 def rules(name=necessary_prereqs):
@@ -32,7 +32,7 @@ def rules(name=necessary_prereqs):
 class Query:
     def __init__(self, data=None):
         if not data:
-            data = get_from_json_dir("full_graph_data.json")
+            data = get_from_json_dir("full_graph.json")
 
         self.data = data
         self.all_courses = [course for course, _ in data["courses_name_pair"]]

@@ -8,4 +8,3 @@ requests==2.31.0
 soupsieve==2.4.1
 urllib3==2.0.3
 websocket-server==0.6.4
-websockets==11.0.3
