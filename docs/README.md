@@ -5,12 +5,17 @@
 - [Description](#description)
 - [Design](#design)
   - [Web Scraper](#web-scraper)
-    - [Course Details](#course-details)
-    - [Requisite Object](#requisite-object)
-    - [Graph Representation](#graph-representation)
-  - [Query](#query)
+  - [Query Function](#query-function)
   - [Prerequisite Tree Visualizer](#prerequisite-tree-visualizer)
+  - [Websocket Server](#websocket-server)
 - [Implementation](#implementation)
+  - [Web Scraper](#web-scraper-1)
+    - [Parsing Specifics](#parsing-specifics)
+  - [Query](#query)
+    - [Graph Representation](#graph-representation)
+  - [Query](#query-1)
+  - [Prerequisite Tree Visualizer](#prerequisite-tree-visualizer-1)
+- [Implementation](#implementation-1)
   - [Course Attribute Parsing](#course-attribute-parsing)
   - [Requisite Parsing](#requisite-parsing)
   - [Parsing Into Graph Representation](#parsing-into-graph-representation)
@@ -27,90 +32,74 @@
 
 ## Description
 
-This project was created in order to analyze course prerequisites from the Stony Brook Undergraduate Course Bulletin (e.g. [CSE Page](https://www.stonybrook.edu/sb/bulletin/current/academicprograms/cse/courses.php)) by web scraping the page and creating a knowledge base of all courses within the department. The knowledge base is then used to construct a prerequisite tree in order to visualize it using software. It can also be queried to return a subgraph of the prerequisite tree based off several queries (e.g. a list of course names, departments, transitive prerequisites, etc.).
+This project was created in order to analyze course prerequisites from the Stony Brook Undergraduate Course Bulletin (e.g. [CSE Page](https://www.stonybrook.edu/sb/bulletin/current/academicprograms/cse/courses.php)) by web scraping the page and creating a knowledge base of all courses within the department. The knowledge base is then used to construct a prerequisite tree in order to visualize it using software. It can also be queried to return a subgraph of the prerequisite tree based off several queries (e.g. a list of course names, departments, transitive prerequisites).
 
 ## Design
 
-The application is split into three parts: the web scraper, the query, the prerequisite tree visualizer.
+![Design](/docs/images/design.png)
+
+The application consists of four main parts: the web scraper, the query function, the web client (prerequisite tree visualizer), and the websocket server.
 
 ### Web Scraper
 
-The web scraper is written in Python 3.11 and uses the [BeautifulSoup library](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) to parse the contents of the course bulletin. There are two main functions: one that returns an object with all the course details and another that returns a graph representation of the prerequisite tree.
+The web scraper scrapes the Stony Brook course bulletin and parses the course attributes and requisites into a knowledge base which is then stored, in this case, as a [JSON file](/backend/json/full_graph.json). Ideally, the web scraper would be run periodically to update the knowledge base with any changes to the course bulletin (e.g. after each semester).
 
-#### Course Details
+### Query Function
 
-The object of course details is represented in the following form:
+The query function requires the whole knowledge base (i.e. [full_graph.json](/backend/json/full_graph.json)) and a query object whose keys are the query options and whose values are the query arguments. The query function then returns a list of courses which, along with their requisites (retrieved from the knowledge base), is used to construct a graph representation of the prerequisite tree (i.e. a subgraph of the full graph).
 
-```ts
-{
-    "<course_number>": {
-        "department": string,
-        "number": string,
-        "name": string,
-        "description": string,
-        "prerequisites": {} | null,
-        "corequisites": {} | null,
-        "antirequisites": {} | null,
-        "advisoryPrerequisites": {} | null,
-        "advisoryCorequisites": {} | null,
-        "sbcs": string[],
-        "credits": string
-    },
-    ...
-}
-```
+### Prerequisite Tree Visualizer
 
-#### Requisite Object
+The prerequisite tree visualizer is a web client that displays the graph representation of the prerequisite tree that is built off a 3D force graph library. This web client allows the user to query the graph and view the resulting subgraph.
 
-Each requisite object (e.g. prerequisites, corequisites, antirequisites) represents a tree of AND/OR nodes, courses, majors, standing, etc., where each node is an object with a `type` and a `value` key.
+### Websocket Server
 
-Sample Object ([CSE 220](https://www.stonybrook.edu/sb/bulletin/current/academicprograms/cse/courses.php#220)):
+The websocket server is a server that manages a websocket connection with any number of web clients (i.e. prerequisite tree visualizers). It is responsible for handling the query requests from the prerequisite tree visualizer and returning the resulting subgraph.
+
+
+## Implementation
+
+### Web Scraper
+
+The web scraper is written in Python 3.11 and uses the [BeautifulSoup library](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) to parse the contents of the [Stony Brook University Undergraduate course bulletin](https://www.stonybrook.edu/sb/bulletin/current/) across every department (e.g. [CHE](https://www.stonybrook.edu/sb/bulletin/current/academicprograms/che/courses.php), [CSE](https://www.stonybrook.edu/sb/bulletin/current/academicprograms/cse/courses.php), [AMS](https://www.stonybrook.edu/sb/bulletin/current/academicprograms/ams/courses.php), [MAT](https://www.stonybrook.edu/sb/bulletin/current/academicprograms/mat/courses.php)).
+
+After parsing all the courses and prerequisites, all the "extraneous" prerequisite relationships are removed. These removed prerequisite relationships have source courses that are not listed in the bulletin and thus are not included in the graph representation. This is done to ensure that the graph representation is complete and that the prerequisite tree visualizer can display the graph.
+
+#### Parsing Specifics
+
+The web scraper extracts all the `course` elements from the UG bulletin, looping for each department. Each course is then parsed line by line for the attributes (e.g. course number, name, prerequisites). Each prerequisite string in each course is extracted for each course it contains, however in the [future](#future-work), an prerequisite object with nested relationships (i.e. AND/OR) will be used instead.
+
+
+Each course and name pair is appended to a course list and each prerequisite pair (source, target) is appended to a prerequisite list with each list being a value within dictionary. After all the departments and courses have finished parsing, the course list and prerequisite list are written to a JSON file:
 
 ```json
 {
-    "type": "and",
-    "value": [
-        {
-            "type": "or",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 214"
-                },
-                {
-                    "type": "custom",
-                    "value": "co-requisite CSE 260"
-                }
-            ]
-        },
-        {
-            "type": "major",
-            "value": [
-                "CSE"
-            ]
-        }
-    ]
+  "courses_name_pair": [
+    [
+      "AAS 102",
+      "Eastern Religions"
+    ],
+    [
+      "AAS 110",
+      "Appreciating Indian Music"
+    ],
+  ],
+  "prereqs": [
+    [
+        "ANT 102",
+        "AAS 372"
+    ],
+    [
+        "KOR 212",
+        "AAS 385"
+    ],
+  ]
 }
 ```
 
-Currently, the following nodes have been implemented:
+### Query
 
-- `and`: a logical AND
-  - a list of nodes
-- `or`: a logical OR
-  - a list of nodes
-- `course`: a course
-  - a string in the form of `DEPARTMENT COURSE_NUMBER` (e.g. `"CSE 214"`)
-- `major`: a major
-  - a list of strings in the form of `DEPARTMENT` (e.g. `"PSY"`, `"CSE"`, `"AMS"`)
-- `standing`: the minimum standing (U1 - U4)
-  - an integer ranging `1` - `4`
-- `math placement`: the minimum math placement exam score
-  - an integer ranging `1` - `9`
-- `honors`: the honors colleges (currently only CEAS honors programs are implemented)
-  - a list of strings representing the honors programs (e.g. `"WISE"`, `"Honors College"`)
-- `custom`: a string that could not be matched (with the parsing rules)
-  - a string (e.g. `"co-requisite CSE 260"`, `"permission of instructor"`)
+TODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
 
 #### Graph Representation
 
