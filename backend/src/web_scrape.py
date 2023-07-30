@@ -97,6 +97,8 @@ def generate_full_graph(departments: List[str] = all_departments):
     # Write the graph data to a JSON file
     write_to_json_dir("full_graph.json", graph)
 
+    print("Written to './json/full_graph.json'")
+
 
 if __name__ == "__main__":
     generate_full_graph()
