@@ -1,6 +1,6 @@
 # Course Prerequisites
 
-![All UG Course Data](docs\images\full-graph.png)
+![All UG Course Data](/docs/images/full-graph.png)
 
 ## About
 
