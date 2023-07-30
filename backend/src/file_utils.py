@@ -40,6 +40,8 @@ def clear_log_dir():
     # Set the directory path
     directory = './log/'
 
+    ensure_dirs(directory)
+
     # Iterate over the files in the directory
     for filename in os.listdir(directory):
         # Build the full file path
