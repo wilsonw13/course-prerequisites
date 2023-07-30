@@ -8,7 +8,7 @@ This is a fullstack web application that allows users to search for courses at S
 
 ## Documentation
 
-Documentation that explains the entire design and specifics of the application can be found [here](docs\docs.md).
+Documentation that explains the entire design and specifics of the application can be found [here](/docs/docs.md).
 
 ## Local Installation (on Windows)
 
