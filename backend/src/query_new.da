@@ -1,0 +1,122 @@
+import websockets
+import threading
+import json
+
+from file_utils import get_config, get_from_json_dir, write_to_json_dir
+
+config = get_config()
+host, port = config["ws_host"], config["ws_port"]
+
+
+def remove_nested_quotes(iterable):
+    # TODO have to use splice to remove nested quotes
+    return {item[1:-1] for item in iterable}
+
+
+def rules(name=infinite_prereq_reach):
+    """Reachability of prereqs without depth"""
+    reach(x), if_(source(x))
+    reach(x), if_(prereq(x, y), reach(y))
+
+
+def rules(name=prereq_reach):
+    """Reachability of prereqs with depth"""
+    reach(x, 0), if_(source(x))
+    reach(x, n), if_(prereq(x, y), reach(y, n-1))
+
+
+def rules(name=isolated_courses):
+    """Courses that are not prereqs of any other course AND do not have any prereqs"""
+    isolated(x), if_(course(x), course(y), not prereq(x, y))
+    # course(z), not prereq(z, x)
+
+
+def rules(name=necessary_prereqs):
+    """(Filters) Prereqs that are necessary for the set of courses"""
+    necessary(x, y), if_(prereq(x, y), course(x), course(y))
+
+
+class Query:
+    def __init__(self, data=None):
+        if not data:
+            data = get_from_json_dir("full_graph.json")
+
+        self.data = data
+        self.all_courses = [course for course, _ in data["courses_name_pair"]]
+        self.all_prereqs = data["prereqs"]
+
+        self.courses = set()   # initialize courses set
+        self.prereqs = []   # initialize prereqs list
+
+    def update_departments(self, departments):
+        self.courses.update(
+            {c for c in self.all_courses if c[:3] in departments})
+
+    def update_courses(self, courses):
+        self.courses.update({c for c in courses if c in self.all_courses})
+
+    def transitive_prereqs(self):
+        inf = infer(rules=infinite_prereq_reach, bindings=[
+                    ('prereq', self.all_prereqs), ('source', self.courses)], queries=['reach'])
+
+        self.courses.update(remove_nested_quotes(inf))
+
+    def remove_courses_without_prereqs(self):
+        inf = infer(rules=isolated_courses, bindings=[
+            ('prereq', self.all_prereqs), ('course', self.courses)], queries=['isolated'])
+
+        self.courses = {
+            c for c in self.courses if c not in remove_nested_quotes(inf)}
+
+    def remove_dead_prereqs(self):
+        """Remove prereqs that don't have a corresponding course within the set of courses"""
+
+        # actual implementation FINDS all prereqs that have a corresponding course instead of remove
+        inf = infer(rules=necessary_prereqs, bindings=[
+            ('prereq', self.all_prereqs), ('course', self.courses)], queries=['necessary'])
+
+        # TODO have to use splice to remove nested quotes
+        self.prereqs = {(p[0][1:-1], p[1][1:-1]) for p in inf}
+
+    def generate_graph_data(self):
+        """Returns a dictionary of the actual, exact graph data that the graph uses"""
+
+        # Get the course name from the course id from the full_course_data.json file (data)
+        def get_course_name(course_id):
+            for pair in self.data["courses_name_pair"]:
+                if pair[0] == course_id:
+                    return pair[1]
+
+        # Keeps track of the unique departments in the courses set to assign a group number to each department from the index
+        deps = []
+
+        def get_group_number(course_id):
+            dep = course_id[:3]
+            if dep not in deps:
+                deps.append(dep)
+            return deps.index(dep)
+
+        return {
+            "nodes": [{"course_number": c, "name": get_course_name(c), "group": get_group_number(c)} for c in self.courses],
+            "links": [{"source": p[0], "target": p[1]} for p in self.prereqs]
+        }
+
+    def query(self, options):
+        """Returns a dictionary of the graph data that the graph uses"""
+
+        if options.get("departments") or options.get("courses"):
+            self.update_departments(options["departments"])
+            self.update_courses(options["courses"])
+
+            if options.get("show_transitive_prereqs"):
+                self.transitive_prereqs()
+        else:
+            self.courses = self.all_courses
+            self.prereqs = self.all_prereqs
+
+        if options.get("remove_courses_without_prereqs"):
+            self.remove_courses_without_prereqs()
+
+        self.remove_dead_prereqs()
+
+        return self.generate_graph_data()
