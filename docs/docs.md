@@ -98,7 +98,7 @@ Each course and name pair is appended to a course list and each prerequisite pai
 
 The query function is also written in Python and it returns a subgraph of the prerequisite tree based off several queries (e.g. a list of course names, departments, transitive prerequisites, etc.). In order to run the transitivity query, the query functions uses [XSB](https://xsb.sourceforge.net/), a logic programming language, with [Alda](https://github.com/DistAlgo/alda), a Python-extended language with distributive algorithms to run the prerequisite transitivity query, thus it has a `.da` file extension.
 
-A [query options](./backend/json/query_options.json) variable specifies a list of query options that the query function can use to filter the graph. The query runs by querying the full graph data based off these specific queries and returns a subgraph.
+A [query options](/backend/json/query_options.json) variable specifies a list of query options that the query function can use to filter the graph. The query runs by querying the full graph data based off these specific queries and returns a subgraph.
 
 #### Graph Representation
 
