@@ -64,4 +64,4 @@ cd frontend
 yarn dev
 ```
 
-***Note: If you want to run the web scraper again, run `py src/web_scrape.py` in the backend folder and it will regenerate `full_graph.json` within the `json` folder.
+***Note: If you want to run the web scraper again, run `py src/web_scrape.py` in the backend folder and it will regenerate `full_graph.json` within the `json/data` folder.

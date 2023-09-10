@@ -14,7 +14,7 @@ def client_connect(client, server):
     print("New client connected and was given id %d" % client['id'])
 
     server.send_message(client, json.dumps(
-        {"type": "query_options", "data": get_from_json_dir("query_options.json")}))
+        {"type": "query_options", "data": get_from_json_dir("config/query_options.json")}))
 
 
 # Called for every client disconnecting

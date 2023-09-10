@@ -6,7 +6,7 @@ from req_parser import parse_course, parse_to_prereq_graph
 from file_utils import get_from_json_dir, write_to_json_dir, clear_log_dir
 from exceptions import DepartmentDoesNotExist
 
-all_departments = get_from_json_dir("all_departments.json")
+all_departments = get_from_json_dir("config/all_departments.json")
 
 
 def get_course_bulletin(department: str):
@@ -24,27 +24,27 @@ def get_course_bulletin(department: str):
     return doc
 
 
-def full_parse(department: str, course_number: str = "", shortened_reqs: bool = False):
-    doc = get_course_bulletin(department)
+def department_parse(departments: List[str] = all_departments, shortened_reqs: bool = False):
+    data = {}
 
     clear_log_dir()
 
-    # if specific course number is specified ...
-    if course_number:
-        write_to_json_dir("data.json", parse_course(
-            doc.find(id=course_number), shortened_reqs))
+    for department in departments:
+        try:
+            doc = get_course_bulletin(department)
 
-    # otherwise parse the whole doc
-    else:
-        department_data = {}
+            for node in doc:
+                if isinstance(node, Tag):
+                    try:
+                        course_data = parse_course(node, shortened_reqs)
+                        data[course_data["full_course_number"]] = course_data
+                    except Exception as e:
+                        print(f"Error parsing course: {e}")
+        except DepartmentDoesNotExist as e:
+            # Log any departments that don't exist
+            e.log()
 
-        for node in doc:
-            if isinstance(node, Tag):
-                course_data = parse_course(node, shortened_reqs)
-                department_data[course_data["number"]] = course_data
-
-        write_to_json_dir(
-            f"{department}-data{'-short' if shortened_reqs else ''}.json", department_data)
+    return data
 
 
 def generate_full_graph(departments: List[str] = all_departments):
@@ -95,10 +95,18 @@ def generate_full_graph(departments: List[str] = all_departments):
     # pass
 
     # Write the graph data to a JSON file
-    write_to_json_dir("full_graph.json", graph)
+    write_to_json_dir("data/full_graph.json", graph)
 
-    print("Written to './json/full_graph.json'")
+    print("Written to './json/data/full_graph.json'")
 
 
 if __name__ == "__main__":
-    generate_full_graph()
+    # data = department_parse(shortened_reqs=True)
+    # write_to_json_dir("data/all_courses.json", data)
+
+    prereqs = {course_id: course["prerequisites"]
+               for course_id, course
+               in get_from_json_dir("data/all_courses.json").items()
+               if course["prerequisites"]}
+
+    write_to_json_dir("data/all_prereqs.json", prereqs)

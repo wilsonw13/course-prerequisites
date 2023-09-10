@@ -35,11 +35,11 @@ The application consists of four main parts: the web scraper, the query function
 
 ### Web Scraper
 
-The web scraper scrapes the Stony Brook course bulletin and parses the course attributes and requisites into a knowledge base which is then stored, in this case, as a [JSON file](/backend/json/full_graph.json). Ideally, the web scraper would be run periodically to update the knowledge base with any changes to the course bulletin (e.g. after each semester).
+The web scraper scrapes the Stony Brook course bulletin and parses the course attributes and requisites into a knowledge base which is then stored, in this case, as a [JSON file](/backend/json/data/full_graph.json). Ideally, the web scraper would be run periodically to update the knowledge base with any changes to the course bulletin (e.g. after each semester).
 
 ### Query Function
 
-The query function requires the whole knowledge base (i.e. [full_graph.json](/backend/json/full_graph.json)) and a query object whose keys are the query options and whose values are the query arguments. The query function then returns a list of courses which, along with their requisites (retrieved from the knowledge base), is used to construct a graph representation of the prerequisite tree (i.e. a subgraph of the full graph).
+The query function requires the whole knowledge base (i.e. [full_graph.json](/backend/json/data/full_graph.json)) and a query object whose keys are the query options and whose values are the query arguments. The query function then returns a list of courses which, along with their requisites (retrieved from the knowledge base), is used to construct a graph representation of the prerequisite tree (i.e. a subgraph of the full graph).
 
 ### Prerequisite Tree Visualizer
 
@@ -98,7 +98,7 @@ Each course and name pair is appended to a course list and each prerequisite pai
 
 The query function is also written in Python and it returns a subgraph of the prerequisite tree based off several queries (e.g. a list of course names, departments, transitive prerequisites, etc.). In order to run the transitivity query, the query functions uses [XSB](https://xsb.sourceforge.net/), a logic programming language, with [Alda](https://github.com/DistAlgo/alda), a Python-extended language with distributive algorithms to run the prerequisite transitivity query, thus it has a `.da` file extension.
 
-A [query options](/backend/json/query_options.json) variable specifies a list of query options that the query function can use to filter the graph. The query runs by querying the full graph data based off these specific queries and returns a subgraph.
+A [query options](/backend/json/config/query_options.json) variable specifies a list of query options that the query function can use to filter the graph. The query runs by querying the full graph data based off these specific queries and returns a subgraph.
 
 #### Graph Representation
 

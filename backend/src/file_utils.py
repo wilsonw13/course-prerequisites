@@ -26,7 +26,7 @@ def get_from_json_dir(file_path):
 
 
 def get_config():
-    return get_from_json_dir("server_config.json")
+    return get_from_json_dir("config/server_config.json")
 
 
 def append_to_log_file(file_path, string):
