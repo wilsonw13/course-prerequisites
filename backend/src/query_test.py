@@ -65,7 +65,10 @@ def run_queries(queries):
         elif set_op == "UPDATE":
             courses = queried_courses
 
-    return courses
+    res_courses = courses.copy()
+    courses.clear()
+
+    return res_courses
 
 
 if __name__ == "__main__":
