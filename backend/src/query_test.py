@@ -14,12 +14,13 @@ courses: Set[str] = set()
 
 def department(departments: List[str]):
     """Returns all courses in the given departments"""
-    return {course_num for course_num, course_attrs in ALL_COURSES_ATTRS.items() if course_attrs["department"] in departments}
+    departments_upper = {department.upper() for department in departments}
+    return {course_num for course_num, course_attrs in ALL_COURSES_ATTRS.items() if course_attrs["department"] in departments_upper}
 
 
 def course(courses: List[str]):
     """Returns all courses in the given list"""
-    return {c for c in courses if c in ALL_COURSES_ATTRS}
+    return {c for c in courses if c.upper() in ALL_COURSES_ATTRS}
 
 
 def level(number: int):
@@ -29,7 +30,9 @@ def level(number: int):
 
 def prerequisite(depth: int = 100):
     """Returns all prerequisite courses of the main set of the given depth or less (REACHABILITY)"""
+    # needs to be able to access the main set of courses
     reachable = courses.copy()
+
     # used to track newly reachable courses (to only recurse on those)
     newly_reachable = reachable.copy()
 
@@ -46,6 +49,24 @@ def prerequisite(depth: int = 100):
         depth -= 1
 
     return reachable
+
+
+def title(text: str):
+    """Returns all courses that contain the given text in their title (i.e. course name)"""
+    text_upper = text.upper()  # using upper to stay consistent with everything else
+    return {course_num for course_num, course_attrs in ALL_COURSES_ATTRS.items() if course_attrs["title"] and text_upper in course_attrs["title"].upper()}
+
+
+def description(text: str):
+    """Returns all courses that contain the given text in their description"""
+    text_upper = text.upper()
+    return {course_num for course_num, course_attrs in ALL_COURSES_ATTRS.items() if course_attrs["description"] and text_upper in course_attrs["description"].upper()}
+
+
+def sbcs(sbcs: List[str]):
+    """Returns all courses with any of the given SBCs"""
+    set_sbcs = {sbc.upper() for sbc in sbcs}
+    return {course_num for course_num, course_attrs in ALL_COURSES_ATTRS.items() if course_attrs["sbcs"] and set_sbcs.intersection(set(course_attrs["sbcs"]))}
 
 # RUNNING
 
@@ -88,3 +109,6 @@ if __name__ == "__main__":
     print("300 level CSE courses:")
     print(run_queries([("ADD", "department", ["CSE"]),
                        ("INTERSECT", "level", 300)]))
+
+    # searches description by "language"
+    print(run_queries([("ADD", "description", "language")]))

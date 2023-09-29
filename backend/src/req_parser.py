@@ -196,7 +196,7 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
         - "department": the three-letter department code of the course (e.g. "CSE")
         - "number": the three-digit course number (e.g. "101")
         - "full_course_number": the three-letter department code followed by the three-digit course number (e.g. "CSE 101")
-        - "name": the name of the course (e.g. "Introduction to Computer Science")
+        - "title": the name of the course (e.g. "Introduction to Computer Science")
         - "description": a description of the course
         - "prerequisites": a list of prerequisites for the course
         - "corequisites": a list of corequisites for the course
@@ -212,7 +212,7 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
         "department": None,
         "number": None,
         "full_course_number": None,
-        "name": None,
+        "title": None,
         "description": None,
         "prerequisites": None,
         "corequisites": None,
@@ -234,7 +234,7 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
 
         # if line is first (then it specifies the headers)
         if lineI == 1:
-            (course_data["department"], course_data["number"], course_data["name"]) = match(
+            (course_data["department"], course_data["number"], course_data["title"]) = match(
                 r"^([a-zA-Z]{3})\s(\d{3}):\s*(.*)$", text)
             course_data["full_course_number"] = course_data["department"] + \
                 " " + course_data["number"]
