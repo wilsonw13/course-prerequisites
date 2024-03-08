@@ -35,11 +35,11 @@ def department_parse(departments: List[str] = all_departments, shortened_reqs: b
 
             for node in doc:
                 if isinstance(node, Tag):
-                    try:
+                    # try:
                         course_data = parse_course(node, shortened_reqs)
                         data[course_data["full_course_number"]] = course_data
-                    except Exception as e:
-                        print(f"Error parsing course: {e}")
+                    # except Exception as e:
+                    #     print(f"Error parsing course: {e}")
         except DepartmentDoesNotExist as e:
             # Log any departments that don't exist
             e.log()
@@ -101,12 +101,12 @@ def generate_full_graph(departments: List[str] = all_departments):
 
 
 if __name__ == "__main__":
-    # data = department_parse(shortened_reqs=True)
-    # write_to_json_dir("data/all_courses.json", data)
+    data = department_parse(shortened_reqs=False)
+    write_to_json_dir("data/all_courses_full.json", data)
 
-    prereqs = {course_id: course["prerequisites"]
-               for course_id, course
-               in get_from_json_dir("data/all_courses.json").items()
-               if course["prerequisites"]}
-
-    write_to_json_dir("data/all_prereqs.json", prereqs)
+#     prereqs = {course_id: course["prerequisites"]
+#                for course_id, course
+#                in get_from_json_dir("data/all_courses.json").items()
+#                if course["prerequisites"]}
+#
+#     write_to_json_dir("data/all_prereqs.json", prereqs)

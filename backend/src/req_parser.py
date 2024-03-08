@@ -91,7 +91,18 @@ def req_match(txt: str, course_number: str):
         return {"type": "major", "value": [x for x in match(r"([A-Z]{3})", txt)]}
 
     # if txt is standing
-    if match(r"standing", txt, re.IGNORECASE):
+    if match(r"standing|status", txt, re.IGNORECASE):
+        standings = {
+            "freshmen": 1,
+            "sophomore": 2,
+            "junior": 3,
+            "senior": 4
+        }
+
+        for standing, val in standings.items():
+            if match(standing, txt, re.IGNORECASE):
+                return {"type": "standing", "value": val}
+
         return {"type": "standing", "value": min([int(x) for x in match(r"U(\d+)", txt)])}
 
     # if txt is math placement exam
@@ -243,11 +254,19 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
         elif lineI == 3:
             course_data["description"] = text
 
+        # if line matches DEC
+        elif match(r"DEC:", text):
+            continue
+
+        # if line matches a DEC or a ,
+        elif match(r"^[A-Z,]$", text):
+            continue
+
         # if line matches SBC
         elif match(r"SBC:", text):
             # matches all SBCs if any
             sbcs = re.findall(r"SBC:\s*([A-Z]+(?:,\s*[A-Z]+)*)", text)
-            course_data["sbcs"] = sbcs if sbcs else []
+            course_data["sbcs"] = sbcs or []
 
         # if line matches partial fulfillment of SBCs
         elif match(r"Partially fulfills", text):
@@ -264,37 +283,43 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
 
         # if line matches requisite
         elif match(r"requisite", text):
-            (req_type, req_text) = match(r"(.*)requisites?:\s*(.*)$", text)
+            try:
+                (req_type, req_text) = match(r"(.*)requisite\(?s?\)?:\s*(.*)$", text, re.IGNORECASE)
 
-            # clean up requisite_type
-            req_type = re.sub(
-                r"\s+", " ", req_type.replace("-", " ").lower().strip())
+                # clean up requisite_type
+                req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
 
-            requisite_obj = simple_req_match(req_text, course_data['full_course_number']) if parse_simple_reqs else req_match(
-                req_text, course_data['full_course_number'])
+                requisite_obj = simple_req_match(req_text, course_data['full_course_number']) if parse_simple_reqs else req_match(
+                    req_text, course_data['full_course_number'])
 
-            if req_type == "pre":
-                course_data["prerequisites"] = requisite_obj
-            elif req_type == "co":
-                course_data["corequisites"] = requisite_obj
-            elif req_type == "pre or co":
-                course_data["prerequisites"] = course_data["corequisites"] = requisite_obj
-            elif req_type == "anti":
-                course_data["antirequisites"] = requisite_obj
-            elif req_type == "advisory pre":
-                course_data["advisoryPrerequisites"] = requisite_obj
-            elif req_type == "advisory co":
-                course_data["advisoryCorequisites"] = requisite_obj
-            elif req_type == "advisory pre or co":
-                course_data["advisoryPrerequisites"] = course_data["advisoryCorequisites"] = requisite_obj
-            else:
-                print(f"\"{req_type}\" is not a valid requisite type")
+                if req_type == "pre":
+                    course_data["prerequisites"] = requisite_obj
+                elif req_type == "co":
+                    course_data["corequisites"] = requisite_obj
+                elif req_type == "pre or co":
+                    course_data["prerequisites"] = course_data["corequisites"] = requisite_obj
+                elif req_type == "anti":
+                    course_data["antirequisites"] = requisite_obj
+                elif req_type == "advisory pre":
+                    course_data["advisoryPrerequisites"] = requisite_obj
+                elif req_type == "advisory co":
+                    course_data["advisoryCorequisites"] = requisite_obj
+                elif req_type == "advisory pre or co":
+                    course_data["advisoryPrerequisites"] = course_data["advisoryCorequisites"] = requisite_obj
+                else:
+                    print(f"{course_data['full_course_number']}: \"{req_type}\" is not a valid requisite type")
+
+            # if unable to match requisite or if something goes wrong ...
+            except:
+              try:
+                raise UnmatchedCourseLine(text, course_data['full_course_number'])
+              except UnmatchedCourseLine as e:
+                e.log()
 
         # otherwise (if line doesn't match) ...
         else:
             try:
-                raise UnmatchedCourseLine(
-                    text, course_data['full_course_number'])
+                raise UnmatchedCourseLine(text, course_data['full_course_number'])
             except UnmatchedCourseLine as e:
                 e.log()
 
