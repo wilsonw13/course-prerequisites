@@ -42,7 +42,7 @@ def match(regex: str, match_text: str, flags: re.RegexFlag = None):
         return text_match
 
 
-def req_match(txt: str, course_number: str):
+def req_match(txt: str, course_number: str, ignore_non_courses: bool = False):
     """Takes in a string and a dictionary, and returns a dictionary with information about the requisites specified in the string.
 
     Parameters
@@ -51,6 +51,8 @@ def req_match(txt: str, course_number: str):
         a string representing a requirement or prerequisite for a course
     course_number : str
         The `data` parameter is a dictionary containing information about a course, including its department code (`department`) and course number (`number`). This information is used in the function to provide context for parsing the course requisites.
+    reqs_ignore_non_courses : bool, optional
+        A boolean value that indicates whether or not to ignore prequisites that are not other courses
 
     Returns
     -------
@@ -71,27 +73,39 @@ def req_match(txt: str, course_number: str):
 
     # if there is an "and" or ";"
     if match(r"(?:\sand\s|;)", txt, re.IGNORECASE):
-        or_split_txt = re.split(r"(?:\sand\s|;)", txt)
+        split_txt = re.split(r"(?:\sand\s|;)", txt)
 
         # if first txt in split_txt is a course
-        if match(r"[a-zA-Z]{3}\s?\d{3}", or_split_txt[0]):
-
-            for i, t in enumerate(or_split_txt):
+        if match(r"[a-zA-Z]{3}\s?\d{3}", split_txt[0]):
+            for i, t in enumerate(split_txt):
                 # if t does not have department code, then add it from the previous element
                 if match(r"^(?:(?![a-zA-Z]{3}).)*$", t):
-                    or_split_txt[i] = f"{match(r'[a-zA-Z]{3}', or_split_txt[i - 1])[0]} {t}"
+                    split_txt[i] = f"{match(r'[a-zA-Z]{3}', split_txt[i - 1])[0]} {t}"
 
+        if not ignore_non_courses:
+            return {
+                "type": "and",
+                "value": [req_match(t, course_number, ignore_non_courses) for t in split_txt]
+            }
+
+        # if non-courses are ignored, then we must remove all the Nones present
+        value = [req_match(t, course_number, ignore_non_courses) for t in split_txt]
+        value = list(filter(lambda x: x is not None, value))
+
+        # if empty list, return None
         return {
             "type": "and",
-            "value": [req_match(t, course_number) for t in or_split_txt]
-        }
+            "value": value
+        } if value else None
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
     if match(r"major", txt, re.IGNORECASE) and match(r"([A-Z]{3})", txt):
+        if ignore_non_courses: return None
         return {"type": "major", "value": [x for x in match(r"([A-Z]{3})", txt)]}
 
     # if txt is standing
     if match(r"standing|status", txt, re.IGNORECASE):
+        if ignore_non_courses: return None
         standings = {
             "freshmen": 1,
             "sophomore": 2,
@@ -107,10 +121,13 @@ def req_match(txt: str, course_number: str):
 
     # if txt is math placement exam
     if match(r"math.*placement\sexam", txt, re.IGNORECASE):
+        if ignore_non_courses: return None
         return {"type": "math placement", "value": min([int(x) for x in match(r"level\s(\d+)", txt, re.IGNORECASE)])}
 
     # if txt is any of the (CEAS) honors programs
     if match(r"(?:honors|university\sscholars)", txt, re.IGNORECASE):
+        if ignore_non_courses: return None
+
         honors_programs = []
 
         if match(r"computer\sscience\shonors", txt, re.IGNORECASE):
@@ -129,20 +146,31 @@ def req_match(txt: str, course_number: str):
 
     # if there is an "or" | SAME CODE AS "AND"
     if match(r"\sor\s", txt, re.IGNORECASE):
-        or_split_txt = re.split(r"\sor\s", txt)
+        split_txt = re.split(r"\sor\s", txt)
 
         # if first txt in split_txt is a course
-        if match(r"[a-zA-Z]{3}\s?\d{3}", or_split_txt[0]):
+        if match(r"[a-zA-Z]{3}\s?\d{3}", split_txt[0]):
 
-            for i, t in enumerate(or_split_txt):
+            for i, t in enumerate(split_txt):
                 # if t does not have department code, then add it from the previous element
                 if match(r"^(?:(?![a-zA-Z]{3}).)*$", t):
-                    or_split_txt[i] = f"{match(r'[a-zA-Z]{3}', or_split_txt[i - 1])[0]} {t}"
+                    split_txt[i] = f"{match(r'[a-zA-Z]{3}', split_txt[i - 1])[0]} {t}"
 
+        if not ignore_non_courses:
+            return {
+                "type": "or",
+                "value": [req_match(t, course_number, ignore_non_courses) for t in split_txt]
+            }
+
+        # if non-courses are ignored, then we must remove all the Nones present
+        value = [req_match(t, course_number, ignore_non_courses) for t in split_txt]
+        value = list(filter(lambda x: x is not None, value))
+
+        # if empty list, return None
         return {
             "type": "or",
-            "value": [req_match(t, course_number) for t in or_split_txt]
-        }
+            "value": value
+        } if value else None
 
     # if txt is a course
     if match(r"^[a-zA-Z]{3}\s\d{3}$", txt):
@@ -152,6 +180,7 @@ def req_match(txt: str, course_number: str):
         raise UnknownRequisite(txt, course_number)
     except UnknownRequisite as e:
         e.log()
+        if ignore_non_courses: return None
         return {"type": "custom", "value": txt}
 
 
@@ -190,7 +219,7 @@ def simple_req_match(txt: str, course_number: str):
     return req_courses
 
 
-def parse_course(course_node, parse_simple_reqs: bool = False):
+def parse_course(course_node, parse_simple_reqs: bool = False, reqs_ignore_non_courses: bool = False):
     """Parses course information from a webpage and returns a dictionary containing various details about the course.
 
     Parameters
@@ -199,6 +228,8 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
         It is a BeautifulSoup object representing a single course
     parse_simple_reqs : bool, optional
         A boolean value that indicates whether the function should simply parse reqs. The default value is False.
+    reqs_ignore_non_courses : bool, optional
+        A boolean value that indicates whether or not to ignore prequisites that are not other courses
 
     Returns
     -------
@@ -290,7 +321,7 @@ def parse_course(course_node, parse_simple_reqs: bool = False):
                 req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
 
                 requisite_obj = simple_req_match(req_text, course_data['full_course_number']) if parse_simple_reqs else req_match(
-                    req_text, course_data['full_course_number'])
+                    req_text, course_data['full_course_number'], reqs_ignore_non_courses)
 
                 if req_type == "pre":
                     course_data["prerequisites"] = requisite_obj

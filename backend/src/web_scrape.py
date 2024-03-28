@@ -24,7 +24,7 @@ def get_course_bulletin(department: str):
     return doc
 
 
-def department_parse(departments: List[str] = all_departments, shortened_reqs: bool = False):
+def department_parse(departments: List[str] = all_departments, shortened_reqs: bool = False, reqs_ignore_non_courses: bool = False):
     data = {}
 
     clear_log_dir()
@@ -36,7 +36,7 @@ def department_parse(departments: List[str] = all_departments, shortened_reqs: b
             for node in doc:
                 if isinstance(node, Tag):
                     # try:
-                        course_data = parse_course(node, shortened_reqs)
+                        course_data = parse_course(node, shortened_reqs, reqs_ignore_non_courses)
                         data[course_data["full_course_number"]] = course_data
                     # except Exception as e:
                     #     print(f"Error parsing course: {e}")
@@ -101,8 +101,11 @@ def generate_full_graph(departments: List[str] = all_departments):
 
 
 if __name__ == "__main__":
-    data = department_parse(shortened_reqs=False)
-    write_to_json_dir("data/all_courses_full.json", data)
+    data = department_parse(departments=["AMS", "CSE"], reqs_ignore_non_courses=True)
+    write_to_json_dir("data/AMS_CSE_courses.json", data)
+
+    # data = department_parse(shortened_reqs=False)
+    # write_to_json_dir("data/all_courses_full.json", data)
 
 #     prereqs = {course_id: course["prerequisites"]
 #                for course_id, course
