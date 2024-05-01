@@ -187,7 +187,7 @@ See the root [README.md](/README.md#local-installation-on-windows) file for inst
 
 ## References
 
-- [Georgia Tech course tree visualizer](https://devarsi-rawal.github.io/gt-course-tree/)
+- [Georgia Tech course tree visualizer](https://github.com/devarsirawal/gt-course-tree)
 - (Paper) [The curriculum prerequisite network: a tool for visualizing and analyzing academic curricula](https://arxiv.org/ftp/arxiv/papers/1408/1408.5340.pdf)
 - (Paper) [Visualization UW Course Prerequisites Sequences](http://cse512-16s.github.io/fp-dbabbs-jordanstarkey95/paper-dbabbs-jds56.pdf)
 - [Rhumbl: Mapping the cirriculum of MIT through OCW](https://rhumbl.com/examples/curriculum-maps)
