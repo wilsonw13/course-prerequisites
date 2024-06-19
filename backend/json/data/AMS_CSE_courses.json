@@ -70,13 +70,8 @@
         },
         "corequisites": null,
         "antirequisites": {
-            "type": "or",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "AMS 310"
-                }
-            ]
+            "type": "course",
+            "value": "AMS 310"
         },
         "advisoryPrerequisites": null,
         "advisoryCorequisites": null,
@@ -172,13 +167,8 @@
         "title": "Writing in Applied Mathematics",
         "description": "See Requirements for the Major in Applied Mathematics and Statistics, Upper Division Writing Requirement.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "WRT 102"
-                }
-            ]
+            "type": "course",
+            "value": "WRT 102"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -282,13 +272,8 @@
         "title": "Probability Theory",
         "description": "Probability spaces, random variables, moment generating functions, algebra of expectations, conditional and marginal distributions, multivariate distributions, order statistics, law of large numbers.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "AMS 301"
-                }
-            ]
+            "type": "course",
+            "value": "AMS 301"
         },
         "corequisites": {
             "type": "or",
@@ -435,20 +420,15 @@
         "title": "Computing and Programming Fundamentals in Applied Mathematics and Statistics",
         "description": "Introduction to programming in MATLAB and Python, including scripting, basic data structures, algorithms, scientific computing, and software engineering. Homework projects will focus on using computation to solve linear algebra, data analysis, and other mathematical problems.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "AMS 210"
-                        },
-                        {
-                            "type": "course",
-                            "value": "MAT 211"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "AMS 210"
+                },
+                {
+                    "type": "course",
+                    "value": "MAT 211"
                 }
             ]
         },
@@ -555,20 +535,15 @@
         "title": "Mathematical Biology",
         "description": "This course introduces the use of mathematics and computer simulation to study a wide range of problems in biology. Topics include the modeling of populations, the dynamics of signal transduction and gene-regulatory networks, and simulation of protein structure and dynamics. A computer laboratory component allows students to apply their knowledge to real-world problems.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "AMS 161"
-                        },
-                        {
-                            "type": "course",
-                            "value": "MAT 132"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "AMS 161"
+                },
+                {
+                    "type": "course",
+                    "value": "MAT 132"
                 }
             ]
         },
@@ -686,13 +661,8 @@
         "title": "Computational Geometry",
         "description": "The design and analysis of efficient algorithms to solve geometric problems that arise in computer graphics, robotics, geographical information systems, manufacturing, and optimization. Topics include convex hulls, triangulation, Voronoi diagrams, visibility, intersection, robot motion planning, and arrangements. This course is offered as both AMS 345 and CSE 355.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "AMS 301"
-                }
-            ]
+            "type": "course",
+            "value": "AMS 301"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -946,32 +916,12 @@
         "title": "Speak Effectively Before an Audience",
         "description": "A zero credit course that may be taken in conjunction with AMS 475 course that provides opportunity to achieve the learning outcomes of the Stony Brook Curriculum's SPK learning objective.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "WRT 102"
-                        }
-                    ]
-                }
-            ]
+            "type": "course",
+            "value": "WRT 102"
         },
         "corequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "WRT 102"
-                        }
-                    ]
-                }
-            ]
+            "type": "course",
+            "value": "WRT 102"
         },
         "antirequisites": null,
         "advisoryPrerequisites": null,
@@ -988,13 +938,8 @@
         "title": "Write Effectively in Applied Mathematics",
         "description": "A zero credit course that may be taken in conjunction with AMS 487, with permission of the instructor. The course provides opportunity to practice the skills and techniques of effective academic writing and satisfies the learning outcomes of the Stony Brook Curriculum's WRTD learning objective.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "WRT 102"
-                }
-            ]
+            "type": "course",
+            "value": "WRT 102"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -1079,13 +1024,8 @@
         "prerequisites": null,
         "corequisites": null,
         "antirequisites": {
-            "type": "or",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 160"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 160"
         },
         "advisoryPrerequisites": null,
         "advisoryCorequisites": null,
@@ -1104,13 +1044,8 @@
         "corequisites": null,
         "antirequisites": null,
         "advisoryPrerequisites": {
-            "type": "or",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 101"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 101"
         },
         "advisoryCorequisites": null,
         "sbcs": [
@@ -1339,13 +1274,8 @@
         "title": "Programming Abstractions",
         "description": "Intermediate-level programming concepts and paradigms, including functional programming, object-orientation, basics of type systems, memory management, program and data abstractions, parameter passing, modularity, and parallel programming. Includes weekly recitations, which provide students with experience in the practice of programming in a variety of high-level languages.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 214"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 214"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -1361,18 +1291,8 @@
         "title": "Systems Fundamentals I",
         "description": "Introduces systems-level programming concepts using the C language and assembly language, and explores the correspondence of programming constructs in these languages. Topics include internal data representation, basic instructions and control structures, bitwise operations, arithmetic operations, memory management, pointers, function calls and parameter passing, linking and loading. Included is an overview of foundational topics in computer architecture, organization and networks.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 214"
-                        }
-                    ]
-                }
-            ]
+            "type": "course",
+            "value": "CSE 214"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -1467,13 +1387,8 @@
         "title": "Technical Communications",
         "description": "Principles of professional technical communications for Computer Science and Information Systems majors. Topics include writing business communications, user manuals, press releases, literature reviews, and research abstracts. Persuasive oral communications and effective presentation techniques, to address a range of audiences, will also be covered. This course satisfies the upper-division writing requirement for CSE and ISE majors.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "WRT 102"
-                }
-            ]
+            "type": "course",
+            "value": "WRT 102"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -1599,18 +1514,8 @@
         "title": "Principles of Database Systems",
         "description": "The design of database management systems to obtain consistency, integrity, and availability of data. Conceptual models and schemas of data: relational, hierarchical, and network. Students undertake a semester project that includes the design and implementation of a database system.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 260"
-                        }
-                    ]
-                }
-            ]
+            "type": "course",
+            "value": "CSE 260"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -1626,20 +1531,15 @@
         "title": "Operating Systems",
         "description": "Students are introduced to the structure of modern operating systems. Topics include virtual memory, resource allocation strategies, concurrency, and protection. The design and implementation of a simple operating system are performed. This course focuses on teaching the skills required to design and build modules of an operating system kernel. It covers key algorithms and architectures. A companion course, CSE 320, teaches complementary skills from the application programmer's point of view.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 320"
-                        },
-                        {
-                            "type": "course",
-                            "value": "ESE 280"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 320"
+                },
+                {
+                    "type": "course",
+                    "value": "ESE 280"
                 }
             ]
         },
@@ -1657,18 +1557,8 @@
         "title": "Principles of Programming Languages",
         "description": "An introduction to programming languages paradigms, including functional and logic programming, and the suitability of various languages for particular programming tasks. Students write sample programs in the studied languages. The languages are used to illustrate programming language constructs such as scoping and binding, type systems, storage management and operating environments. This illustration is accompanied by an introduction to the implementation of programming languages, such as parsing, semantic analysis, symbol tables, memory allocation and code generation. Students complete a series of assignments to implement a language chosen by the instructor.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 260"
-                        }
-                    ]
-                }
-            ]
+            "type": "course",
+            "value": "CSE 260"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -1734,28 +1624,23 @@
         "title": "Systems Administration",
         "description": "This course covers practical techniques to manage information systems, also known as IT Systems Administration. Students will learn how to install computers for assorted hardware and software platforms (Windows, Unix/Linux, OS-X). Install networking equipment and configure it. Install server software on several systems (e.g. web, database, mail) and configure it. Secure the network, hosts, and services, and apply system patches. Set up redundant computing services, virtual machines/services, and hardware so that services can survive some hardware/software failures. Evaluate the performance, reliability, and security of the overall system. This course is offered as both CSE 311 and ISE 311.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 214"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 230"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 260"
-                        },
-                        {
-                            "type": "course",
-                            "value": "ISE 208"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 214"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 230"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 260"
+                },
+                {
+                    "type": "course",
+                    "value": "ISE 208"
                 }
             ]
         },
@@ -1835,13 +1720,8 @@
         "title": "Systems Fundamentals II",
         "description": "This course introduces essential concepts of operating systems, compilers, concurrency, and performance analysis, focused around several cross-cutting examples, such as memory management, error handling, and threaded programming. In this course, operating systems concepts are considered from the point of view of the application programmer, and the focus is on APIs for interacting with an operating system. A companion course, CSE 306, considers operating systems from the point of view of the OS kernel implementer.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 220"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 220"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -1969,13 +1849,8 @@
         "title": "Fundamentals of Computer Graphics",
         "description": "An introduction to computer graphics including graphics application programming; data structures for graphics; representing and specifying color; fundamental hardware and software concepts for calligraphic and raster displays; two-dimensional, geometric transformations; introduction to three-dimensional graphics; graphics standards; and input devices, interaction handling, and user-computer interface.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 220"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 220"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -1991,13 +1866,8 @@
         "title": "Computer Security Fundamentals",
         "description": "Introduces the basic concepts and terminology of computer security. Covers basic security topics such as cryptography, operating systems security, network security, and language-based security.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 220"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 220"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -2076,20 +1946,15 @@
         "title": "User Interface Development",
         "description": "Survey of user interface systems, with emphasis on responsive and adaptive strategies to accommodate cross-platform deployment across multiple devices such as desktops and mobile devices. Demonstration of the use of tool kits for designing user interfaces. Additional topics include human factors, design standards, and visual languages. Students participate in a project involving the design and implementation of user interface systems. This course is offered as both CSE 333 and ISE 333.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 214"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 260"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 214"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 260"
                 }
             ]
         },
@@ -2121,20 +1986,15 @@
         "title": "Internet Programming",
         "description": "Introduces the design and development of software for Internet commerce. Topics include extended markup language, servlets, cookies, sessions, Internet media types, Web protocols, digital signatures, certificates, encryption, and the wireless Internet.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 214"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 260"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 214"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 260"
                 }
             ]
         },
@@ -2152,20 +2012,15 @@
         "title": "Scripting Languages",
         "description": "Scripting languages are widely used in the IT industry. Programming with scripting languages, also known as scripting, has several advantages compared to programming with other types of languages in that scripts facilitate rapid program development; can automate high-level jobs or tasks very effectively; and can be used to compose various software components, even binaries, into more complex and powerful applications. This course introduces the principles of scripting, covers one or two selected scripting languages in depth, and illustrates the advanced use of scripting by extensive case studies in application areas such as system administration, web application development, graphical user interface development, and text processing.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 214"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 260"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 214"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 260"
                 }
             ]
         },
@@ -2266,20 +2121,15 @@
         "title": "Artificial Intelligence",
         "description": "Topics covered include critique of artificial intelligence research; state-space problem representations and search algorithms; game-playing programs; theorem-proving programs; programs for the study and simulation of cognitive processes and pattern recognition. Further topics in current research as time permits.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 316"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 351"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 316"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 351"
                 }
             ]
         },
@@ -2343,20 +2193,15 @@
         "title": "Natural Language Processing",
         "description": "Natural language processing techniques power many intelligent language based applications. This course will introduce basic language analysis tasks such as language modeling and syntactic analysis, as well as core applications such as text classification, information extraction, question answering, and machine translation. The course will cover relevant algorithms, machine learning solutions, and evaluation methodologies.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 316"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 351"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 316"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 351"
                 }
             ]
         },
@@ -2374,13 +2219,8 @@
         "title": "Computational Geometry",
         "description": "The design and analysis of efficient algorithms to solve geometric problems that arise in computer graphics, robotics, geographical information systems, manufacturing, and optimization. Topics include convex hulls, triangulation, Voronoi diagrams, visibility, intersection, robot motion planning, and arrangements. This course is offered as both AMS 345 and CSE 355.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "AMS 301"
-                }
-            ]
+            "type": "course",
+            "value": "AMS 301"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -2457,13 +2297,8 @@
         "title": "Software Security",
         "description": "This course will describe the principles and practice of securing software systems. Topics will include: software vulnerabilities; static and dynamic analysis techniques for vulnerability detection; exploit detection and prevention; secure software development techniques and defensive programming; malware detection and analysis; security policies and sandboxing; information flow.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 220"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 220"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -2485,13 +2320,8 @@
         "title": "Web Security",
         "description": "This course will cover all aspects of web security, including browser security, web server security, and web application security. Topics include: SOP and JavaScript; application and protocol vulnerabilities; probing, surveillance, and tracking; penetration testing; modern social engineering techniques; monetary incentives and monetization.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 220"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 220"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -2513,13 +2343,8 @@
         "title": "Mobile Security",
         "description": "The course covers the latest security technologies for mobile platforms (e.g., Android and iOS). It first introduces the security issues plaguing mobile apps and discusses defensive mechanisms, such as code signing, app permissions, and sandbox. It then peeks into mobile OS, explaining how jailbreaking/rooting works and the internals of iOS/Android security designs. Finally, it surveys modern hardware-level security features, such as secure booting, TrustZone, and biometrics.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 220"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 220"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -2541,13 +2366,8 @@
         "title": "Offensive Security",
         "description": "Hands-on course with the goal of understanding various security problems in depth, through a more adversarial way of thinking. By focusing on finding and exploiting vulnerabilities, the course will cover a broad range of topics, including the ethics of offensive security, reverse engineering, software vulnerability discovery and exploitation, malicious code analysis, network traffic interception and manipulation, reconnaissance and information gathering, physical security, and social engineering. All topics will be covered from a highly practical perspective, following a hands-on approach and tutorial-like sessions, along with programming assignments.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 220"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 220"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -2627,13 +2447,8 @@
         "title": "Wireless and Mobile Networking",
         "description": "The fundamentals of wireless communication. Link, network and transcript layer protocols for wireless and mobile networking. Cellular networks. Wireless LANs. Wireless multihop networks. Mobile applications.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 310"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 310"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -2752,13 +2567,8 @@
         "title": "Advanced Systems Programming in UNIX/C",
         "description": "Focuses on several aspects of producing commercial-grade system software: reliability, portability, security, and survivability. Uses Unix and C, heavily used in industry when developing systems and embedded systems code. Emphasizes techniques and tools to produce reliable, secure, and highly portable code. Requires substantial programming as well as a course project.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 320"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 320"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -2874,13 +2684,8 @@
         "title": "2D Game Programming",
         "description": "An introduction to the fundamental concepts of computer game programming. Students design and develop original games for PCs applying proven game design and software engineering principles.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 220"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 220"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -2896,13 +2701,8 @@
         "title": "3D Game Programming",
         "description": "This course explores the concepts and technologies behind making 3D, networked games. This will include the examination of game engine creation as well as the use of middleware to build graphically sophisticated game systems.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 220"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 220"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -2987,20 +2787,15 @@
         "title": "Special Topics in Computer Science",
         "description": "A lecture or seminar course on a current topic in computer science. May be repeated as the topic changes, but cannot be used more than twice to satisfy CSE major requirements.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 214"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 260"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 214"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 260"
                 }
             ]
         },
@@ -3018,20 +2813,15 @@
         "title": "Special Topics in Computer Science",
         "description": "A lecture or seminar course on a current topic in computer science. May be repeated as the topic changes, but cannot be used more than twice to satisfy CSE major requirements.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 214"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 260"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 214"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 260"
                 }
             ]
         },
@@ -3049,20 +2839,15 @@
         "title": "Special Topics in Computer Science",
         "description": "A lecture or seminar course on a current topic in computer science. May be repeated as the topic changes, but cannot be used more than twice to satisfy CSE major requirements.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 214"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 260"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 214"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 260"
                 }
             ]
         },
@@ -3080,20 +2865,15 @@
         "title": "Special Topics in Computer Science",
         "description": "A lecture or seminar course on a current topic in computer science. May be repeated as the topic changes, but cannot be used more than twice to satisfy CSE major requirements.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 214"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 260"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 214"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 260"
                 }
             ]
         },
@@ -3111,20 +2891,15 @@
         "title": "Special Topics in Computer Science",
         "description": "A lecture or seminar course on a current topic in computer science. May be repeated as the topic changes, but cannot be used more than twice to satisfy CSE major requirements.",
         "prerequisites": {
-            "type": "and",
+            "type": "or",
             "value": [
                 {
-                    "type": "or",
-                    "value": [
-                        {
-                            "type": "course",
-                            "value": "CSE 214"
-                        },
-                        {
-                            "type": "course",
-                            "value": "CSE 260"
-                        }
-                    ]
+                    "type": "course",
+                    "value": "CSE 214"
+                },
+                {
+                    "type": "course",
+                    "value": "CSE 260"
                 }
             ]
         },
@@ -3142,13 +2917,8 @@
         "title": "Software Engineering",
         "description": "Introduces the basic concepts and modern tools and techniques of software engineering. Emphasizes the development of reliable and maintainable software via system requirements and specifications, software design methodologies including object-oriented design, implementation, integration, and testing; software project management; life-cycle documentation; software maintenance; and consideration of human factor issues.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 316"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 316"
         },
         "corequisites": null,
         "antirequisites": null,
@@ -3224,13 +2994,8 @@
         "title": "Senior Honors Research Project II",
         "description": "A two-semester research project carried out under the supervision of a computer science faculty member. Students must submit a written project report and make a presentation to the department at the year-end Honors Project Colloquium.",
         "prerequisites": {
-            "type": "and",
-            "value": [
-                {
-                    "type": "course",
-                    "value": "CSE 495"
-                }
-            ]
+            "type": "course",
+            "value": "CSE 495"
         },
         "corequisites": null,
         "antirequisites": null,

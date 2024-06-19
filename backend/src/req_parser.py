@@ -92,11 +92,8 @@ def req_match(txt: str, course_number: str, ignore_non_courses: bool = False):
         value = [req_match(t, course_number, ignore_non_courses) for t in split_txt]
         value = list(filter(lambda x: x is not None, value))
 
-        # if empty list, return None
-        return {
-            "type": "and",
-            "value": value
-        } if value else None
+        # if list contains a single element, return the single element, elif list contains no elements, return None, else return normal result
+        return value[0] if len(value) == 1 else ({"type": "and", "value": value} if value else None)
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
     if match(r"major", txt, re.IGNORECASE) and match(r"([A-Z]{3})", txt):
@@ -166,11 +163,8 @@ def req_match(txt: str, course_number: str, ignore_non_courses: bool = False):
         value = [req_match(t, course_number, ignore_non_courses) for t in split_txt]
         value = list(filter(lambda x: x is not None, value))
 
-        # if empty list, return None
-        return {
-            "type": "or",
-            "value": value
-        } if value else None
+        # if list contains a single element, return the single element, elif list contains no elements, return None, else return normal result
+        return value[0] if len(value) == 1 else ({"type": "or", "value": value} if value else None)
 
     # if txt is a course
     if match(r"^[a-zA-Z]{3}\s\d{3}$", txt):
