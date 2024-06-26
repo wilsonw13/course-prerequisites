@@ -1,11 +1,27 @@
 import re
 import unicodedata
+import secrets
+import string
 from bs4 import Tag
 from typing import List
 
 from exceptions import UnknownRequisite, UnmatchedCourseLine
 
+ids = set()
+DEFAULT_ID_LENGTH = 6
+def generate_id(length):
+    """Generates an ID of the specified length. If it collides with a previously generated ID, then it regenerates it
+    """
+    alphabet = string.ascii_letters + string.digits
+    _id = ''.join(secrets.choice(alphabet) for _ in range(length))
 
+    if _id in ids:
+        return generate_id(length)
+    else:
+        ids.add(_id)
+        return _id
+
+FULL_COURSE_NUMBER_REGEX = r"[a-zA-Z]{3}\s?\d{3}"
 def match(regex: str, match_text: str, flags: re.RegexFlag = None):
     """Takes a regular expression, a text to match, and optional flags as input and returns a list of all non-overlapping matches in the text.
 
@@ -41,8 +57,12 @@ def match(regex: str, match_text: str, flags: re.RegexFlag = None):
     else:
         return text_match
 
+and_ = set()    # a#
+or_ = set()     # o#
+not_ = set()    # n#
+member = set()  # m#
 
-def req_match(txt: str, course_number: str, ignore_non_courses: bool = False):
+def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: bool = False):
     """Takes in a string and a dictionary, and returns a dictionary with information about the requisites specified in the string.
 
     Parameters
@@ -76,13 +96,14 @@ def req_match(txt: str, course_number: str, ignore_non_courses: bool = False):
         split_txt = re.split(r"(?:\sand\s|;)", txt)
 
         # if first txt in split_txt is a course
-        if match(r"[a-zA-Z]{3}\s?\d{3}", split_txt[0]):
+        if match(FULL_COURSE_NUMBER_REGEX, split_txt[0]):
             for i, t in enumerate(split_txt):
                 # if t does not have department code, then add it from the previous element
                 if match(r"^(?:(?![a-zA-Z]{3}).)*$", t):
                     split_txt[i] = f"{match(r'[a-zA-Z]{3}', split_txt[i - 1])[0]} {t}"
 
         if not ignore_non_courses:
+            # TODO fix later
             return {
                 "type": "and",
                 "value": [req_match(t, course_number, ignore_non_courses) for t in split_txt]
@@ -92,8 +113,27 @@ def req_match(txt: str, course_number: str, ignore_non_courses: bool = False):
         value = [req_match(t, course_number, ignore_non_courses) for t in split_txt]
         value = list(filter(lambda x: x is not None, value))
 
-        # if list contains a single element, return the single element, elif list contains no elements, return None, else return normal result
-        return value[0] if len(value) == 1 else ({"type": "and", "value": value} if value else None)
+        ### === NEW
+        # generate id for the and if the parent is not itself a course
+        _id = f"a_{generate_id(DEFAULT_ID_LENGTH)}" \
+                if not match(FULL_COURSE_NUMBER_REGEX, parent_id) \
+                else parent_id
+
+        child_id = None
+
+        # if there are multiple children, make a list
+        if len(value) > 1:
+            # child_id here is member_id
+            child_id = f"m_{generate_id(DEFAULT_ID_LENGTH)}"
+
+            for v in value:
+                member.add((child_id, v))
+        else:
+            child_id = value[0]
+
+        # add it to the and set
+        and_.add((_id, child_id))
+        return _id
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
     if match(r"major", txt, re.IGNORECASE) and match(r"([A-Z]{3})", txt):
@@ -146,7 +186,7 @@ def req_match(txt: str, course_number: str, ignore_non_courses: bool = False):
         split_txt = re.split(r"\sor\s", txt)
 
         # if first txt in split_txt is a course
-        if match(r"[a-zA-Z]{3}\s?\d{3}", split_txt[0]):
+        if match(FULL_COURSE_NUMBER_REGEX, split_txt[0]):
 
             for i, t in enumerate(split_txt):
                 # if t does not have department code, then add it from the previous element
@@ -163,12 +203,31 @@ def req_match(txt: str, course_number: str, ignore_non_courses: bool = False):
         value = [req_match(t, course_number, ignore_non_courses) for t in split_txt]
         value = list(filter(lambda x: x is not None, value))
 
-        # if list contains a single element, return the single element, elif list contains no elements, return None, else return normal result
-        return value[0] if len(value) == 1 else ({"type": "or", "value": value} if value else None)
+        ### === NEW (copied from and)
+        # generate id for the or if the parent is not itself a course
+        _id = f"o_{generate_id(DEFAULT_ID_LENGTH)}" \
+                if not match(FULL_COURSE_NUMBER_REGEX, parent_id) \
+                else parent_id
+
+        child_id = None
+
+        # if there are multiple children, make a list
+        if len(value) > 1:
+            # child_id here is member_id
+            child_id = f"m_{generate_id(DEFAULT_ID_LENGTH)}"
+
+            for v in value:
+                member.add((child_id, v))
+        else:
+            child_id = value[0]
+
+        # add it to the or set
+        or_.add((_id, child_id))
+        return _id
 
     # if txt is a course
     if match(r"^[a-zA-Z]{3}\s\d{3}$", txt):
-        return {"type": "course", "value": txt}
+        return txt
 
     try:
         raise UnknownRequisite(txt, course_number)
@@ -178,42 +237,7 @@ def req_match(txt: str, course_number: str, ignore_non_courses: bool = False):
         return {"type": "custom", "value": txt}
 
 
-def simple_req_match(txt: str, course_number: str):
-    """Extracts course codes from a given string and adds missing department codes if necessary.
-
-    Parameters
-    ----------
-    txt : str
-        a string containing course codes
-    course_number : str
-        The "data" parameter is a dictionary that is not used in the given function. It is likely meant to contain some information related to courses or requirements, but without more context it is impossible to say for sure.
-
-    Returns
-    -------
-    list
-        a list of course codes
-    """
-
-    req_courses = match(r"([A-Z]{3}\s\d{3}|\d{3})", txt)
-
-    try:
-        if req_courses:
-            for i, c in enumerate(req_courses):
-                # if t does not have department code, then add it from the previous element
-                if not match(r"[A-Z]{3}", c):
-                    if i == 0:
-                        raise UnknownRequisite(txt, course_number)
-                    else:
-                        req_courses[i] = f"{match(r'[a-zA-Z]{3}', req_courses[i - 1])[0]} {c}"
-        else:
-            raise UnknownRequisite(txt, course_number)
-    except UnknownRequisite as e:
-        e.log()
-
-    return req_courses
-
-
-def parse_course(course_node, parse_simple_reqs: bool = False, reqs_ignore_non_courses: bool = False):
+def parse_course(course_node, reqs_ignore_non_courses: bool = False):
     """Parses course information from a webpage and returns a dictionary containing various details about the course.
 
     Parameters
@@ -314,9 +338,12 @@ def parse_course(course_node, parse_simple_reqs: bool = False, reqs_ignore_non_c
                 # clean up requisite_type
                 req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
 
-                requisite_obj = simple_req_match(req_text, course_data['full_course_number']) if parse_simple_reqs else req_match(
-                    req_text, course_data['full_course_number'], reqs_ignore_non_courses)
+                requisite_obj = req_match(req_text,
+                                          course_data['full_course_number'],
+                                          course_data["full_course_number"],
+                                          reqs_ignore_non_courses)
 
+                # TODO: get smarter parsing here
                 if req_type == "pre":
                     course_data["prerequisites"] = requisite_obj
                 elif req_type == "co":

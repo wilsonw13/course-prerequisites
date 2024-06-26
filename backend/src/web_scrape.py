@@ -6,12 +6,15 @@ from req_parser import parse_course, parse_to_prereq_graph
 from file_utils import get_from_json_dir, write_to_json_dir, clear_log_dir
 from exceptions import DepartmentDoesNotExist
 
+# temp imports
+from req_parser import and_, or_, member
+
 all_departments = get_from_json_dir("config/all_departments.json")
 
 
 def get_course_bulletin(department: str):
     # SBU UG Bulletin Link
-    url = f"https://www.stonybrook.edu/sb/bulletin/current/academicprograms/{department}/courses.php"
+    url = f"https://www.stonybrook.edu/sb/bulletin/current/academicprograms/{department.lower()}/courses.php"
 
     # Returns beautiful soup instance with children that are div tags with the course class
     doc = BeautifulSoup(requests.get(url).content, "lxml",
@@ -24,7 +27,7 @@ def get_course_bulletin(department: str):
     return doc
 
 
-def department_parse(departments: List[str] = all_departments, shortened_reqs: bool = False, reqs_ignore_non_courses: bool = False):
+def department_parse(departments: List[str] = all_departments, reqs_ignore_non_courses: bool = False):
     data = {}
 
     clear_log_dir()
@@ -36,7 +39,7 @@ def department_parse(departments: List[str] = all_departments, shortened_reqs: b
             for node in doc:
                 if isinstance(node, Tag):
                     # try:
-                        course_data = parse_course(node, shortened_reqs, reqs_ignore_non_courses)
+                        course_data = parse_course(node, reqs_ignore_non_courses)
                         data[course_data["full_course_number"]] = course_data
                     # except Exception as e:
                     #     print(f"Error parsing course: {e}")
@@ -104,12 +107,7 @@ if __name__ == "__main__":
     data = department_parse(departments=["AMS", "CSE"], reqs_ignore_non_courses=True)
     write_to_json_dir("data/AMS_CSE_courses.json", data)
 
+    write_to_json_dir("data/rules.txt", "\n".join(map(str, and_.union(or_).union(member))), "txt")
+
     # data = department_parse(shortened_reqs=False)
     # write_to_json_dir("data/all_courses_full.json", data)
-
-#     prereqs = {course_id: course["prerequisites"]
-#                for course_id, course
-#                in get_from_json_dir("data/all_courses.json").items()
-#                if course["prerequisites"]}
-#
-#     write_to_json_dir("data/all_prereqs.json", prereqs)

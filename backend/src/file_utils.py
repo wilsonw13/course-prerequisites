@@ -5,14 +5,18 @@ import json
 def ensure_dirs(path): os.makedirs(os.path.dirname(path), exist_ok=True)
 
 
-def write_to_json_dir(file_path, data):
+def write_to_json_dir(file_path, data, type: str="json"):
     init_path = "./json/"
     path = init_path + file_path
 
     ensure_dirs(path) # creates dir if doesn't exist
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4)
-
+        if type == "json":
+            json.dump(data, f, indent=4)
+        elif type == "txt":
+            f.write(data)
+        else:
+            print(f"Writing to unknown file type: {type}")
 
 def get_from_json_dir(file_path):
     init_path = "./json/"
