@@ -7,7 +7,7 @@ from file_utils import get_from_json_dir, write_to_json_dir, clear_log_dir
 from exceptions import DepartmentDoesNotExist
 
 # temp imports
-from req_parser import and_, or_, member
+from req_parser import Temp_Parent
 
 all_departments = get_from_json_dir("config/all_departments.json")
 
@@ -38,11 +38,11 @@ def department_parse(departments: List[str] = all_departments, reqs_ignore_non_c
 
             for node in doc:
                 if isinstance(node, Tag):
-                    # try:
+                    try:
                         course_data = parse_course(node, reqs_ignore_non_courses)
                         data[course_data["full_course_number"]] = course_data
-                    # except Exception as e:
-                    #     print(f"Error parsing course: {e}")
+                    except Exception as e:
+                        print(f"Error parsing course: {e}")
         except DepartmentDoesNotExist as e:
             # Log any departments that don't exist
             e.log()
@@ -107,7 +107,12 @@ if __name__ == "__main__":
     data = department_parse(departments=["AMS", "CSE"], reqs_ignore_non_courses=True)
     write_to_json_dir("data/AMS_CSE_courses.json", data)
 
-    write_to_json_dir("data/rules.txt", "\n".join(map(str, and_.union(or_).union(member))), "txt")
+    write_to_json_dir("data/rules.txt", Temp_Parent.readable_format(), "txt")
 
     # data = department_parse(shortened_reqs=False)
     # write_to_json_dir("data/all_courses_full.json", data)
+
+### queries
+# given this course, what are all the prereqs?
+# what courses have this course AND this course as a prereq?
+# also check latex

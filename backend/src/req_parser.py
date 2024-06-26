@@ -7,20 +7,6 @@ from typing import List
 
 from exceptions import UnknownRequisite, UnmatchedCourseLine
 
-ids = set()
-DEFAULT_ID_LENGTH = 6
-def generate_id(length):
-    """Generates an ID of the specified length. If it collides with a previously generated ID, then it regenerates it
-    """
-    alphabet = string.ascii_letters + string.digits
-    _id = ''.join(secrets.choice(alphabet) for _ in range(length))
-
-    if _id in ids:
-        return generate_id(length)
-    else:
-        ids.add(_id)
-        return _id
-
 FULL_COURSE_NUMBER_REGEX = r"[a-zA-Z]{3}\s?\d{3}"
 def match(regex: str, match_text: str, flags: re.RegexFlag = None):
     """Takes a regular expression, a text to match, and optional flags as input and returns a list of all non-overlapping matches in the text.
@@ -57,10 +43,97 @@ def match(regex: str, match_text: str, flags: re.RegexFlag = None):
     else:
         return text_match
 
-and_ = set()    # a#
-or_ = set()     # o#
-not_ = set()    # n#
-member = set()  # m#
+class Temp_Parent:
+    ids = set() # not inherited
+    set_ = set()
+
+    def __init__(self) -> None:
+        """
+        base_id: the generated id that uniquely identifies that tuple
+        child_id: the child id of the tuple
+        """
+        self.base_id = None
+        self.child_base_id = None
+        self.__class__.set_.add(self) # add to the unique tuple set
+
+    def full_id(self, id_) -> str:
+        prefix = None
+
+        if isinstance(self, And_):
+            prefix = "a"
+        elif isinstance(self, Member):
+            prefix = "m"
+        else:
+            print("Invalid class: {self}")
+            return None
+
+        return f"{prefix}_{id_}" if not match(FULL_COURSE_NUMBER_REGEX, id_) else id_
+
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}({self.full_id(self.base_id)}, {self.full_id(self.child_base_id)})"
+
+    ### Static Methods
+    @staticmethod
+    def generate_id() -> str:
+        DEFAULT_ID_LENGTH = 6
+        while True:
+            id_ = ''.join(secrets.choice(string.ascii_letters + string.digits)
+                          for _ in range(DEFAULT_ID_LENGTH))
+            if id_ not in Temp_Parent.ids:
+                Temp_Parent.ids.add(id_)
+                return id_
+
+    @staticmethod
+    def readable_format() -> str:
+        return "\n".join(map(str, And_.set_.union(Or_.set_).union(Member.set_)))
+
+
+class And_(Temp_Parent):
+    def __init__(self, children, parent_id=None) -> None:
+        if not children:
+            print("Invalid And_ created")
+            return
+
+        super().__init__()
+
+        self.base_id = parent_id or Temp_Parent.generate_id()
+        self.child_base_id = Member.create(children) if len(children) > 1 else children[0]
+
+
+class Or_(Temp_Parent):
+    def __init__(self, children, parent_id=None) -> None:
+        if not children:
+            print("Invalid Or_ created")
+            return
+
+        super().__init__()
+
+        self.base_id = parent_id or Temp_Parent.generate_id()
+        self.child_base_id = Member.create(children) if len(children) > 1 else children[0]
+
+
+class Member(Temp_Parent):
+    def __init__(self, base_id, member_id) -> None:
+        if not (base_id and member_id):
+            print("Invalid Member created")
+            return
+
+        super().__init__()
+
+        self.base_id = base_id
+        self.child_base_id = member_id
+
+    # create member tuples from a list of values
+    @staticmethod
+    def create(values) -> str:
+        member_id = Temp_Parent.generate_id()
+
+        for val in values:
+            Member(member_id, val)
+
+        return member_id
+
+
 
 def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: bool = False):
     """Takes in a string and a dictionary, and returns a dictionary with information about the requisites specified in the string.
@@ -110,30 +183,10 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
             }
 
         # if non-courses are ignored, then we must remove all the Nones present
-        value = [req_match(t, course_number, ignore_non_courses) for t in split_txt]
-        value = list(filter(lambda x: x is not None, value))
+        values = list(filter(lambda x: x is not None, [req_match(t, course_number, "whatisthis_and", ignore_non_courses) for t in split_txt]))
 
-        ### === NEW
-        # generate id for the and if the parent is not itself a course
-        _id = f"a_{generate_id(DEFAULT_ID_LENGTH)}" \
-                if not match(FULL_COURSE_NUMBER_REGEX, parent_id) \
-                else parent_id
-
-        child_id = None
-
-        # if there are multiple children, make a list
-        if len(value) > 1:
-            # child_id here is member_id
-            child_id = f"m_{generate_id(DEFAULT_ID_LENGTH)}"
-
-            for v in value:
-                member.add((child_id, v))
-        else:
-            child_id = value[0]
-
-        # add it to the and set
-        and_.add((_id, child_id))
-        return _id
+        instance = And_(values, parent_id)
+        return instance.full_id(instance.base_id)
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
     if match(r"major", txt, re.IGNORECASE) and match(r"([A-Z]{3})", txt):
@@ -200,30 +253,10 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
             }
 
         # if non-courses are ignored, then we must remove all the Nones present
-        value = [req_match(t, course_number, ignore_non_courses) for t in split_txt]
-        value = list(filter(lambda x: x is not None, value))
+        values = list(filter(lambda x: x is not None, [req_match(t, course_number, "whatisthis_or", ignore_non_courses) for t in split_txt]))
 
-        ### === NEW (copied from and)
-        # generate id for the or if the parent is not itself a course
-        _id = f"o_{generate_id(DEFAULT_ID_LENGTH)}" \
-                if not match(FULL_COURSE_NUMBER_REGEX, parent_id) \
-                else parent_id
-
-        child_id = None
-
-        # if there are multiple children, make a list
-        if len(value) > 1:
-            # child_id here is member_id
-            child_id = f"m_{generate_id(DEFAULT_ID_LENGTH)}"
-
-            for v in value:
-                member.add((child_id, v))
-        else:
-            child_id = value[0]
-
-        # add it to the or set
-        or_.add((_id, child_id))
-        return _id
+        instance = Or_(values, parent_id)
+        return instance.full_id(instance.base_id)
 
     # if txt is a course
     if match(r"^[a-zA-Z]{3}\s\d{3}$", txt):
@@ -379,46 +412,47 @@ def parse_course(course_node, reqs_ignore_non_courses: bool = False):
 
 
 def parse_to_prereq_graph(course_node, data: dict, department_exceptions: List[str]):
-    course_number = None
-
-    for lineI, line in enumerate(course_node.children):
-        try:
-            # cleans up text by replacing all /n and multiple consecutive spaces with a single space and normalizes unicode
-            text = unicodedata.normalize("NFKD", re.sub(
-                r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
-
-            # if line is an empty line or is an empty element (of class "clear"), continue to next line
-            if not text or (isinstance(line, Tag) and line.attrs.get("class") == ["clear"]):
-                continue
-
-            # if line is first (then it specifies the headers)
-            if lineI == 1:
-                course_number, name = match(
-                    r"^([A-Z]{3}\s\d{3}):\s*(.*)", text)
-
-                # append the course (to future graph)
-                data["courses_name_pair"].append([course_number, name])
-
-            # if line matches requisite
-            elif match(r"requisite", text):
-                assert course_number, "course has not been found!"
-
-                try:
-                    (req_type, req_text) = match(
-                        r"(.*)requisite\(?s?\)?:\s*(.*)$", text)
-                except TypeError:
-                    raise UnknownRequisite(text, course_number)
-
-                # clean up requisite_type
-                req_type = re.sub(
-                    r"\s+", " ", req_type.replace("-", " ").lower().strip())
-
-                reqs = simple_req_match(req_text, course_number)
-
-                if reqs and not match("advisory", req_type) and match("pre", req_type):
-                    for req in reqs:
-                        if req[0:3] not in department_exceptions:
-                            data["prereqs"].append([req, course_number])
-
-        except UnknownRequisite as e:
-            e.log()
+    pass
+#     course_number = None
+#
+#     for lineI, line in enumerate(course_node.children):
+#         try:
+#             # cleans up text by replacing all /n and multiple consecutive spaces with a single space and normalizes unicode
+#             text = unicodedata.normalize("NFKD", re.sub(
+#                 r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
+#
+#             # if line is an empty line or is an empty element (of class "clear"), continue to next line
+#             if not text or (isinstance(line, Tag) and line.attrs.get("class") == ["clear"]):
+#                 continue
+#
+#             # if line is first (then it specifies the headers)
+#             if lineI == 1:
+#                 course_number, name = match(
+#                     r"^([A-Z]{3}\s\d{3}):\s*(.*)", text)
+#
+#                 # append the course (to future graph)
+#                 data["courses_name_pair"].append([course_number, name])
+#
+#             # if line matches requisite
+#             elif match(r"requisite", text):
+#                 assert course_number, "course has not been found!"
+#
+#                 try:
+#                     (req_type, req_text) = match(
+#                         r"(.*)requisite\(?s?\)?:\s*(.*)$", text)
+#                 except TypeError:
+#                     raise UnknownRequisite(text, course_number)
+#
+#                 # clean up requisite_type
+#                 req_type = re.sub(
+#                     r"\s+", " ", req_type.replace("-", " ").lower().strip())
+#
+#                 reqs = simple_req_match(req_text, course_number)
+#
+#                 if reqs and not match("advisory", req_type) and match("pre", req_type):
+#                     for req in reqs:
+#                         if req[0:3] not in department_exceptions:
+#                             data["prereqs"].append([req, course_number])
+#
+#         except UnknownRequisite as e:
+#             e.log()
