@@ -1,14 +1,22 @@
-CSE 101: Level 3 or higher on the mathematics placement examination
-CSE 110: Level 3 or higher on the mathematics placement examination
-CSE 114: Level 5 or higher on the math placement exam
-CSE 130: Level 3 or higher on the mathematics placement examination
-CSE 150: one MAT course that satisfies D.E.C. C or QPS or score of level 4 on the math placement exam; admission to Honors in Computer Science or the Honors College or the WISE Honors Program or University Scholars.
-CSE 160: Honors in Computer Science or the Honors College or the WISE Honors Program or University Scholars.
-CSE 301: U2 standing or higher
+CSE 101: May not be taken by students with credit for CSE 114
+CSE 102: basic computer skills
+CSE 220: co-requisite CSE 260
 CSE 301: one course in computing
-CSE 312: CSE or ISE major; U3 or U4 standing; one D.E.C. E or SNW course
-CSE 334: U2, U3 or U4 standing; CSE or ISE major
-CSE 475: U3 or U4 standing as an undergraduate CEAS major; a minimum g.p.a. of 3.00 in all Stony Brook courses; grade of B or better in the course in which the student is to assist and permission of department.
-CSE 487: Permission of instructor and department
-CSE 488: CSE major, U3 or U4 standing; permission of department
-CSE 495: Admission to Honors in Computer Science
+CSE 305: CSE 214, CSE 216
+CSE 307: CSE 214, CSE 216
+CSE 312: one D.E.C. E
+CSE 312: SNW course
+CSE 355: programming knowledge of C
+CSE 355: C++
+CSE 355: Java
+CSE 364: CSE/ISE 334
+CSE 373: : CSE 113
+CSE 475: the course in which the student is to assist
+CSE 475: permission of department.
+CSE 487: Permission of instructor
+CSE 487: department
+CSE 488: permission of department
+CSE 495: permission of instructor
+CSE 495: department.
+CSE 496: permission of instructor
+CSE 496: department

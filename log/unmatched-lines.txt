@@ -1,5 +1,48 @@
-CSE 300: ,
-CSE 301: DEC:
-CSE 301: H
-CSE 312: ,
-CSE 312: ,
+CSE 101: Anti-requisite: May not be taken by students with credit for CSE 114 or CSE 160
+CSE 102: Advisory Prerequisite: CSE 101 or basic computer skills
+CSE 114: Advisory Prerequisite: CSE 101 or ISE 108
+CSE 150: Prerequisite: one MAT course that satisfies D.E.C. C or QPS or score of level 4 on the math placement exam; admission to Honors in Computer Science or the Honors College or the WISE Honors Program or University Scholars or Simons STEM Scholars Program.
+CSE 215: Prerequisite: AMS 151 or MAT 125 or MAT 131
+CSE 220: Prerequisites: C or higher in CSE 214 or co-requisite CSE 260 and CSE major
+CSE 230: Prerequisite: CSE 130 or CSE 220 or ESE 124 or ESG 111 or BME 120 or MEC 102
+CSE 303: Prerequisites: C or higher: CSE 160 or CSE 214; CSE 150 or CSE 215; CSE major
+CSE 304: Prerequisites: C or higher: CSE 216 or CSE 260; CSE 220
+CSE 304: Advisory Prerequisites: CSE 303 or CSE 350
+CSE 305: Prerequisites: C or higher: CSE 214, CSE 216 or CSE 260; CSE or DAS major
+CSE 306: Prerequisites: C or higher: CSE 320 or ESE 280; CSE Major or ECE major.
+CSE 307: Prerequisites: C or higher: CSE 214, CSE 216 or CSE 260; CSE or DAS major.
+CSE 310: Prerequisites: C or higher: CSE 214 or 260; CSE 220 or ISE 218; CSE major or ISE major.
+CSE 311: Prerequisites: CSE 214 or CSE 230 or CSE 260 or ISE 208; ISE or CSE major
+CSE 312: Prerequisites: CSE, ISE or DAS major; U3 or U4 standing; one D.E.C. E or SNW course
+CSE 316: Prerequisites: C or higher in CSE 214 or CSE 260; CSE 216 or CSE 307; CSE major
+CSE 323: Prerequisites: CSE 214 or CSE 230 or CSE 260 or ISE 208
+CSE 325: Prerequisite: CSE 110 or CSE 101 or CSE 114
+CSE 327: Prerequisites: CSE 214 or CSE 230 or CSE 260; AMS 210 or MAT 211; CSE or ISE or DAS major
+CSE 332: Prerequisites: CSE 214 or CSE 260; MAT 211 or AMS 210; AMS 110 or AMS 310; CSE or ISE or DAS major
+CSE 333: Prerequisite: CSE 214 or CSE 260; CSE or ISE major
+CSE 334: Prerequisite: U2, U3 or U4 standing; CSE or ISE major
+CSE 336: Prerequisites: C or higher in CSE 214 or CSE 260; CSE major
+CSE 337: Prerequisites: CSE 214 or CSE 260; CSE or ISE or DAS major; U3 or U4 standing
+CSE 350: Prerequisites: CSE 113 or CSE 150 or CSE 215; AMS 210 or MAT 211; Honors in Computer Science or the Honors College or the WISE Honors Program or University Scholars or the Simons STEM Scholars Program.
+CSE 351: Prerequisites: CSE 214 or CSE 260; AMS 310; CSE or DAS major
+CSE 352: Prerequisites: CSE 316 or CSE 351; CSE or DAS major
+CSE 353: Prerequisites: CSE 316 or CSE 351; CSE or DAS major
+CSE 353: Pre- or Co-requisite: AMS 310 or AMS 311 or AMS 412
+CSE 354: Prerequisites: CSE 316 or CSE 351; CSE or DAS major
+CSE 355: Prerequisites: AMS 301; programming knowledge of C or C++ or Java
+CSE 357: Prerequisite: C or higher in CSE 316 or CSE 351; AMS 310; CSE or DAS major
+CSE 366: Prerequisites: CSE 214 or CSE 260; MAT 211 or AMS 210; CSE or ISE major
+CSE 371: Prerequisite: CSE 113 or CSE 150 or CSE 215 or MAT 200 or MAT 250
+CSE 373: Prerequisites: C or higher in: CSE 113 or CSE 150 or CSE 215 or MAT 200 or MAT 250; MAT 211 or AMS 210; CSE 214 or CSE 260; CSE or MAT or DAS major
+CSE 377: Prerequisites: AMS 161 or MAT 127 or 132; AMS 210 or MAT 211
+CSE 378: Prerequisites: AMS 161 or MAT 127 or 132; AMS 210 or MAT 211 or MEC 262
+CSE 385: Prerequisites: CSE 113 or CSE 150 or CSE 215 or MAT 200 or MAT 250; AMS 210 or MAT 211; CSE 214 or CSE 260; Honors in Computer Science or the Honors College or the WISE Honors Program or University Scholars or Simons STEM Scholars.
+CSE 390: Prerequisite: CSE 214 or CSE 260; CSE or ISE Major
+CSE 391: Prerequisite: CSE 214 or CSE 260; CSE or ISE Major
+CSE 392: Prerequisite: CSE 214 or CSE 260; CSE or ISE Major
+CSE 393: Prerequisite: CSE 214 or CSE 260; CSE or ISE Major
+CSE 394: Prerequisite: CSE 214 or CSE 260; CSE or ISE Major
+CSE 475: Prerequisites: U3 or U4 standing as an undergraduate CEAS major; a minimum g.p.a. of 3.00 in all Stony Brook courses; grade of B or better in the course in which the student is to assist and permission of department.
+CSE 487: Prerequisites: Permission of instructor and department
+CSE 488: Prerequisites: CSE major, U3 or U4 standing; permission of department
+CSE 495: Prerequisite: Admission to Honors in Computer Science; permission of instructor and department.

@@ -60,14 +60,16 @@ class Temp_Parent:
         prefix = None
 
         if isinstance(self, And_):
-            prefix = "a"
+            prefix = "and_"
+        elif isinstance(self, Or_):
+            prefix = "or_"
         elif isinstance(self, Member):
-            prefix = "m"
+            prefix = "mem_"
         else:
-            print("Invalid class: {self}")
+            print(f"Invalid class: {self}")
             return None
 
-        return f"{prefix}_{id_}" if not match(FULL_COURSE_NUMBER_REGEX, id_) else id_
+        return f"{prefix}{id_}" if not match(FULL_COURSE_NUMBER_REGEX, id_) else id_
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}({self.full_id(self.base_id)}, {self.full_id(self.child_base_id)})"
@@ -97,7 +99,18 @@ class And_(Temp_Parent):
         super().__init__()
 
         self.base_id = parent_id or Temp_Parent.generate_id()
-        self.child_base_id = Member.create(children) if len(children) > 1 else children[0]
+        self.child_base_id = Member.create(children)
+
+    @staticmethod
+    def create(children, parent_id=None):
+        # If there's only one child, return the child directly to avoid redundancy
+        if len(children) == 1:
+            return children[0]
+
+        # If there are multiple children, proceed with creating an And_ instance
+        instance = And_(children, parent_id)
+        return instance
+
 
 
 class Or_(Temp_Parent):
@@ -109,7 +122,17 @@ class Or_(Temp_Parent):
         super().__init__()
 
         self.base_id = parent_id or Temp_Parent.generate_id()
-        self.child_base_id = Member.create(children) if len(children) > 1 else children[0]
+        self.child_base_id = Member.create(children)
+
+    @staticmethod
+    def create(children, parent_id=None):
+        # If there's only one child, return the child directly to avoid redundancy
+        if len(children) == 1:
+            return children[0]
+
+        # If there are multiple children, proceed with creating an Or_ instance
+        instance = Or_(children, parent_id)
+        return instance
 
 
 class Member(Temp_Parent):
@@ -183,9 +206,9 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
             }
 
         # if non-courses are ignored, then we must remove all the Nones present
-        values = list(filter(lambda x: x is not None, [req_match(t, course_number, "whatisthis_and", ignore_non_courses) for t in split_txt]))
+        values = list(filter(lambda x: x is not None, [req_match(t, course_number, parent_id, ignore_non_courses) for t in split_txt]))
 
-        instance = And_(values, parent_id)
+        instance = And_.create(values, parent_id)
         return instance.full_id(instance.base_id)
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
@@ -240,22 +263,22 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
 
         # if first txt in split_txt is a course
         if match(FULL_COURSE_NUMBER_REGEX, split_txt[0]):
-
             for i, t in enumerate(split_txt):
                 # if t does not have department code, then add it from the previous element
                 if match(r"^(?:(?![a-zA-Z]{3}).)*$", t):
                     split_txt[i] = f"{match(r'[a-zA-Z]{3}', split_txt[i - 1])[0]} {t}"
 
         if not ignore_non_courses:
+             # TODO fix later
             return {
                 "type": "or",
                 "value": [req_match(t, course_number, ignore_non_courses) for t in split_txt]
             }
 
         # if non-courses are ignored, then we must remove all the Nones present
-        values = list(filter(lambda x: x is not None, [req_match(t, course_number, "whatisthis_or", ignore_non_courses) for t in split_txt]))
+        values = list(filter(lambda x: x is not None, [req_match(t, course_number, parent_id, ignore_non_courses) for t in split_txt]))
 
-        instance = Or_(values, parent_id)
+        instance = Or_.create(values, parent_id)
         return instance.full_id(instance.base_id)
 
     # if txt is a course
@@ -317,6 +340,10 @@ def parse_course(course_node, reqs_ignore_non_courses: bool = False):
     }
 
     for lineI, line in enumerate(course_node.children):
+        # TODO: remove
+        if course_data["full_course_number"] is not None and course_data["full_course_number"] != "CSE 306":
+            return None
+
         # cleans up text by replacing all /n and multiple consecutive spaces with a single space and normalizes unicode
         text = unicodedata.normalize("NFKD", re.sub(
             r"\s{2,}", " ", line.text.replace("\n", " ")).strip())
