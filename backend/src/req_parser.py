@@ -50,13 +50,15 @@ class Temp_Parent:
     def __init__(self) -> None:
         """
         base_id: the generated id that uniquely identifies that tuple
+        id_: the id that uniquely identifies that tuple + a prefix
         child_id: the child id of the tuple
         """
         self.base_id = None
-        self.child_base_id = None
+        self.child_id = None
         self.__class__.set_.add(self) # add to the unique tuple set
 
-    def full_id(self, id_) -> str:
+    @property
+    def id_(self) -> str:
         prefix = None
 
         if isinstance(self, And_):
@@ -69,10 +71,10 @@ class Temp_Parent:
             print(f"Invalid class: {self}")
             return None
 
-        return f"{prefix}{id_}" if not match(FULL_COURSE_NUMBER_REGEX, id_) else id_
+        return f"{prefix}{self.base_id}" if not match(FULL_COURSE_NUMBER_REGEX, self.base_id) else self.base_id
 
     def __str__(self) -> str:
-        return f"{self.__class__.__name__}({self.full_id(self.base_id)}, {self.full_id(self.child_base_id)})"
+        return f"{self.__class__.__name__}({self.id_}, {self.child_id})"
 
     ### Static Methods
     @staticmethod
@@ -99,7 +101,7 @@ class And_(Temp_Parent):
         super().__init__()
 
         self.base_id = parent_id or Temp_Parent.generate_id()
-        self.child_base_id = Member.create(children)
+        self.child_id = Member.create(children)
 
     @staticmethod
     def create(children, parent_id=None):
@@ -122,7 +124,7 @@ class Or_(Temp_Parent):
         super().__init__()
 
         self.base_id = parent_id or Temp_Parent.generate_id()
-        self.child_base_id = Member.create(children)
+        self.child_id = Member.create(children)
 
     @staticmethod
     def create(children, parent_id=None):
@@ -144,17 +146,13 @@ class Member(Temp_Parent):
         super().__init__()
 
         self.base_id = base_id
-        self.child_base_id = member_id
+        self.child_id = member_id
 
     # create member tuples from a list of values
     @staticmethod
     def create(values) -> str:
         member_id = Temp_Parent.generate_id()
-
-        for val in values:
-            Member(member_id, val)
-
-        return member_id
+        return [Member(member_id, val) for val in values][0].id_
 
 
 
@@ -209,7 +207,7 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
         values = list(filter(lambda x: x is not None, [req_match(t, course_number, parent_id, ignore_non_courses) for t in split_txt]))
 
         instance = And_.create(values, parent_id)
-        return instance.full_id(instance.base_id)
+        return instance.id_(instance.base_id)
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
     if match(r"major", txt, re.IGNORECASE) and match(r"([A-Z]{3})", txt):
@@ -279,7 +277,7 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
         values = list(filter(lambda x: x is not None, [req_match(t, course_number, parent_id, ignore_non_courses) for t in split_txt]))
 
         instance = Or_.create(values, parent_id)
-        return instance.full_id(instance.base_id)
+        return instance.id_(instance.base_id)
 
     # if txt is a course
     if match(r"^[a-zA-Z]{3}\s\d{3}$", txt):
@@ -340,8 +338,8 @@ def parse_course(course_node, reqs_ignore_non_courses: bool = False):
     }
 
     for lineI, line in enumerate(course_node.children):
-        # TODO: remove
-        if course_data["full_course_number"] is not None and course_data["full_course_number"] != "CSE 306":
+        # TODO: remove this
+        if course_data["full_course_number"] is not None and course_data["full_course_number"] != "CSE 310":
             return None
 
         # cleans up text by replacing all /n and multiple consecutive spaces with a single space and normalizes unicode
