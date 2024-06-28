@@ -5,7 +5,7 @@
         "full_course_number": "CSE 310",
         "title": "Computer Networks",
         "description": "Overview of computer networks and the Internet. Concept of end systems, access networks, clients and servers. Connection-oriented and connectionless services. Circuit switching and packet switching. Description of Internet protocol layers, including application layer, transport layer, network layer and link layer. Architecture of the current Internet and the World-Wide Web. TCP/IP protocol stack. Internet routing and addressing. Local area network protocols, Ethernet hubs and switches. Wireless LANs. Multimedia networking. May not be taken by students with credit for ESE 346.",
-        "prerequisites": null,
+        "prerequisites": "CSE 310",
         "corequisites": null,
         "antirequisites": null,
         "advisoryPrerequisites": "AMS 310",

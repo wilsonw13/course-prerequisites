@@ -89,52 +89,41 @@ class Temp_Parent:
 
     @staticmethod
     def readable_format() -> str:
-        return "\n".join(map(str, And_.set_.union(Or_.set_).union(Member.set_)))
+        return "\n".join(sorted(map(str, And_.set_.union(Or_.set_).union(Member.set_))))
 
 
 class And_(Temp_Parent):
     def __init__(self, children, parent_id=None) -> None:
-        if not children:
-            print("Invalid And_ created")
-            return
-
         super().__init__()
 
-        self.base_id = parent_id or Temp_Parent.generate_id()
-        self.child_id = Member.create(children)
+        if not children:
+            print("Invalid And_ created")
+            self.__class__.set_.remove(self)
+            return
 
-    @staticmethod
-    def create(children, parent_id=None):
         # If there's only one child, return the child directly to avoid redundancy
         if len(children) == 1:
             return children[0]
 
-        # If there are multiple children, proceed with creating an And_ instance
-        instance = And_(children, parent_id)
-        return instance
-
+        self.base_id = parent_id or Temp_Parent.generate_id()
+        self.child_id = Member.create(children)
 
 
 class Or_(Temp_Parent):
     def __init__(self, children, parent_id=None) -> None:
-        if not children:
-            print("Invalid Or_ created")
-            return
-
         super().__init__()
 
-        self.base_id = parent_id or Temp_Parent.generate_id()
-        self.child_id = Member.create(children)
+        if not children:
+            print("Invalid Or_ created")
+            self.__class__.set_.remove(self)
+            return
 
-    @staticmethod
-    def create(children, parent_id=None):
         # If there's only one child, return the child directly to avoid redundancy
         if len(children) == 1:
             return children[0]
 
-        # If there are multiple children, proceed with creating an Or_ instance
-        instance = Or_(children, parent_id)
-        return instance
+        self.base_id = parent_id or Temp_Parent.generate_id()
+        self.child_id = Member.create(children)
 
 
 class Member(Temp_Parent):
@@ -156,7 +145,7 @@ class Member(Temp_Parent):
 
 
 
-def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: bool = False):
+def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: bool = True):
     """Takes in a string and a dictionary, and returns a dictionary with information about the requisites specified in the string.
 
     Parameters
@@ -165,7 +154,7 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
         a string representing a requirement or prerequisite for a course
     course_number : str
         The `data` parameter is a dictionary containing information about a course, including its department code (`department`) and course number (`number`). This information is used in the function to provide context for parsing the course requisites.
-    reqs_ignore_non_courses : bool, optional
+    _ignore_non_courses : bool, optional
         A boolean value that indicates whether or not to ignore prequisites that are not other courses
 
     Returns
@@ -204,10 +193,8 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
             }
 
         # if non-courses are ignored, then we must remove all the Nones present
-        values = list(filter(lambda x: x is not None, [req_match(t, course_number, parent_id, ignore_non_courses) for t in split_txt]))
-
-        instance = And_.create(values, parent_id)
-        return instance.id_(instance.base_id)
+        values = list(filter(lambda x: x is not None, [req_match(t, course_number, None, ignore_non_courses) for t in split_txt]))
+        return And_(values, parent_id).id_
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
     if match(r"major", txt, re.IGNORECASE) and match(r"([A-Z]{3})", txt):
@@ -274,10 +261,8 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
             }
 
         # if non-courses are ignored, then we must remove all the Nones present
-        values = list(filter(lambda x: x is not None, [req_match(t, course_number, parent_id, ignore_non_courses) for t in split_txt]))
-
-        instance = Or_.create(values, parent_id)
-        return instance.id_(instance.base_id)
+        values = list(filter(lambda x: x is not None, [req_match(t, course_number, None, ignore_non_courses) for t in split_txt]))
+        return Or_(values, parent_id).id_
 
     # if txt is a course
     if match(r"^[a-zA-Z]{3}\s\d{3}$", txt):
