@@ -45,7 +45,6 @@ def match(regex: str, match_text: str, flags: re.RegexFlag = None):
 
 class Temp_Parent:
     ids = set() # not inherited
-    set_ = set()
 
     def __init__(self) -> None:
         """
@@ -55,7 +54,6 @@ class Temp_Parent:
         """
         self.base_id = None
         self.child_id = None
-        self.__class__.set_.add(self) # add to the unique tuple set
 
     @property
     def id_(self) -> str:
@@ -93,6 +91,8 @@ class Temp_Parent:
 
 
 class And_(Temp_Parent):
+    set_ = set()
+
     def __init__(self, children, parent_id=None) -> None:
         super().__init__()
 
@@ -107,9 +107,12 @@ class And_(Temp_Parent):
 
         self.base_id = parent_id or Temp_Parent.generate_id()
         self.child_id = Member.create(children)
+        And_.set_.add(self)
 
 
 class Or_(Temp_Parent):
+    set_ = set()
+
     def __init__(self, children, parent_id=None) -> None:
         super().__init__()
 
@@ -124,9 +127,12 @@ class Or_(Temp_Parent):
 
         self.base_id = parent_id or Temp_Parent.generate_id()
         self.child_id = Member.create(children)
+        Or_.set_.add(self)
 
 
 class Member(Temp_Parent):
+    set_ = set()
+
     def __init__(self, base_id, member_id) -> None:
         if not (base_id and member_id):
             print("Invalid Member created")
@@ -136,6 +142,7 @@ class Member(Temp_Parent):
 
         self.base_id = base_id
         self.child_id = member_id
+        Member.set_.add(self)
 
     # create member tuples from a list of values
     @staticmethod
@@ -323,10 +330,6 @@ def parse_course(course_node, reqs_ignore_non_courses: bool = False):
     }
 
     for lineI, line in enumerate(course_node.children):
-        # TODO: remove this
-        if course_data["full_course_number"] is not None and course_data["full_course_number"] != "CSE 310":
-            return None
-
         # cleans up text by replacing all /n and multiple consecutive spaces with a single space and normalizes unicode
         text = unicodedata.normalize("NFKD", re.sub(
             r"\s{2,}", " ", line.text.replace("\n", " ")).strip())

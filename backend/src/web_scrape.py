@@ -105,7 +105,7 @@ def generate_full_graph(departments: List[str] = all_departments):
 
 
 if __name__ == "__main__":
-    data = department_parse(departments=["CSE"], reqs_ignore_non_courses=True)
+    data = department_parse(departments=["AMS", "CSE"], reqs_ignore_non_courses=True)
     write_to_json_dir("data/AMS_CSE_courses.json", data)
 
     write_to_json_dir("data/rules.txt", Temp_Parent.readable_format(), "txt")
