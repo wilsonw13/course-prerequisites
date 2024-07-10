@@ -2,12 +2,12 @@ import requests
 from bs4 import BeautifulSoup, SoupStrainer, Tag
 from typing import List
 
-from req_parser import parse_course, parse_to_prereq_graph
+from req_parser import parse_course
 from file_utils import get_from_json_dir, write_to_json_dir, clear_log_dir
 from exceptions import DepartmentDoesNotExist
 
 # temp imports
-from req_parser import Temp_Parent
+from req_parser import Node
 
 all_departments = get_from_json_dir("config/all_departments.json")
 
@@ -51,64 +51,10 @@ def department_parse(departments: List[str] = all_departments, reqs_ignore_non_c
     return data
 
 
-def generate_full_graph(departments: List[str] = all_departments):
-    """Generates a graph representation of all courses and their prerequisites by calling get_course_bulletin() to web scrape. Writes the resulting graph to a JSON file.
-
-    Parameters
-    ----------
-    departments : List[str], optional
-        The list of departments to generate the graph for. The default value is all departments.
-    """
-
-    # remove_links: bool = True
-
-    departments_docs = []
-    department_exceptions = []
-
-    clear_log_dir()  # Clear the log directory before starting
-
-    for department in departments:
-        try:
-            # Get the course bulletin for each department
-            departments_docs.append(get_course_bulletin(department))
-        except DepartmentDoesNotExist as e:
-            # Log any departments that don't exist
-            department_exceptions.append(e.department)
-            e.log()
-
-    # Make sure there are courses to visualize
-    assert departments_docs, "No department courses found!"
-
-    graph = {
-        "courses_name_pair": [],
-        "prereqs": []
-    }
-
-    for doc in departments_docs:
-        # TODO: why is there a index 1 here?
-        for node in doc:
-            if isinstance(node, Tag):
-                # Parse the course data into a graph
-                parse_to_prereq_graph(node, graph, department_exceptions)
-
-    # if remove_links:  # Remove links that don't have a corresponding course node
-    course_graph_nodes = [node[0] for node in graph["courses_name_pair"]]
-    graph["prereqs"] = [link for link in graph["prereqs"]
-                        if link[0] in course_graph_nodes]
-    # else:  # Add courses as nodes even if they don't have any prerequisites
-    # pass
-
-    # Write the graph data to a JSON file
-    write_to_json_dir("data/full_graph.json", graph)
-
-    print("Written to './json/data/full_graph.json'")
-
-
 if __name__ == "__main__":
     data = department_parse(departments=["AMS", "CSE"], reqs_ignore_non_courses=True)
     write_to_json_dir("data/AMS_CSE_courses.json", data)
-
-    write_to_json_dir("data/rules.txt", Temp_Parent.readable_format(), "txt")
+    write_to_json_dir("data/rules.txt", Node.gen_rules(), "txt")
 
     # data = department_parse(shortened_reqs=False)
     # write_to_json_dir("data/all_courses_full.json", data)
