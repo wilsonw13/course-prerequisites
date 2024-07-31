@@ -46,43 +46,35 @@ class Node:
     _id_counter = 0
     _nodes = []
 
-    def __str__(self) -> str:
-        return f"{self.__class__.__name__}({self.id_}, {self.child_id})"
+    def __init__(self, parent_id: str, child_id: str) -> None:
+        self.id_, self.child_id = parent_id, child_id
+        self.append(self)
 
-    @classmethod
-    def append(cls, node):
-        cls._nodes.append(node)
+    def __str__(self) -> str:
+        return f"({self.__class__.__name__}, {self.id_}, {self.child_id})"
 
     @staticmethod
-    def gen_id(s):
+    def append(node) -> None:
+        Node._nodes.append(node)
+
+    @staticmethod
+    def gen_id(s: str) -> str:
         Node._id_counter += 1
         return s + str(Node._id_counter)
 
     @staticmethod
-    def gen_rules():
+    def gen_rules() -> str:
         return "\n".join(map(str, Node._nodes))
 
-class MultiChildNode(Node):
-    def __init__(self, children, parent_id) -> None:
-        self.id_ = parent_id
-        self.child_id = children[0] if len(children) == 1 else Member.create(children)
-        self.append(self)
-
-
-class And_(MultiChildNode):
+class And_(Node):
     pass # these classes are used for their name
 
 
-class Or_(MultiChildNode):
+class Or_(Node):
     pass # these classes are used for their name
 
 
 class Member(Node):
-    def __init__(self, base_id, member_id) -> None:
-        self.id_ = base_id
-        self.child_id = member_id
-        self.append(self)
-
     # create member tuples from a list of values
     @staticmethod
     def create(values) -> str:
@@ -136,7 +128,11 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
 
         # remove all the Nones present
         values = list(filter(lambda x: x is not None, [req_match(t, course_number, None, ignore_non_courses) for t in split_txt]))
-        return And_(values, parent_id or Node.gen_id("and_")).id_ if len(values) else None
+        if not len(values):
+            return None
+
+        node = And_(parent_id or Node.gen_id("and_"), values[0] if len(values) == 1 else Member.create(values))
+        return node.child_id if parent_id else node.id_
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
     if match(r"major", txt, re.IGNORECASE) and match(r"([A-Z]{3})", txt):
@@ -197,14 +193,15 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
 
         # remove all the Nones present
         values = list(filter(lambda x: x is not None, [req_match(t, course_number, None, ignore_non_courses) for t in split_txt]))
-        return Or_(values, parent_id or Node.gen_id("or_")).id_ if len(values) else None
+        if not len(values):
+            return None
+
+        node = Or_(parent_id or Node.gen_id("or_"), values[0] if len(values) == 1 else Member.create(values))
+        return node.child_id if parent_id else node.id_
 
     # if txt is a course
     if match(r"^" + FULL_COURSE_NUMBER_REGEX + r"$", txt):
-        if parent_id:
-            And_([txt], parent_id)
-        return txt
-
+        return And_(parent_id, txt).child_id if parent_id else txt
 
     try:
         raise UnknownRequisite(txt, course_number)
@@ -315,26 +312,29 @@ def parse_course(course_node, reqs_ignore_non_courses: bool = False):
                 # clean up requisite_type
                 req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
 
-                requisite_obj = req_match(req_text,
+                node_id = req_match(req_text,
                                           course_data['full_course_number'],
                                           course_data["full_course_number"],
                                           reqs_ignore_non_courses)
 
+                #TODO
+                node_child_id = ""
+
                 # TODO: get smarter parsing here
                 if req_type == "pre":
-                    course_data["prerequisites"] = requisite_obj
+                    course_data["prerequisites"] = node_child_id
                 elif req_type == "co":
-                    course_data["corequisites"] = requisite_obj
+                    course_data["corequisites"] = node_child_id
                 elif req_type == "pre or co":
-                    course_data["prerequisites"] = course_data["corequisites"] = requisite_obj
+                    course_data["prerequisites"] = course_data["corequisites"] = node_child_id
                 elif req_type == "anti":
-                    course_data["antirequisites"] = requisite_obj
+                    course_data["antirequisites"] = node_child_id
                 elif req_type == "advisory pre":
-                    course_data["advisoryPrerequisites"] = requisite_obj
+                    course_data["advisoryPrerequisites"] = node_child_id
                 elif req_type == "advisory co":
-                    course_data["advisoryCorequisites"] = requisite_obj
+                    course_data["advisoryCorequisites"] = node_child_id
                 elif req_type == "advisory pre or co":
-                    course_data["advisoryPrerequisites"] = course_data["advisoryCorequisites"] = requisite_obj
+                    course_data["advisoryPrerequisites"] = course_data["advisoryCorequisites"] = node_child_id
                 else:
                     print(f"{course_data['full_course_number']}: \"{req_type}\" is not a valid requisite type")
 
