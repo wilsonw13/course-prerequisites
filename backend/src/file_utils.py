@@ -5,11 +5,11 @@ import json
 def ensure_dirs(path): os.makedirs(os.path.dirname(path), exist_ok=True)
 
 
-def write_to_json_dir(file_path, data, type: str="json"):
+def write_to_json_dir(file_path: str, data, type: str = "json"):
     init_path = "./json/"
     path = init_path + file_path
 
-    ensure_dirs(path) # creates dir if doesn't exist
+    ensure_dirs(path)  # creates dir if doesn't exist
     with open(path, "w", encoding="utf-8") as f:
         if type == "json":
             json.dump(data, f, indent=4)
@@ -18,7 +18,8 @@ def write_to_json_dir(file_path, data, type: str="json"):
         else:
             print(f"Writing to unknown file type: {type}")
 
-def get_from_json_dir(file_path):
+
+def get_from_json_dir(file_path: str):
     init_path = "./json/"
     path = init_path + file_path
 
@@ -31,15 +32,26 @@ def get_from_json_dir(file_path):
         print("Invalid JSON format in file: " + path)
 
 
+def get_rules(file_path: str):
+    init_path = "./json/"
+    path = init_path + file_path
+
+    try:
+        with open(path, "r") as file:
+            return [tuple(line.strip().strip('()').split(', ')) for line in file]
+    except FileNotFoundError:
+        print("File not found: " + path)
+
+
 def get_config():
     return get_from_json_dir("config/server_config.json")
 
 
-def append_to_log_file(file_path, string):
+def append_to_log_file(file_path: str, string: str):
     init_path = "./log/"
     path = init_path + file_path
 
-    ensure_dirs(path) # creates dir if doesn't exist
+    ensure_dirs(path)  # creates dir if doesn't exist
     with open(path, 'a', encoding="utf-8") as f:
         f.write(string + "\n")
 
@@ -62,7 +74,7 @@ def clear_log_dir():
                 f.truncate(0)
 
 
-def clear_file(file_path):
+def clear_file(file_path: str):
     ensure_dirs(file_path)
     with open(file_path, 'w') as f:
         f.truncate(0)

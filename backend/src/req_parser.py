@@ -7,6 +7,8 @@ from typing import List
 from exceptions import UnknownRequisite, UnmatchedCourseLine
 
 FULL_COURSE_NUMBER_REGEX = r"[a-zA-Z]{3}\s?\d{3}"
+
+
 def match(regex: str, match_text: str, flags: re.RegexFlag = None):
     """Takes a regular expression, a text to match, and optional flags as input and returns a list of all non-overlapping matches in the text.
 
@@ -42,6 +44,7 @@ def match(regex: str, match_text: str, flags: re.RegexFlag = None):
     else:
         return text_match
 
+
 class Node:
     _id_counter = 0
     _nodes = []
@@ -66,12 +69,13 @@ class Node:
     def gen_rules() -> str:
         return "\n".join(map(str, Node._nodes))
 
+
 class And_(Node):
-    pass # these classes are used for their name
+    pass  # these classes are used for their name
 
 
 class Or_(Node):
-    pass # these classes are used for their name
+    pass  # these classes are used for their name
 
 
 class Member(Node):
@@ -127,21 +131,25 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
                     split_txt[i] = f"{match(r'[a-zA-Z]{3}', split_txt[i - 1])[0]} {t}"
 
         # remove all the Nones present
-        values = list(filter(lambda x: x is not None, [req_match(t, course_number, None, ignore_non_courses) for t in split_txt]))
+        values = list(filter(lambda x: x is not None, [req_match(
+            t, course_number, None, ignore_non_courses) for t in split_txt]))
         if not len(values):
             return None
 
-        node = And_(parent_id or Node.gen_id("and_"), values[0] if len(values) == 1 else Member.create(values))
+        node = And_(parent_id or Node.gen_id("and_"), values[0] if len(
+            values) == 1 else Member.create(values))
         return node.child_id if parent_id else node.id_
 
     # if txt is majors and contains major codes such as CSE, AMS, etc.
     if match(r"major", txt, re.IGNORECASE) and match(r"([A-Z]{3})", txt):
-        if ignore_non_courses: return None
+        if ignore_non_courses:
+            return None
         return {"type": "major", "value": [x for x in match(r"([A-Z]{3})", txt)]}
 
     # if txt is standing
     if match(r"standing|status", txt, re.IGNORECASE):
-        if ignore_non_courses: return None
+        if ignore_non_courses:
+            return None
         standings = {
             "freshmen": 1,
             "sophomore": 2,
@@ -157,12 +165,14 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
 
     # if txt is math placement exam
     if match(r"math.*placement\sexam", txt, re.IGNORECASE):
-        if ignore_non_courses: return None
+        if ignore_non_courses:
+            return None
         return {"type": "math placement", "value": min([int(x) for x in match(r"level\s(\d+)", txt, re.IGNORECASE)])}
 
     # if txt is any of the (CEAS) honors programs
     if match(r"(?:honors|university\sscholars)", txt, re.IGNORECASE):
-        if ignore_non_courses: return None
+        if ignore_non_courses:
+            return None
 
         honors_programs = []
 
@@ -192,11 +202,13 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
                     split_txt[i] = f"{match(r'[a-zA-Z]{3}', split_txt[i - 1])[0]} {t}"
 
         # remove all the Nones present
-        values = list(filter(lambda x: x is not None, [req_match(t, course_number, None, ignore_non_courses) for t in split_txt]))
+        values = list(filter(lambda x: x is not None, [req_match(
+            t, course_number, None, ignore_non_courses) for t in split_txt]))
         if not len(values):
             return None
 
-        node = Or_(parent_id or Node.gen_id("or_"), values[0] if len(values) == 1 else Member.create(values))
+        node = Or_(parent_id or Node.gen_id("or_"), values[0] if len(
+            values) == 1 else Member.create(values))
         return node.child_id if parent_id else node.id_
 
     # if txt is a course
@@ -207,7 +219,8 @@ def req_match(txt: str, course_number: str, parent_id: str, ignore_non_courses: 
         raise UnknownRequisite(txt, course_number)
     except UnknownRequisite as e:
         e.log()
-        if ignore_non_courses: return None
+        if ignore_non_courses:
+            return None
         return {"type": "custom", "value": txt}
 
 
@@ -307,17 +320,19 @@ def parse_course(course_node, reqs_ignore_non_courses: bool = False):
         # if line matches requisite
         elif match(r"requisite", text):
             try:
-                (req_type, req_text) = match(r"(.*)requisite\(?s?\)?:\s*(.*)$", text, re.IGNORECASE)
+                (req_type, req_text) = match(
+                    r"(.*)requisite\(?s?\)?:\s*(.*)$", text, re.IGNORECASE)
 
                 # clean up requisite_type
-                req_type = re.sub(r"\s+", " ", req_type.replace("-", " ").lower().strip())
+                req_type = re.sub(
+                    r"\s+", " ", req_type.replace("-", " ").lower().strip())
 
                 node_id = req_match(req_text,
-                                          course_data['full_course_number'],
-                                          course_data["full_course_number"],
-                                          reqs_ignore_non_courses)
+                                    course_data['full_course_number'],
+                                    course_data["full_course_number"],
+                                    reqs_ignore_non_courses)
 
-                #TODO
+                # TODO
                 node_child_id = ""
 
                 # TODO: get smarter parsing here
@@ -336,19 +351,22 @@ def parse_course(course_node, reqs_ignore_non_courses: bool = False):
                 elif req_type == "advisory pre or co":
                     course_data["advisoryPrerequisites"] = course_data["advisoryCorequisites"] = node_child_id
                 else:
-                    print(f"{course_data['full_course_number']}: \"{req_type}\" is not a valid requisite type")
+                    print(
+                        f"{course_data['full_course_number']}: \"{req_type}\" is not a valid requisite type")
 
             # if unable to match requisite or if something goes wrong ...
             except:
-              try:
-                raise UnmatchedCourseLine(text, course_data['full_course_number'])
-              except UnmatchedCourseLine as e:
-                e.log()
+                try:
+                    raise UnmatchedCourseLine(
+                        text, course_data['full_course_number'])
+                except UnmatchedCourseLine as e:
+                    e.log()
 
         # otherwise (if line doesn't match) ...
         else:
             try:
-                raise UnmatchedCourseLine(text, course_data['full_course_number'])
+                raise UnmatchedCourseLine(
+                    text, course_data['full_course_number'])
             except UnmatchedCourseLine as e:
                 e.log()
 
