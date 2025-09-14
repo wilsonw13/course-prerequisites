@@ -1,1 +1,32 @@
-from file_utils import get_from_json_dir, write_to_json_dir
+from file_utils import get_rules, get_from_json_dir, write_to_json_dir
+# python -m da --rules src/query.da
+
+nodes = get_rules("data/rules.txt")
+# print(nodes)
+
+# example_course_1 = "CSE 316" TODO: how to make this work?
+
+
+def rules(name=get_parents):
+    Parent(x), if_(Nodes(_, x, "CSE 316"))
+
+
+inf1 = infer(rules=get_parents, bindings=[
+             ('Nodes', nodes)], queries=['Parent'])
+# print(inf1)
+
+
+def rules(name=get_eligible_courses):
+    Eligible(x), if_(Taken(x))
+    Eligible(x), if_(Nodes("and_", x, y), Eligible(y))
+    Eligible(x), if_(Nodes("and_", x, y), all(
+        Nodes("member", y, z), Eligible(z)))
+    Eligible(x), if_(Nodes("or_", x, y), Eligible(y))
+    Eligible(x), if_(Nodes("or_", x, y), any(
+        Nodes("member", y, z), Eligible(z)))
+
+
+taken = ["CSE 114"]
+inf2 = infer(rules=get_parents, bindings=[
+             ('Nodes', nodes), ('Taken', taken)], queries=['Eligible'])
+print(inf2)
